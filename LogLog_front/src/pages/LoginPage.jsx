@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { login } from "../api/authApi";
 import "./LoginPage.css";
 
@@ -52,7 +52,9 @@ export default function LoginPage() {
                 <div className="login-links">
                     <span>비밀번호 찾기</span>
                     <span>|</span>
-                    <span>회원가입</span>
+                    <Link to="/signup" className="signup-link">
+                        회원가입
+                    </Link>
                 </div>
             </form>
         </div>
