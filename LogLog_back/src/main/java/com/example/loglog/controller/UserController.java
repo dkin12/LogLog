@@ -68,6 +68,24 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    // 이메일 중복 체크
+    @GetMapping("/exists/email")
+    public ResponseEntity<?> existsEmail(@RequestParam String email) {
+        if (userService.existsByEmail(email)) {
+            return ResponseEntity.badRequest().body("이미 사용 중인 이메일입니다.");
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    // 닉네임 중복 체크
+    @GetMapping("/exists/nickname")
+    public ResponseEntity<?> existsNickname(@RequestParam String nickname) {
+        if (userService.existsByNickname(nickname)) {
+            return ResponseEntity.badRequest().body("이미 사용 중인 닉네임입니다.");
+        }
+        return ResponseEntity.ok().build();
+    }
+
     /**
      * 로그아웃 요청을 처리
      *

@@ -98,4 +98,14 @@ public class UserService {
 
         return null; // 회원가입 성공
     }
+
+    // 이메일 중복 체크
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    // 닉네임 중복 체크
+    public boolean existsByNickname(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
 }
