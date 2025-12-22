@@ -3,8 +3,12 @@
     src: url("./assets/fonts/KeinannPOP.ttf") format("truetype");
 }
 
-body {
+html, body {
     margin: 0;
+    height: 100%;
+}
+
+body {
     background-color: #F9F9F8;
-    font-family: "KeinannPOP", 'Noto Sans KR', sans-serif; /* 있으면 좋음 */
+    font-family: "KeinannPOP", "Noto Sans KR", sans-serif;
 }
