@@ -6,6 +6,7 @@ import com.example.loglog.dto.request.UserSignupRequest;
 import com.example.loglog.entity.User;
 import com.example.loglog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 로그인 로직
@@ -34,9 +36,12 @@ public class UserService {
 
         User user = optionalUser.get();
 
-        // 3. 비밀번호가 일치하는지 검사 (평문 비교)
-        if (!user.getPassword().equals(loginRequest.getPassword())) {
-            return null; // 비밀번호 불일치
+        // 3. 비밀번호가 일치하는지 검사 (암호화 비교)
+        if (!passwordEncoder.matches(
+                loginRequest.getPassword(),
+                user.getPassword()
+        )) {
+            return null;
         }
 
         // 4. 로그인 성공. 세션에 저장할 DTO를 생성하여 반환
@@ -89,7 +94,10 @@ public class UserService {
         // 4. 모든 검증 통과. User 엔티티 생성
         User newUser = new User();
         newUser.setEmail(request.getEmail());
-        newUser.setPassword(request.getPassword()); // (시연용) 평문 저장
+        // 비밀번호 암호화 저장
+        String encodedPassword =
+                passwordEncoder.encode(request.getPassword());
+        newUser.setPassword(encodedPassword);
         newUser.setNickname(request.getNickname());
         // (createdAt은 User 엔티티의 @PrePersist에 의해 자동 생성됨)
 
