@@ -14,8 +14,13 @@ export default function LoginPage() {
         setError("");
 
         try {
-            await login({ email, password });
-            navigate("/"); // 로그인 성공 → 메인
+            const res = await login({ email, password });
+
+            // JWT 저장
+            localStorage.setItem("accessToken", res.accessToken);
+
+            // 로그인 성공 → 메인
+            navigate("/");
         } catch (err) {
             setError("이메일 또는 비밀번호가 올바르지 않습니다.");
         }

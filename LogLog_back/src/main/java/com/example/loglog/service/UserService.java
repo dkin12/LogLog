@@ -1,6 +1,5 @@
 package com.example.loglog.service;
 
-import com.example.loglog.dto.common.SessionUser;
 import com.example.loglog.dto.request.UserLoginRequest;
 import com.example.loglog.dto.request.UserSignupRequest;
 import com.example.loglog.entity.User;
@@ -24,19 +23,19 @@ public class UserService {
      * @param loginRequest (email, password)
      * @return 로그인 성공 시 SessionUser DTO, 실패 시 null
      */
-    public SessionUser login(UserLoginRequest loginRequest) {
+    public User login(UserLoginRequest loginRequest) {
 
-        // 1. 이메일로 사용자를 조회
-        Optional<User> optionalUser = userRepository.findByEmail(loginRequest.getEmail());
+        // 1. 이메일로 사용자 조회
+        Optional<User> optionalUser =
+                userRepository.findByEmail(loginRequest.getEmail());
 
-        // 2. 이메일이 존재하지 않으면 null 반환
+        // 2. 이메일 없음
         if (optionalUser.isEmpty()) {
             return null;
         }
-
         User user = optionalUser.get();
 
-        // 3. 비밀번호가 일치하는지 검사 (암호화 비교)
+        // 3. 비밀번호 검증 (BCrypt)
         if (!passwordEncoder.matches(
                 loginRequest.getPassword(),
                 user.getPassword()
@@ -44,8 +43,8 @@ public class UserService {
             return null;
         }
 
-        // 4. 로그인 성공. 세션에 저장할 DTO를 생성하여 반환
-        return new SessionUser(user);
+        // 4. 로그인 성공 → User 엔티티 반환
+        return user;
     }
 
     /**
