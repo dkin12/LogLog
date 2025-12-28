@@ -45,26 +45,6 @@ public class PostService {
         return postRepository.save(post).getId();
 
     }
-/*
-    // [게시글 수정] - 수정 기능 구현 시 필요
-    @Transactional
-    public Long updatePost(Long postId, PostUpdateRequest request, Long userId) {
-        Post post = postRepository.findById(request.);
-
-        // ... 본인 확인 및 기본 정보 업데이트(post.update) ...
-
-        // ✨ 태그 수정 로직
-        // 1. 기존 태그 싹 비우기
-        post.clearTags();
-        // 2. 새로운 태그 다시 채우기
-        addTags(post, request.getTags());
-
-        return post.getId();
-    }
- */
-    // PostService.java 내부
-
-
 
     private void addTags(Post post, List<String> tagNames) {
         if (tagNames == null || tagNames.isEmpty()) {
@@ -72,16 +52,10 @@ public class PostService {
         }
 
         for (String tagName : tagNames) {
-            // 1. 이름으로 태그를 찾는다.
-            // 2. 없으면 새로 만들어서 저장(save) 후 가져온다.
             Tag tag = tagRepository.findByName(tagName)
                     .orElseGet(() -> tagRepository.save(new Tag(tagName)));
-
-            // 3. 게시글에 태그를 '추가'만 한다. (setPost 아님!)
             post.addTag(tag);
         }
-        // ★ 주의: Post는 변경 감지(Dirty Checking) 혹은 cascade 설정에 의해
-        // 트랜잭션 종료 시 연결 정보가 중간 테이블(log_post_tags)에 자동 저장됩니다.
     }
 
     // 게시글 목록 조회

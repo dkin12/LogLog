@@ -48,7 +48,6 @@ public class PostListResponse {
         String plainText = content.replaceAll("[#*>\\[\\]`]", "") // 특수문자 제거
                 .replaceAll("\n", " ");         // 줄바꿈 제거
 
-        // 2. 글자 수 자르기
         if (plainText.length() > limit) {
             return plainText.substring(0, limit) + "...";
         }
