@@ -1,0 +1,55 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin-top: 30px;
+}
+
+.page-numbers {
+    display: flex;
+    gap: 10px;
+}
+
+/* 공통 버튼 */
+.page-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: #e5e5e5;
+    color: #555;
+    font-size: 9.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* hover */
+.page-btn:hover:not(:disabled) {
+    background: #d0d0d0;
+}
+
+/* 활성 페이지 */
+.page-btn.active {
+    background: #583218; /* 메인 브라운 */
+    color: #fff;
+}
+
+/* 이전/다음 */
+.page-btn.arrow {
+    background: #D17E44; /* 주황 */
+    color: #fff;
+    font-size: 10px;
+}
+
+.page-btn.arrow:hover:not(:disabled) {
+    background: #D17E44
+}
+
+/* 비활성 */
+.page-btn:disabled {
+    background: #eee;
+    color: #aaa;
+    cursor: not-allowed;
+}
