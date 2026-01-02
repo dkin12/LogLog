@@ -1,0 +1,37 @@
+.user-dropdown {
+    position: relative;
+}
+
+.user-button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    width: 160px;
+    border-radius: 8px;
+    list-style: none;
+    padding: 8px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-menu li {
+    padding: 10px 14px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+    background-color: #f2f2f2;
+}
+
+.dropdown-menu .divider {
+    height: 1px;
+    background-color: #ddd;
+}
