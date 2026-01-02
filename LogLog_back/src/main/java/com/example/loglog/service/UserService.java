@@ -2,6 +2,7 @@ package com.example.loglog.service;
 
 import com.example.loglog.dto.request.UserLoginRequest;
 import com.example.loglog.dto.request.UserSignupRequest;
+import com.example.loglog.dto.response.UserResponse;
 import com.example.loglog.entity.User;
 import com.example.loglog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -114,5 +115,17 @@ public class UserService {
     // 닉네임 중복 체크
     public boolean existsByNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
+    }
+
+    // 로그인 정보 받아오기
+    public UserResponse findMe(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자 없음"));
+
+        return new UserResponse(
+                user.getId(),
+                user.getEmail(),
+                user.getNickname()
+        );
     }
 }

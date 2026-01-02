@@ -3,12 +3,14 @@ package com.example.loglog.controller;
 import com.example.loglog.dto.request.UserLoginRequest;
 import com.example.loglog.dto.request.UserSignupRequest;
 import com.example.loglog.dto.response.LoginResponse;
+import com.example.loglog.dto.response.UserResponse;
 import com.example.loglog.entity.User;
 import com.example.loglog.security.jwt.JwtProvider;
 import com.example.loglog.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -85,6 +87,15 @@ public class UserController {
         }
         return ResponseEntity.ok().build();
     }
+
+    // 로그인 정보
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> me(
+            @AuthenticationPrincipal Long userId
+    ) {
+        return ResponseEntity.ok(userService.findMe(userId));
+    }
+
 
     // 로그아웃
 /*    @PostMapping("/logout")
