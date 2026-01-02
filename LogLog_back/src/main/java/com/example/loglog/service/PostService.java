@@ -2,8 +2,10 @@ package com.example.loglog.service;
 
 import com.example.loglog.dto.request.PostCreateRequest;
 import com.example.loglog.dto.request.PostUpdateRequest;
+import com.example.loglog.dto.response.PageResponse;
 import com.example.loglog.dto.response.PostDetailResponse;
 import com.example.loglog.dto.response.PostListResponse;
+import com.example.loglog.dto.response.PostResponse;
 import com.example.loglog.dto.type.PostStatus;
 import com.example.loglog.entity.Category;
 import com.example.loglog.entity.Post;
@@ -14,6 +16,10 @@ import com.example.loglog.repository.PostRepository;
 import com.example.loglog.repository.TagRepository;
 import com.example.loglog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,11 +43,8 @@ public class PostService {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("회원정보가 없습니다."));
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(()->new IllegalArgumentException("카테고리가 없습니다."));
-
         Post post = request.toEntity(user,category);
-
         addTags(post,request.getTags());
-
         return postRepository.save(post).getId();
 
     }
@@ -58,13 +61,38 @@ public class PostService {
         }
     }
 
-    // 게시글 목록 조회
+//    // 게시글 목록 조회
+//    @Transactional(readOnly = true)
+//    public List<PostListResponse> getPostList() {
+//        List<Post> posts = postRepository.findAllByStatusNotOrderByCreatedAtDesc(PostStatus.PRIVATE);
+//        return posts.stream().map(PostListResponse::fromEntity).collect(Collectors.toList());
+//
+//    }// 게시글 목록 조회
+//    @Transactional(readOnly = true)
+//    public List<PostListResponse> getPostList() {
+//        List<Post> posts = postRepository.findAllByStatusNotOrderByCreatedAtDesc(PostStatus.PRIVATE);
+//        return posts.stream().map(PostListResponse::fromEntity).collect(Collectors.toList());
+//
+//    }
+
+    // 검색 조건에 따른 조회
+    private Page<Post> findPostPage(String keyword, Pageable pageable) {
+        if(keyword == null || keyword.isEmpty()) {
+            return postRepository.findAll(pageable);
+        }
+        return postRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
+    }
+
     @Transactional(readOnly = true)
-    public List<PostListResponse> getPostList() {
-        List<Post> posts = postRepository.findAllByStatusNotOrderByCreatedAtDesc(PostStatus.PRIVATE);
-        return posts.stream().map(PostListResponse::fromEntity).collect(Collectors.toList());
+    public PageResponse<PostListResponse> getPostList(int page, int size, String keyword) {
+        int currentPage = (page <= 0) ? 1 : page -1;
+        Pageable pageable = PageRequest.of(currentPage,size, Sort.by(Sort.Direction.DESC,"createdAt"));
+
+        Page<Post> postPage = findPostPage(keyword, pageable);
+        return PageResponse.from(postPage,PostListResponse::fromEntity);
 
     }
+
 
     // 게시글 상세 조회
     public PostDetailResponse getPost(Long postId) {
@@ -90,7 +118,7 @@ public class PostService {
                 request.getTitle(),
                 request.getContent(),
                 request.getThumbnailUrl(),
-                category, // 👈 여기에 객체가 들어가야 함
+                category,
                 request.getStatus()
         );
 

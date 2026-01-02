@@ -37,6 +37,7 @@ public class SecurityConfig {
                                 "/api/users/signup",
                                 "/api/users/exists/**"
                         ).permitAll()
+
                         .anyRequest().authenticated()
                 )
 
