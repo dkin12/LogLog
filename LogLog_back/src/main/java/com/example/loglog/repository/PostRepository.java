@@ -14,5 +14,16 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // 검색어가 있을 때
     Page<Post> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
+
+    // 카테고리 필터링
+    Page<Post> findByCategory_CategoryId(Long categoryId, Pageable pageable);
+
+    // 카테고리 필터링 + 검색
+    Page<Post> findByCategory_CategoryIdAndTitleContainingOrContentContaining(
+            Long categoryId,
+            String title,
+            String content,
+            Pageable pageable
+    );
 }
 

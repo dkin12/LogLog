@@ -75,24 +75,35 @@ public class PostService {
 //
 //    }
 
-    // 검색 조건에 따른 조회
-    private Page<Post> findPostPage(String keyword, Pageable pageable) {
-        if(keyword == null || keyword.isEmpty()) {
-            return postRepository.findAll(pageable);
-        }
-        return postRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
-    }
-
+    // 게시글 조회(필터/검색)
     @Transactional(readOnly = true)
-    public PageResponse<PostListResponse> getPostList(int page, int size, String keyword) {
-        int currentPage = (page <= 0) ? 1 : page -1;
-        Pageable pageable = PageRequest.of(currentPage,size, Sort.by(Sort.Direction.DESC,"createdAt"));
+    public PageResponse<PostListResponse> getPostList(int page, int size, String keyword, Long categoryId) {
+        int currentPage = Math.max(page - 1, 0);
+        Pageable pageable = PageRequest.of(currentPage, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Post> postPage;
 
-        Page<Post> postPage = findPostPage(keyword, pageable);
-        return PageResponse.from(postPage,PostListResponse::fromEntity);
-
+        if (categoryId != null && keyword != null && !keyword.isBlank()) {
+            // 1) 카테고리 + 검색
+            postPage = postRepository
+                    .findByCategory_CategoryIdAndTitleContainingOrContentContaining(
+                            categoryId, keyword, keyword, pageable
+                    );
+        } else if (categoryId != null) {
+            // 2) 카테고리 필터
+            postPage = postRepository
+                    .findByCategory_CategoryId(categoryId, pageable);
+        } else if (keyword != null && !keyword.isBlank()) {
+            // 3) 검색
+            postPage = postRepository
+                    .findByTitleContainingOrContentContaining(
+                            keyword, keyword, pageable
+                    );
+        } else {
+            // 4) 전체 조회
+            postPage = postRepository.findAll(pageable);
+        }
+        return PageResponse.from(postPage, PostListResponse::fromEntity);
     }
-
 
     // 게시글 상세 조회
     public PostDetailResponse getPost(Long postId) {

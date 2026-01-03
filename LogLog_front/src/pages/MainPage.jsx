@@ -9,12 +9,17 @@ import Pagination from "../components/common/Pagination";
 export default function MainPage() {
     const [searchParams, setSearchParams] = useSearchParams();
 
+    // 현재 페이지 (0-based)
     const page = Number(searchParams.get("page") ?? 0);
-    const category = searchParams.get("category") ?? "전체";
 
-    const { data, isLoading, isError} = useQuery({
-        queryKey: ["posts", page, category],
-        queryFn: () => fetchPosts({ page, category }),
+    // 선택된 카테고리 ID (없으면 전체)
+    const categoryIdParam = searchParams.get("categoryId");
+    const categoryId = categoryIdParam ? Number(categoryIdParam) : null;
+
+    // 게시글 조회
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ["posts", page, categoryId],
+        queryFn: () => fetchPosts({ page, categoryId }),
         keepPreviousData: true,
     });
 
@@ -22,9 +27,12 @@ export default function MainPage() {
         <>
             {/* 카테고리 항상 노출 */}
             <CategoryFilter
-                selected={category}
-                onSelect={(c) =>
-                    setSearchParams({ category: c, page: 0 })
+                selectedCategoryId={categoryId}
+                onSelect={(id) =>
+                    setSearchParams({
+                        page: 0,
+                        ...(id ? { categoryId: id } : {})
+                    })
                 }
             />
 
@@ -41,7 +49,10 @@ export default function MainPage() {
                     page={data.currentPage}
                     totalPages={data.totalPages}
                     onChange={(nextPage) =>
-                        setSearchParams({ category, page: nextPage })
+                        setSearchParams({
+                            page: nextPage,
+                            ...(categoryId ? { categoryId } : {})
+                        })
                     }
                 />
             )}

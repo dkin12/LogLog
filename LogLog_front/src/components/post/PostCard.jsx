@@ -1,4 +1,5 @@
 import defaultThumbnail from "../../assets/images/default.png";
+import { FaRegEye } from "react-icons/fa";
 import "./PostCard.css";
 
 export default function PostCard({ post }) {
@@ -42,7 +43,7 @@ export default function PostCard({ post }) {
 
                 <div className="post-card-footer">
                     <span className="post-card-author">by {post.userNickname}</span>
-                    <span className="post-card-views">👁 {post.views}</span>
+                    <span className="post-card-views"><FaRegEye/> {post.views}</span>
                 </div>
             </div>
         </div>

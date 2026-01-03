@@ -39,14 +39,17 @@ public class PostController {
         return ResponseEntity.ok(postId);
     }
 
-    // 2. 게시글 목록 조회
+    // 2. 게시글 목록 조회 (카테고리 필터 / 검색 기능 포함)
     @GetMapping
-    public ResponseEntity<PageResponse<PostListResponse>> getPostsList(
+    public ResponseEntity<PageResponse<PostListResponse>> getPosts(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String keyword
-    ){
-        return ResponseEntity.ok(postService.getPostList(page,size,keyword));
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long categoryId
+    ) {
+        return ResponseEntity.ok(
+                postService.getPostList(page, size, keyword, categoryId)
+        );
     }
 
     // 3. 게시글 상세 조회
