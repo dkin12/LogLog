@@ -1,0 +1,26 @@
+.write-fab {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1000;
+
+    background: #D17E44;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.write-fab:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.25);
+}

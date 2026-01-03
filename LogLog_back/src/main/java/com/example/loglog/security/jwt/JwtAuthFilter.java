@@ -21,43 +21,30 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
 
-        String token = resolveToken(request);
-
-        // 토큰 O 유효 → 인증 처리
-        if (token != null && jwtProvider.validateToken(token)) {
-
-            Long userId = jwtProvider.getUserId(token);
-            String email = jwtProvider.getEmail(token);
-
-            // 인증 객체 생성
-            Authentication authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            userId,   // principal
-                            null,
-                            List.of(new SimpleGrantedAuthority("ROLE_USER"))
-                    );
-
-            // SecurityContext에 등록
-            SecurityContextHolder.getContext()
-                    .setAuthentication(authentication);
-        }
-
-        filterChain.doFilter(request, response);
-    }
-
-    // Authorization 헤더에서 Bearer 토큰 추출
-    private String resolveToken(HttpServletRequest request) {
         String bearer = request.getHeader("Authorization");
 
         if (StringUtils.hasText(bearer) && bearer.startsWith("Bearer ")) {
-            return bearer.substring(7);
+            String token = bearer.substring(7);
+
+            if (jwtProvider.validateToken(token)) {
+                Long userId = jwtProvider.getUserId(token);
+
+                Authentication authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                userId,
+                                null,
+                                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                        );
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
-        return null;
+
+        filterChain.doFilter(request, response);
     }
 }

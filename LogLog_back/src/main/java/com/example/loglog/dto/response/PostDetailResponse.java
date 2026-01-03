@@ -36,9 +36,11 @@ public class PostDetailResponse {
                 .thumbnail(post.getThumbnailUrl())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
-                .tags(post.getTags().stream()
-                        .map(Tag::getName) // Tag 객체를 String(이름)으로 변환
-                        .collect(Collectors.toList())) // 리스트로 포장
+                .tags(
+                        post.getPostTags().stream()              // PostTag 조회
+                                .map(pt -> pt.getTag().getName())   // Tag 이름 추출
+                                .collect(Collectors.toList())
+                )
                 .build();
     }
 }

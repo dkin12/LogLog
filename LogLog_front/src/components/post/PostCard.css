@@ -11,8 +11,8 @@
 }
 
 .post-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
 }
 
 /* ===== 썸네일 영역 ===== */
@@ -109,5 +109,10 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: rgba(0, 0, 0, 0.06); /* 아주 연한 선 */
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.post-card-views svg {
+    position: relative;
+    top: 1px;
 }

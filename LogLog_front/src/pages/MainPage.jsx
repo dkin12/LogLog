@@ -9,12 +9,27 @@ import Pagination from "../components/common/Pagination";
 export default function MainPage() {
     const [searchParams, setSearchParams] = useSearchParams();
 
+    // 현재 페이지 (0-based)
     const page = Number(searchParams.get("page") ?? 0);
-    const category = searchParams.get("category") ?? "전체";
 
-    const { data, isLoading, isError} = useQuery({
-        queryKey: ["posts", page, category],
-        queryFn: () => fetchPosts({ page, category }),
+    // 카테고리 필터
+    const categoryIdParam = searchParams.get("categoryId");
+    const categoryId = categoryIdParam ? Number(categoryIdParam) : null;
+
+    // 검색 조건
+    const keyword = searchParams.get("keyword");
+    const tag = searchParams.get("tag");
+
+    // 게시글 조회
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ["posts", page, categoryId, keyword, tag],
+        queryFn: () =>
+            fetchPosts({
+                page,
+                categoryId,
+                keyword,
+                tag,
+            }),
         keepPreviousData: true,
     });
 
@@ -22,9 +37,14 @@ export default function MainPage() {
         <>
             {/* 카테고리 항상 노출 */}
             <CategoryFilter
-                selected={category}
-                onSelect={(c) =>
-                    setSearchParams({ category: c, page: 0 })
+                selectedCategoryId={categoryId}
+                onSelect={(id) =>
+                    setSearchParams({
+                        page: 0,
+                        ...(id ? { categoryId: id } : {}),
+                        ...(keyword ? { keyword } : {}),
+                        ...(tag ? { tag } : {}),
+                    })
                 }
             />
 
@@ -35,13 +55,18 @@ export default function MainPage() {
                 isError={isError}
             />
 
-            {/* 페이지네이션은 데이터 있을 때만 */}
+            {/* 페이지네이션 */}
             {data && data.totalPages > 1 && (
                 <Pagination
                     page={data.currentPage}
                     totalPages={data.totalPages}
                     onChange={(nextPage) =>
-                        setSearchParams({ category, page: nextPage })
+                        setSearchParams({
+                            page: nextPage,
+                            ...(categoryId ? { categoryId } : {}),
+                            ...(keyword ? { keyword } : {}),
+                            ...(tag ? { tag } : {}),
+                        })
                     }
                 />
             )}

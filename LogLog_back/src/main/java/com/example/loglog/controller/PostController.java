@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,14 +40,17 @@ public class PostController {
         return ResponseEntity.ok(postId);
     }
 
-    // 2. 게시글 목록 조회
+    // 2. 게시글 목록 조회 (카테고리 필터 / 검색 기능 포함)
     @GetMapping
-    public ResponseEntity<PageResponse<PostListResponse>> getPostsList(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String keyword
-    ){
-        return ResponseEntity.ok(postService.getPostList(page,size,keyword));
+    @Transactional(readOnly = true)
+    public PageResponse<PostListResponse> getPostList(
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String tag,
+            @RequestParam(required = false) Long categoryId
+    ) {
+        return postService.getPostList(page, size, categoryId, keyword, tag);
     }
 
     // 3. 게시글 상세 조회

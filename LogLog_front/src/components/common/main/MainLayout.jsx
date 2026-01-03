@@ -1,14 +1,15 @@
+import WriteFloatingButton from "../WriteFloatingButton.jsx";
 import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import MainHeader from "./MainHeader";
-import {getMe} from "../../../api/authApi.js";
-import "./MainLayout.css"
+import { getMe } from "../../../api/authApi.js";
+import "./MainLayout.css";
 
 export default function MainLayout() {
     const [user, setUser] = useState(null);
-    const token = localStorage.getItem("accessToken");
 
     useEffect(() => {
+        const token = localStorage.getItem("accessToken");
         if (!token) return;
 
         getMe()
@@ -17,7 +18,7 @@ export default function MainLayout() {
                 localStorage.removeItem("accessToken");
                 setUser(null);
             });
-    }, [token]);
+    }, []);
 
     const isLogin = !!user;
 
@@ -27,6 +28,7 @@ export default function MainLayout() {
             <main className="main-container">
                 <Outlet />
             </main>
+            <WriteFloatingButton isLogin={isLogin} />
         </>
     );
 }

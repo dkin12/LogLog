@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
+import { fetchCategories } from "../../api/categoryApi";
 import "./CategoryFilter.css";
-import { fetchCategories } from "../../api/categoryApi.js";
 
-export default function CategoryFilter({ selected, onSelect }) {
+export default function CategoryFilter({ selectedCategoryId, onSelect }) {
     const { data: categories = [], isLoading } = useQuery({
         queryKey: ["categories"],
         queryFn: fetchCategories,
@@ -15,9 +15,8 @@ export default function CategoryFilter({ selected, onSelect }) {
         <div className="category-filter">
             {/* 전체 */}
             <button
-                key="all"
-                className={selected === "전체" ? "active" : ""}
-                onClick={() => onSelect("전체")}
+                className={!selectedCategoryId ? "active" : ""}
+                onClick={() => onSelect(null)}
             >
                 전체
             </button>
@@ -26,8 +25,8 @@ export default function CategoryFilter({ selected, onSelect }) {
             {categories.map((cat) => (
                 <button
                     key={cat.categoryId}
-                    className={selected === cat.categoryName ? "active" : ""}
-                    onClick={() => onSelect(cat.categoryName)}
+                    className={selectedCategoryId === cat.categoryId ? "active" : ""}
+                    onClick={() => onSelect(cat.categoryId)}
                 >
                     {cat.categoryName}
                 </button>

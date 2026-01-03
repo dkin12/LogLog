@@ -1,0 +1,21 @@
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 420px; /* 메인 영역에서 충분한 높이 */
+    gap: 16px;
+
+    color: #777;
+    font-size: 14px;
+}
+
+.empty-state img {
+    width: 160px;
+    opacity: 0.8;
+}
+
+.empty-state p {
+    margin: 0;
+}
