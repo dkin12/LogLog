@@ -1,0 +1,21 @@
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.auth-buttons .btn {
+    padding: 8px 14px;
+    border-radius: 18px;
+    text-decoration: none;
+    font-size: 14px;
+    background-color: #5b3418;
+    color: #fff;
+}
+
+.auth-buttons .signup {
+    background-color: #583218
+}
+
+.auth-buttons .login {
+    background-color: #583218
+}

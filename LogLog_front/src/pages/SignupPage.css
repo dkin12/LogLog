@@ -9,7 +9,7 @@ body {
 
 /* 페이지 레이아웃 */
 .signup-page {
-    max-width: 600px;
+    max-width: 420px;
     margin: 0 auto;
     padding: 0;
 }
