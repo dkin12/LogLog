@@ -12,14 +12,24 @@ export default function MainPage() {
     // 현재 페이지 (0-based)
     const page = Number(searchParams.get("page") ?? 0);
 
-    // 선택된 카테고리 ID (없으면 전체)
+    // 카테고리 필터
     const categoryIdParam = searchParams.get("categoryId");
     const categoryId = categoryIdParam ? Number(categoryIdParam) : null;
 
+    // 검색 조건
+    const keyword = searchParams.get("keyword");
+    const tag = searchParams.get("tag");
+
     // 게시글 조회
     const { data, isLoading, isError } = useQuery({
-        queryKey: ["posts", page, categoryId],
-        queryFn: () => fetchPosts({ page, categoryId }),
+        queryKey: ["posts", page, categoryId, keyword, tag],
+        queryFn: () =>
+            fetchPosts({
+                page,
+                categoryId,
+                keyword,
+                tag,
+            }),
         keepPreviousData: true,
     });
 
@@ -31,7 +41,9 @@ export default function MainPage() {
                 onSelect={(id) =>
                     setSearchParams({
                         page: 0,
-                        ...(id ? { categoryId: id } : {})
+                        ...(id ? { categoryId: id } : {}),
+                        ...(keyword ? { keyword } : {}),
+                        ...(tag ? { tag } : {}),
                     })
                 }
             />
@@ -43,7 +55,7 @@ export default function MainPage() {
                 isError={isError}
             />
 
-            {/* 페이지네이션은 데이터 있을 때만 */}
+            {/* 페이지네이션 */}
             {data && data.totalPages > 1 && (
                 <Pagination
                     page={data.currentPage}
@@ -51,7 +63,9 @@ export default function MainPage() {
                     onChange={(nextPage) =>
                         setSearchParams({
                             page: nextPage,
-                            ...(categoryId ? { categoryId } : {})
+                            ...(categoryId ? { categoryId } : {}),
+                            ...(keyword ? { keyword } : {}),
+                            ...(tag ? { tag } : {}),
                         })
                     }
                 />
