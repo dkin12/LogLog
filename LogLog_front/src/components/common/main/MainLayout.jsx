@@ -1,3 +1,4 @@
+import WriteFloatingButton from "../WriteFloatingButton.jsx";
 import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import MainHeader from "./MainHeader";
@@ -27,6 +28,8 @@ export default function MainLayout() {
             <main className="main-container">
                 <Outlet />
             </main>
+
+            <WriteFloatingButton isLogin={isLogin} />
         </>
     );
 }
