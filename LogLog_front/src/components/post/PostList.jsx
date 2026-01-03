@@ -1,4 +1,5 @@
 import PostGrid from "./PostGrid";
+import EmptyState from "./EmptyState.jsx";
 
 export default function PostList({ posts, isLoading, isError }) {
     if (isLoading) {
@@ -10,7 +11,7 @@ export default function PostList({ posts, isLoading, isError }) {
     }
 
     if (!posts || posts.length === 0) {
-        return <div className="empty-state">게시글이 없습니다.</div>;
+        return <EmptyState message="작성된 글이 없습니다." />;
     }
 
     return <PostGrid posts={posts} />;
