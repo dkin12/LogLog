@@ -54,3 +54,7 @@ export const getMe = async () => {
     const response = await api.get("/api/users/me");
     return response.data;
 };
+
+export const getToken = () => {
+    return localStorage.getItem('accessToken');
+};

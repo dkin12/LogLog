@@ -8,6 +8,7 @@ import SignupPage from "../pages/SignupPage";
 import MainPage from "../pages/MainPage";
 import MyPage from "../pages/Mypage.jsx";
 import DraftsPage from "../pages/DraftsPage.jsx";
+import PostWrite from "../pages/PostWrite.jsx";
 
 export const router = createBrowserRouter([
     // 메인 영역 (공통 헤더)
@@ -32,6 +33,13 @@ export const router = createBrowserRouter([
                         <DraftsPage />
                     </RequireAuth>
                 ),
+            },
+            {
+                path: "posts/write", element: (
+                    <RequireAuth>
+                        <PostWrite />
+                    </RequireAuth>
+                )
             }
         ],
     },
@@ -42,7 +50,7 @@ export const router = createBrowserRouter([
         element: <Layout />,
         children: [
             { path: "login", element: <LoginPage /> },
-            { path: "signup", element: <SignupPage /> },
+            { path: "signup", element: <SignupPage /> }
         ],
     },
 

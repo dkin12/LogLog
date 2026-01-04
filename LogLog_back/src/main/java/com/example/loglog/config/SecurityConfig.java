@@ -38,7 +38,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/api/category/**").permitAll()
+                        .requestMatchers("/images/**").permitAll()
                         .requestMatchers(
                                 "/api/users/login",
                                 "/api/users/signup",
