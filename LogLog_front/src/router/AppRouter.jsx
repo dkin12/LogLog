@@ -9,6 +9,7 @@ import MainPage from "../pages/MainPage";
 import MyPage from "../pages/Mypage.jsx";
 import DraftsPage from "../pages/DraftsPage.jsx";
 import PostWrite from "../pages/PostWrite.jsx";
+import PostDetail from "../pages/PostDetail.jsx";
 
 export const router = createBrowserRouter([
     // 메인 영역 (공통 헤더)
@@ -35,10 +36,21 @@ export const router = createBrowserRouter([
                 ),
             },
             {
+                path: "posts/write/:id/edit", element: (
+                    <RequireAuth>
+                        <PostWrite mode="edit" />
+                    </RequireAuth>
+                )
+            },
+            {
                 path: "posts/write", element: (
                     <RequireAuth>
-                        <PostWrite />
+                        <PostWrite mode={"create"} />
                     </RequireAuth>
+                )
+            },{
+                path : "posts/:id", element: (
+                        <PostDetail />
                 )
             }
         ],

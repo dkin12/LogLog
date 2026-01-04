@@ -26,7 +26,7 @@ export default function MainLayout() {
         <>
             <MainHeader isLogin={isLogin} user={user} />
             <main className="main-container">
-                <Outlet />
+                <Outlet context={{user}}/>
             </main>
             <WriteFloatingButton isLogin={isLogin} />
         </>
