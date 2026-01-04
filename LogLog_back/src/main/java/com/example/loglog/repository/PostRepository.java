@@ -8,13 +8,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    /* ==================================================
-     * 1. 전체 조회 (PUBLISHED만)
-     * ================================================== */
+    // 1. 전체 조회 (PUBLISHED만)
     @Query("""
-        select p from Post p
+        select p
+        from Post p
         where p.status = :status
     """)
     Page<Post> findAllByStatus(
@@ -22,11 +23,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             Pageable pageable
     );
 
-    /* ==================================================
-     * 2. 카테고리 필터
-     * ================================================== */
+    // 2. 카테고리 필터
     @Query("""
-        select p from Post p
+        select p
+        from Post p
         where p.category.categoryId = :categoryId
           and p.status = :status
     """)
@@ -36,12 +36,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             Pageable pageable
     );
 
-    /* ==================================================
-     * 3. 일반 검색 (제목 + 내용)
-     * ================================================== */
+    // 3. 일반 검색 (제목 + 내용)
     @Query("""
-        select p from Post p
-        where (p.title like %:keyword% or p.content like %:keyword%)
+        select p
+        from Post p
+        where (
+            lower(p.title) like lower(concat('%', :keyword, '%'))
+            or lower(p.content) like lower(concat('%', :keyword, '%'))
+        )
           and p.status = :status
     """)
     Page<Post> findByKeyword(
@@ -50,13 +52,15 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             Pageable pageable
     );
 
-    /* ==================================================
-     * 4. 카테고리 + 일반 검색
-     * ================================================== */
+    // 4. 카테고리 + 일반 검색
     @Query("""
-        select p from Post p
+        select p
+        from Post p
         where p.category.categoryId = :categoryId
-          and (p.title like %:keyword% or p.content like %:keyword%)
+          and (
+                  lower(p.title) like lower(concat('%', :keyword, '%'))
+                  or lower(p.content) like lower(concat('%', :keyword, '%'))
+              )
           and p.status = :status
     """)
     Page<Post> findByCategoryAndKeyword(
@@ -66,37 +70,45 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             Pageable pageable
     );
 
-    /* ==================================================
-     * 5. 태그 검색
-     * ================================================== */
+    // 5. 태그 검색 (ID 먼저 조회 — Oracle 안전)
     @Query("""
-        select distinct p from Post p
-        left join p.postTags pt
-        left join pt.tag t
-        where t.name like %:tagName%
-          and p.status = :status
+        select distinct p.id
+        from Post p
+        join p.postTags pt
+        join pt.tag t
+        where p.status = :status
+          and lower(t.name) like lower(concat('%', :tagName, '%'))
     """)
-    Page<Post> findByTag(
+    Page<Long> findPostIdsByTag(
             @Param("tagName") String tagName,
             @Param("status") PostStatus status,
             Pageable pageable
     );
 
-    /* ==================================================
-     * 6. 카테고리 + 태그 검색
-     * ================================================== */
+    // 6. 카테고리 + 태그 검색 (ID 먼저)
     @Query("""
-        select distinct p from Post p
-        left join p.postTags pt
-        left join pt.tag t
-        where p.category.categoryId = :categoryId
-          and t.name like %:tagName%
-          and p.status = :status
+        select distinct p.id
+        from Post p
+        join p.postTags pt
+        join pt.tag t
+        where p.status = :status
+          and p.category.categoryId = :categoryId
+          and lower(t.name) like lower(concat('%', :tagName, '%'))
     """)
-    Page<Post> findByCategoryAndTag(
+    Page<Long> findPostIdsByCategoryAndTag(
             @Param("categoryId") Long categoryId,
             @Param("tagName") String tagName,
             @Param("status") PostStatus status,
             Pageable pageable
     );
+
+    // 7. ID 리스트로 Post 조회
+    @Query("""
+        select p
+        from Post p
+        where p.id in :ids
+        order by p.createdAt desc
+    """)
+    List<Post> findAllByIdIn(@Param("ids") List<Long> ids);
 }
+
