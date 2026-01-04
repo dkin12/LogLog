@@ -1,10 +1,12 @@
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPosts } from "../api/postsApi";
+import { fetchCategories } from "../api/categoryApi";
 
 import CategoryFilter from "../components/category/CategoryFilter";
 import PostList from "../components/post/PostList";
 import Pagination from "../components/common/Pagination";
+import "./MainPage.css";
 
 export default function MainPage() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -19,6 +21,16 @@ export default function MainPage() {
     // 검색 조건
     const keyword = searchParams.get("keyword");
     const tag = searchParams.get("tag");
+
+    // 카테고리 조회
+    const { data: categories = [] } = useQuery({
+        queryKey: ["categories"],
+        queryFn: fetchCategories,
+        staleTime: Infinity,
+    });
+    const selectedCategoryName = categories.find(
+        (cat) => cat.categoryId === categoryId
+    )?.categoryName;
 
     // 게시글 조회
     const { data, isLoading, isError } = useQuery({
@@ -47,6 +59,29 @@ export default function MainPage() {
                     })
                 }
             />
+
+            {/* 총 게시글 수 & 검색 결과 요약 */}
+            {data && (
+                <div className="post-summary">
+                    {keyword ? (
+                        <>
+                            <strong>"{keyword}"</strong> 검색 결과 · {data.totalElements}건
+                        </>
+                    ) : tag ? (
+                        <>
+                            <strong>#{tag}</strong> 태그 검색 결과 · {data.totalElements}건
+                        </>
+                    ) : categoryId && selectedCategoryName ? (
+                        <>
+                            <strong>{selectedCategoryName}</strong> 카테고리 · {data.totalElements}건
+                        </>
+                    ) : (
+                        <>
+                            총 {data.totalElements}건
+                        </>
+                    )}
+                </div>
+            )}
 
             {/* 목록 상태 판단은 PostList */}
             <PostList

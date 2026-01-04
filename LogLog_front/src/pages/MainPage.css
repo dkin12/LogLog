@@ -1,0 +1,9 @@
+.post-summary {
+    margin: 0px 0 16px;
+    font-size: 11px;
+    color: #666;
+}
+
+.post-summary strong {
+    color: #583218;
+}

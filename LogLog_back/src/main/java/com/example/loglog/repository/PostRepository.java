@@ -40,7 +40,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("""
         select p
         from Post p
-        where (p.title like %:keyword% or p.content like %:keyword%)
+        where (
+            lower(p.title) like lower(concat('%', :keyword, '%'))
+            or lower(p.content) like lower(concat('%', :keyword, '%'))
+        )
           and p.status = :status
     """)
     Page<Post> findByKeyword(
@@ -54,7 +57,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         select p
         from Post p
         where p.category.categoryId = :categoryId
-          and (p.title like %:keyword% or p.content like %:keyword%)
+          and (
+                  lower(p.title) like lower(concat('%', :keyword, '%'))
+                  or lower(p.content) like lower(concat('%', :keyword, '%'))
+              )
           and p.status = :status
     """)
     Page<Post> findByCategoryAndKeyword(
@@ -71,7 +77,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         join p.postTags pt
         join pt.tag t
         where p.status = :status
-          and t.name like concat('%', :tagName, '%')
+          and lower(t.name) like lower(concat('%', :tagName, '%'))
     """)
     Page<Long> findPostIdsByTag(
             @Param("tagName") String tagName,
@@ -87,7 +93,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         join pt.tag t
         where p.status = :status
           and p.category.categoryId = :categoryId
-          and t.name like concat('%', :tagName, '%')
+          and lower(t.name) like lower(concat('%', :tagName, '%'))
     """)
     Page<Long> findPostIdsByCategoryAndTag(
             @Param("categoryId") Long categoryId,
