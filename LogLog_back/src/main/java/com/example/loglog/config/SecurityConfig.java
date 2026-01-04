@@ -36,16 +36,25 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
+                        // 조회 / 검색 / 필터 (비로그인 허용)
+                        .requestMatchers(
+                                "/api/posts",
+                                "/api/posts/**",
+                                "/api/category/**",
+                                "/api/tags/**"
+                        ).permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/api/category/**").permitAll()
+                        // 이미지 
                         .requestMatchers("/images/**").permitAll()
+
+                        // 인증 관련
                         .requestMatchers(
                                 "/api/users/login",
                                 "/api/users/signup",
                                 "/api/users/exists/**"
                         ).permitAll()
+
+                        // 그 외 (글 작성/수정/삭제 등)
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthFilter(jwtProvider),
