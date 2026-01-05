@@ -1,12 +1,26 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 import "./SearchBar.css";
 
 export default function SearchBar() {
-    const [keyword, setKeyword] = useState("");
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
+    const keywordParam = searchParams.get("keyword");
+    const tagParam = searchParams.get("tag");
+
+    // input에 보여줄 값 결정
+    const keywordFromUrl = keywordParam
+        ? keywordParam
+        : tagParam
+            ? `#${tagParam}`
+            : "";
+
+    // URL 기준으로 검색 키워드 동기화
+    const [keyword, setKeyword] = useState(keywordFromUrl);
+    useEffect(() => {
+        setKeyword(keywordFromUrl);
+    }, [keywordFromUrl]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -31,8 +45,6 @@ export default function SearchBar() {
             pathname: "/",
             search: new URLSearchParams(params).toString(),
         });
-
-        setKeyword("");
     };
 
     return (

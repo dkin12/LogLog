@@ -9,10 +9,7 @@ import com.example.loglog.dto.type.PostStatus;
 import com.example.loglog.entity.*;
 import com.example.loglog.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,63 +77,65 @@ public class PostService {
     ) {
         int currentPage = Math.max(page - 1, 0);
 
-        Pageable pageable = PageRequest.of(
+        Pageable idPageable = PageRequest.of(currentPage, size); // ID 조회용
+        Pageable postPageable = PageRequest.of(
                 currentPage,
                 size,
                 Sort.by(Sort.Direction.DESC, "createdAt")
-        );
+        ); // Post 조회용
 
         Page<Post> postPage;
 
         // 태그 검색
         if (tag != null && !tag.isBlank()) {
-            if (categoryId != null) {
-                postPage = postRepository.findByCategoryAndTag(
-                        categoryId,
-                        tag,
-                        PostStatus.PUBLISHED,
-                        pageable
-                );
-            } else {
-                postPage = postRepository.findByTag(
-                        tag,
-                        PostStatus.PUBLISHED,
-                        pageable
+
+            Page<Long> postIdPage = (categoryId != null)
+                    ? postRepository.findPostIdsByCategoryAndTag(
+                    categoryId, tag, PostStatus.PUBLISHED, idPageable)
+                    : postRepository.findPostIdsByTag(
+                    tag, PostStatus.PUBLISHED, idPageable);
+
+            if (postIdPage.isEmpty()) {
+                return PageResponse.from(
+                        new PageImpl<>(List.of(), postPageable, 0),
+                        PostListResponse::fromEntity
                 );
             }
+
+            List<Post> posts =
+                    postRepository.findAllByIdIn(postIdPage.getContent());
+
+            postPage = new PageImpl<>(
+                    posts,
+                    postPageable,
+                    postIdPage.getTotalElements()
+            );
+
+            return PageResponse.from(postPage, PostListResponse::fromEntity);
         }
+
         // 일반 검색
-        else if (keyword != null && !keyword.isBlank()) {
-            if (categoryId != null) {
-                postPage = postRepository.findByCategoryAndKeyword(
-                        categoryId,
-                        keyword,
-                        PostStatus.PUBLISHED,
-                        pageable
-                );
-            } else {
-                postPage = postRepository.findByKeyword(
-                        keyword,
-                        PostStatus.PUBLISHED,
-                        pageable
-                );
-            }
+        if (keyword != null && !keyword.isBlank()) {
+            postPage = (categoryId != null)
+                    ? postRepository.findByCategoryAndKeyword(
+                    categoryId, keyword, PostStatus.PUBLISHED, postPageable)
+                    : postRepository.findByKeyword(
+                    keyword, PostStatus.PUBLISHED, postPageable);
+
+            return PageResponse.from(postPage, PostListResponse::fromEntity);
         }
+
         // 카테고리만
-        else if (categoryId != null) {
+        if (categoryId != null) {
             postPage = postRepository.findByCategory(
-                    categoryId,
-                    PostStatus.PUBLISHED,
-                    pageable
-            );
+                    categoryId, PostStatus.PUBLISHED, postPageable);
+
+            return PageResponse.from(postPage, PostListResponse::fromEntity);
         }
+
         // 전체 조회
-        else {
-            postPage = postRepository.findAllByStatus(
-                    PostStatus.PUBLISHED,
-                    pageable
-            );
-        }
+        postPage = postRepository.findAllByStatus(
+                PostStatus.PUBLISHED, postPageable);
 
         return PageResponse.from(postPage, PostListResponse::fromEntity);
     }

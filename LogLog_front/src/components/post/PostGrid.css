@@ -1,7 +1,7 @@
 .post-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 25px;
+    gap: 22px;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
