@@ -2,10 +2,7 @@ package com.example.loglog.service;
 
 import com.example.loglog.dto.request.PostCreateRequest;
 import com.example.loglog.dto.request.PostUpdateRequest;
-import com.example.loglog.dto.response.PageResponse;
-import com.example.loglog.dto.response.PostDetailResponse;
-import com.example.loglog.dto.response.PostListResponse;
-import com.example.loglog.dto.response.PostResponse;
+import com.example.loglog.dto.response.*;
 import com.example.loglog.dto.type.PostStatus;
 import com.example.loglog.entity.*;
 import com.example.loglog.repository.*;
@@ -14,6 +11,7 @@ import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -215,5 +213,33 @@ public class PostService {
 
         postRepository.deleteById(postId);
     }
+
+     /* ============================
+       게시글 히스토리 목록
+     ============================ */
+
+    @Transactional(readOnly = true)
+    // 기능 1: 목록 조회 (특정 게시글의 모든 히스토리)
+    public List<PostHistoryResponse> getPostHistories(Long postId) {
+        // Entity 리스트 조회
+        List<PostHistory> histories = postHistoryRepository.findByPostIdOrderByArchivedAtDesc(postId);
+
+        // Entity List -> DTO List 변환
+        return histories.stream()
+                .map(PostHistoryResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    // 기능 2: 개별 조회 (특정 히스토리 하나만)
+    public PostHistoryResponse getPostHistoryDetail(Long historyId) {
+        // Entity 단건 조회 (없으면 예외 발생)
+        PostHistory postHistory = postHistoryRepository.findById(historyId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 히스토리를 찾을 수 없습니다. id=" + historyId));
+
+        // Entity -> DTO 변환
+        return PostHistoryResponse.from(postHistory);
+    }
+
 
 }
