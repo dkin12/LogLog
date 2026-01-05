@@ -26,8 +26,8 @@ function PostHistory() {
     return (
         <div className="layout-content">
             <div className="post-history-container">
-                <div className="post-header">
-                    <h2 className="post-header-title">バージョン</h2>
+                <div className="post-history-header">
+                    <h2 className="post-history-header-title">バージョン</h2>
                     <p className="post-count-text">총 {posts.length} 건</p>
                 </div>
 

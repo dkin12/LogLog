@@ -9,8 +9,7 @@ import { useNavigate } from "react-router";
 
 const PostDetailContent = ({ post, currentUser }) => {
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
-    const toast = useToast();
+    const navigate = useNavigate();const toast = useToast();
 
     const deleteMutation = useMutation({
         mutationFn: () => deletePosts(post.id),
@@ -76,7 +75,6 @@ const PostDetailContent = ({ post, currentUser }) => {
             </div>
 
             <div className="post-content">
-
                 <Viewer
                     initialValue={content}
                     key={content}

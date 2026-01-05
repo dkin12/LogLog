@@ -7,12 +7,12 @@
 }
 
 /* 제목 영역 */
-.post-header {
+.post-history-header {
     text-align: center;
     margin-bottom: 60px;
 }
 
-.post-header-title {
+.post-history-header-title {
     font-size: 48px;
     font-weight: 900;
     color: #fb923c;
@@ -33,10 +33,11 @@
     gap: 30px;
 }
 
-.post-item {
+.post-history-item {
     display: flex;
     gap: 24px;
-    padding-bottom: 24px;
+    padding : 24px;
+    cursor: pointer;
     border-bottom: 1px solid #f3f4f6;
 }
 
@@ -51,7 +52,7 @@
     height: 120px;
     flex-shrink: 0;
     background-color: #f3f4f6;
-    border-radius: 4px;
+    border-radius: 8px;
     overflow: hidden;
 }
 
@@ -63,30 +64,30 @@
 
 
 /* 텍스트 내용 박스 */
-.post-content-box {
+.post-history-content-box {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.post-date {
+.post-history-date {
     font-size: 12px;
     color: #9ca3af;
     margin-bottom: 4px;
 }
 
-.post-title {
+.post-history-title {
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 8px;
     cursor: pointer;
 }
 
-.post-title:hover {
+.post-history-title:hover {
     text-decoration: underline;
 }
 
-.post-description {
+.post-history-summery {
     font-size: 14px;
     color: #4b5563;
     line-height: 1.6;
