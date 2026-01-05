@@ -1,0 +1,114 @@
+.grass-cell {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    transition: transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.grass-cell:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+}
+
+.grass-section {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+
+.grass-section h2 {
+    margin-bottom: 6px;
+}
+
+.grass-section .subtitle {
+    margin-bottom: 20px;
+}
+
+.grass-wrapper {
+    background: #fcfcfc;
+    border: 1px solid #f0f0f0;
+    max-width: 1000px;
+    overflow-x: auto;     /* ← 핵심 */
+    min-width: 0;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
+}
+
+.grass-grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(7, 13px);
+    gap: 4px;
+}
+
+.grass-spacer {
+    width: 32px;   /* ← 원하는 오른쪽 여백 */
+    height: 1px;
+}
+
+.grass-legend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #555;
+    justify-content: flex-end;
+}
+
+.legend-box {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+}
+
+.grass-container {
+    display: flex;
+    gap: 32px;
+    margin-top: 24px;
+}
+
+.grass-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.grass-years {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.grass-years button {
+    background: none;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    color: #777;
+}
+
+.grass-years button.active {
+    color: #2563eb;
+    background: #eef2ff;
+    font-weight: 600;
+}
+
+.grass-tooltip {
+    position: fixed;
+    transform: translate(-50%, -120%);
+    background: #333;
+    color: #fff;
+    font-size: 12px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

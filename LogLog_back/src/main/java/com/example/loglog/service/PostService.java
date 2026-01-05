@@ -28,6 +28,7 @@ public class PostService {
     private final TagRepository tagRepository;
     private final PostTagRepository postTagRepository;
     private final CategoryRepository categoryRepository;
+    private final LogService logService;
 
     // 게시글 작성
     @Transactional
@@ -45,6 +46,15 @@ public class PostService {
         // 태그 매핑
         addTags(post, request.getTags());
 
+        // 발행인 경우만 로그 (임시저장은 집계 X)
+        if (post.getStatus() != PostStatus.DRAFT) {
+            logService.recordPostPublish(
+                    user,
+                    PostStatus.DRAFT,      // 생성은 항상 DRAFT에서 시작
+                    post.getStatus(),
+                    post.getId()
+            );
+        }
         return post.getId();
     }
 
@@ -165,9 +175,13 @@ public class PostService {
             throw new IllegalStateException("수정 권한이 없습니다.");
         }
 
+        // update 전에 상태 백업
+        PostStatus oldStatus = post.getStatus();
+
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("카테고리가 없습니다."));
 
+        // 게시글 수정 (status 포함)
         post.update(
                 request.getTitle(),
                 request.getContent(),
@@ -178,6 +192,14 @@ public class PostService {
 
         post.clearTags();
         addTags(post, request.getTags()); // 아까 만든 addTags 메서드 재활용
+
+        // 수정 후 발행 로그
+        logService.recordPostPublish(
+                post.getUser(),
+                oldStatus,
+                post.getStatus(),
+                post.getId()
+        );
 
         return post.getId();
     }
