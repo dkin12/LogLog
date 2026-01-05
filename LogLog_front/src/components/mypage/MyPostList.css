@@ -1,0 +1,66 @@
+.mypost-section {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+
+.mypost-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.mypost-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    /*
+         max-height: 360px;
+    overflow-y: auto;
+    */
+
+}
+
+.mypost-item {
+    padding: 14px 8px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.12s ease;
+}
+
+.mypost-item:hover {
+    background-color: #fafafa;
+}
+
+.mypost-main {
+    font-size: 15px;
+    font-weight: 500;
+    color: #222;
+}
+
+.mypost-meta {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #888;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.mypost-empty {
+    padding: 32px;
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* 상태 표시 */
+.status.PUBLISHED {
+    color: #2f9e44;
+}
+
+.status.PRIVATE {
+    color: #868e96;
+}

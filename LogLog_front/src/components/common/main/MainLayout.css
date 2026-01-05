@@ -19,3 +19,6 @@ body, html, #root {
     flex-direction: column;
 }
 
+.main-layout {
+    padding-top: 5px;
+}

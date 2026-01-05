@@ -1,5 +1,6 @@
 package com.example.loglog.dto.response;
 
+import com.example.loglog.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,4 +10,12 @@ public class UserResponse {
     private Long id;
     private String email;
     private String nickname;
+
+    public static UserResponse from(User user) {
+        return new UserResponse(
+                user.getId(),
+                user.getEmail(),
+                user.getNickname()
+        );
+    }
 }
