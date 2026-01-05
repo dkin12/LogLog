@@ -7,10 +7,9 @@ import { deletePosts } from "../../api/postsApi.js";
 import { useToast } from "../../hooks/useToast.js";
 import { useNavigate } from "react-router";
 
-const PostDetailContent = ({ post, currentUser, apiBase }) => {
+const PostDetailContent = ({ post, currentUser }) => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const imageSrc = post.thumbnailUrl ? `${apiBase}${post.thumbnailUrl}` : null;
     const toast = useToast();
 
     const deleteMutation = useMutation({
@@ -70,7 +69,7 @@ const PostDetailContent = ({ post, currentUser, apiBase }) => {
             </div>
 
             <div className="post-content">
-                <img src={imageSrc} alt="" />
+
                 <Viewer
                     initialValue={content}
                     key={content}

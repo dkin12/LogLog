@@ -3,8 +3,7 @@ import { FaRegEye } from "react-icons/fa";
 import {useNavigate} from "react-router";
 import "./PostCard.css";
 
-export default function PostCard({ post }) {
-    const thumbnail = post.thumbnailUrl || defaultThumbnail;
+export default function PostCard({ post ,apiBase }) {
     const navigate = useNavigate();
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -14,6 +13,8 @@ export default function PostCard({ post }) {
             day: "2-digit",
         });
     };
+
+    const thumbnail = post.thumbnailUrl ? `${apiBase}${post.thumbnailUrl}` : defaultThumbnail;
 
     return (
         <div className="post-card" onClick={() => navigate(`/posts/${post.id}`)}
