@@ -50,7 +50,9 @@ const PostDetailContent = ({ post, currentUser }) => {
                     {
                         isOwner && (
                             <div className="post-actions">
-                                <button className="btn-history">내역</button>
+                                <button className="btn-history" onClick={
+                                    () => navigate(`/posts/${post.id}/history`, { replace: true })
+                                }>내역</button>
                                 <button
                                     className="btn-update"
                                     onClick={() => navigate(`/posts/write/${post.id}/edit`)}

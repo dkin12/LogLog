@@ -38,3 +38,9 @@ export async function deletePosts(postId) {
     const res = await api.delete(`/api/posts/${postId}`);
     return res.data;
 }
+
+// 게시글 수정 내역
+export async function getPostsHistories(postId) {
+    const res = await api.get(`/api/posts/${postId}/history`);
+    return res.data;
+}

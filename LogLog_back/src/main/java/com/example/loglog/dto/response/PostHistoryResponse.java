@@ -18,7 +18,7 @@ public class PostHistoryResponse {
     private Long postId;
     private Long userId;
     private String title;
-    private String summary;
+    private String summery;
     private String content;
     private String thumbnailUrl;
     private LocalDateTime archivedAt;
@@ -28,7 +28,7 @@ public class PostHistoryResponse {
         return PostHistoryResponse.builder()
                 .historyId(postHistory.getId())
                 .postId(postId)
-                .summary(makeSummary(postHistory.getContent(),150))
+                .summery(makeSummary(postHistory.getContent(),150))
                 .userId(postHistory.getUserId())
                 .title(postHistory.getTitle())
                 .content(postHistory.getContent())
