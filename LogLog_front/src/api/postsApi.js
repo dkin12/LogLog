@@ -1,4 +1,5 @@
-import api from "./axios";
+//import api from "./axios";
+import { api } from './api';
 
 export const fetchPosts = async ({ page, categoryId, keyword, tag }) => {
     const params = {

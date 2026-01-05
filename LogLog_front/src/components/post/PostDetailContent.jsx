@@ -11,20 +11,21 @@ const PostDetailContent = ({ post, currentUser, apiBase }) => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const imageSrc = post.thumbnailUrl ? `${apiBase}${post.thumbnailUrl}` : null;
-    const { toast } = useToast() || {};
+    const toast = useToast();
 
     const deleteMutation = useMutation({
-        mutationFn : () => deletePosts(post.id),
+        mutationFn: () => deletePosts(post.id),
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey:['log_posts']});
-            toast.success('Post deleted successfully.');
-            navigate('/');
+            queryClient.invalidateQueries({ queryKey: ['log_posts'] });
+            toast.success('게시글이 삭제되었습니다.');
+            navigate('/', { replace: true });
         },
-        onError:(error) => {
+        onError: (error) => {
             toast.error(error.message);
             alert('삭제 실패: ' + error.message);
         }
     })
+
 
     if (!post || !post.content) return null;
 
@@ -32,7 +33,7 @@ const PostDetailContent = ({ post, currentUser, apiBase }) => {
     const isOwner = currentUser && (currentUser.id === post.userId);
 
     return (
-        <div className="post-detail-content">
+        <div className="post-detail-container">
             <div className="post-header">
                 <h1 className="post-title">{post.title}</h1>
                 <div className="post-meta">

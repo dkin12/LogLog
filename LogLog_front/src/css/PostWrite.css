@@ -1,6 +1,9 @@
 /* 전체 컨테이너 설정 */
 .editor-container {
-  padding-bottom: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    color: #333;
 }
 
 /* 제목 영역 */

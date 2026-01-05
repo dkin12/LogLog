@@ -10,8 +10,6 @@ import PostDetailContent from '../components/post/PostDetailContent';
 function PostDetail() {
     const { id } = useParams();
     const postId = Number(id);
-    const navigate = useNavigate();
-    const queryClient = useQueryClient();
 
 
     // 이미지 경로 설정
@@ -28,7 +26,10 @@ function PostDetail() {
     if(isError) return <ErrorMessage message = "게시글을 불러오는 데 실패했습니다."/>
 
     return (
-        <PostDetailContent post = {post} apiBase = {apiBase} currentUser={user} />
+        <div className="layout-content">
+            <PostDetailContent post = {post} apiBase = {apiBase} currentUser={user} />
+        </div>
+
     )
 
 }

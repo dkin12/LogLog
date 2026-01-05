@@ -43,7 +43,7 @@ public class SecurityConfig {
                                 "/api/category/**",
                                 "/api/tags/**"
                         ).permitAll()
-
+                        .requestMatchers("/images/**").permitAll()
                         // 인증 관련
                         .requestMatchers(
                                 "/api/users/login",

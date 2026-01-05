@@ -1,10 +1,11 @@
 import defaultThumbnail from "../../assets/images/default.png";
 import { FaRegEye } from "react-icons/fa";
+import {useNavigate} from "react-router";
 import "./PostCard.css";
 
 export default function PostCard({ post }) {
     const thumbnail = post.thumbnailUrl || defaultThumbnail;
-
+    const navigate = useNavigate();
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString("ko-KR", {
@@ -15,7 +16,8 @@ export default function PostCard({ post }) {
     };
 
     return (
-        <div className="post-card">
+        <div className="post-card" onClick={() => navigate(`/posts/${post.id}`)}
+             style={{ cursor: 'pointer' }}>
             {/* 썸네일 영역 */}
             <div className="post-card-thumbnail">
                 <img src={thumbnail} alt="" />
