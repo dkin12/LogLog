@@ -5,6 +5,7 @@ import com.example.loglog.dto.request.PostUpdateRequest;
 import com.example.loglog.dto.response.PageResponse;
 import com.example.loglog.dto.response.PostDetailResponse;
 import com.example.loglog.dto.response.PostListResponse;
+import com.example.loglog.dto.response.PostResponse;
 import com.example.loglog.dto.type.PostStatus;
 import com.example.loglog.entity.*;
 import com.example.loglog.repository.*;
@@ -28,6 +29,7 @@ public class PostService {
     private final TagRepository tagRepository;
     private final PostTagRepository postTagRepository;
     private final CategoryRepository categoryRepository;
+    private final PostHistoryRepository postHistoryRepository;
 
     // 게시글 작성
     @Transactional
@@ -175,6 +177,21 @@ public class PostService {
                 category,
                 request.getStatus()
         );
+    /* ============================
+       게시글 히스토리
+     ============================ */
+        PostHistory history = PostHistory.builder()
+                .post(post)
+                .userId(userId)
+                .title(post.getTitle())
+                .content(post.getContent())
+                .thumbnailUrl(post.getThumbnailUrl())
+                .status(post.getStatus())
+                .categoryId(post.getCategory() != null ? post.getCategory().getCategoryId() : null)
+                .build();
+
+        postHistoryRepository.save(history);
+
 
         post.clearTags();
         addTags(post, request.getTags()); // 아까 만든 addTags 메서드 재활용

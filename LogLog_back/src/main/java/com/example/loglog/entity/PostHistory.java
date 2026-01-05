@@ -23,7 +23,6 @@ public class PostHistory {
     @Column(name = "history_id")
     private Long id;
 
-    // ★ 어떤 게시글의 기록인지 연결 (Post가 삭제되면 히스토리도 지울지, 남길지는 정책 나름인데 보통 연결해둡니다)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "posts_id", nullable = false)
     private Post post;
@@ -41,7 +40,7 @@ public class PostHistory {
     private String thumbnailUrl;
 
     @Column(name = "category_id")
-    private Long categoryId;
+    private Integer categoryId;
 
     @Enumerated(EnumType.STRING)
     private PostStatus status;
