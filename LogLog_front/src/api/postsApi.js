@@ -13,3 +13,27 @@ export const fetchPosts = async ({ page, categoryId, keyword, tag }) => {
     const res = await api.get("/api/posts", { params });
     return res.data;
 };
+
+
+// 게시글 작성
+export async function createPosts(payload) {
+    const res = await api.post('/api/posts', payload);
+    return res.data;
+}
+// 게시글 상세
+export async function detailPost(postId) {
+    const res = await api.get(`/api/posts/${postId}`);
+    return res.data;
+
+}
+
+// 게시글 수정 
+export async function updatePosts(postId, postData) {
+    const res = await api.put(`/api/posts/${postId}`, postData);
+    return res.data;
+}
+// 게시글 삭제 
+export async function deletePosts(postId) {
+    const res = await api.delete(`/api/posts/${postId}`);
+    return res.data;
+}

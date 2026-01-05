@@ -26,23 +26,23 @@ public class Post {
     @Column(name = "posts_id")
     private Long id;
 
-    // 사용자 N:1
+    // 사용자 N:1 관계
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
-    // 카테고리 N:1
+    // 카테고리 N:1 관계
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(nullable = false, length = 200)
+    @Column(length = 200)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "CLOB")
+    @Column(columnDefinition = "CLOB")
     private String content;
 
-    @Column(name = "thumbnail_url", length = 200)
+    @Column(name = "thumbnail_url",length = 200)
     private String thumbnailUrl;
 
     @Column(nullable = false)
@@ -53,7 +53,7 @@ public class Post {
     private PostStatus status;
 
     @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at",updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
@@ -67,7 +67,7 @@ public class Post {
 
     @PrePersist
     public void prePersist() {
-        if (views == null) this.views = 0L;
+        if(views == null ) this.views = 0L;
     }
 
     // 태그 추가

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +29,7 @@ public class PostService {
     private final PostTagRepository postTagRepository;
     private final CategoryRepository categoryRepository;
 
-    /* ============================
-       게시글 작성
-     ============================ */
+    // 게시글 작성
     @Transactional
     public Long createPost(PostCreateRequest request, Long userId) {
 
@@ -151,15 +150,14 @@ public class PostService {
                         HttpStatus.NOT_FOUND, "post with id " + postId + " not found"));
 
         post.increaseViews();
-
         return PostDetailResponse.fromEntity(post);
     }
 
     /* ============================
        게시글 수정
      ============================ */
+    @Transactional
     public Long updatePost(Long postId, PostUpdateRequest request, Long userId) {
-
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
@@ -178,9 +176,8 @@ public class PostService {
                 request.getStatus()
         );
 
-        // 태그 재설정
         post.clearTags();
-        addTags(post, request.getTags());
+        addTags(post, request.getTags()); // 아까 만든 addTags 메서드 재활용
 
         return post.getId();
     }
@@ -188,6 +185,7 @@ public class PostService {
     /* ============================
        게시글 삭제
      ============================ */
+    @Transactional
     public void deletePost(Long postId, Long userId) {
 
         Post post = postRepository.findById(postId)
@@ -200,4 +198,5 @@ public class PostService {
 
         postRepository.deleteById(postId);
     }
+
 }

@@ -1,0 +1,264 @@
+/* 전체 컨테이너 설정 */
+.editor-container {
+  padding-bottom: 20px;
+}
+
+/* 제목 영역 */
+.title-section {
+  margin-bottom: 30px;
+}
+
+.title-input {
+  width: 100%;
+  font-size: 2.5rem;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  padding: 10px 0;
+  color: #333;
+  background-color: #f9f9f8;
+}
+
+.title-input::placeholder {
+  color: #ccc;
+}
+
+.title-underline {
+  height: 4px;
+  width: 100px;
+  background-color: #495057;
+  margin: 10px 0 20px 0;
+}
+
+.tag-input {
+    width: 100%;
+    font-size: 1.1rem;
+    border: none;
+    border-bottom: 2px solid #ddd;
+
+    outline: none;
+    background-color: #f9f9f8;
+    padding: 5px 0;
+    margin-bottom: 10px;
+    transition: border-color 0.3s;
+}
+
+.tag-input:focus {
+    border-bottom: 2px solid #333; /* 원하는 포인트 색상(검정, 파랑 등) */
+}
+
+/* 에디터 영역 */
+.editor-wrapper {
+  margin-bottom: 40px;
+  border: 1px solid #eee;
+}
+
+/* 설정 영역 공통 */
+.settings-container {
+  margin-bottom: 80px;
+}
+
+.setting-item {
+  margin-bottom: 40px;
+}
+
+.setting-item h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* 썸네일 설정 */
+.thumbnail-options {
+  display: flex;
+  gap: 20px;
+}
+
+.thumb-card {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  cursor: pointer;
+}
+
+.radio-header {
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.thumb-preview {
+  height: 140px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #868e96;
+  transition: all 0.2s;
+  overflow: hidden;
+}
+.thumb-preview.default-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 4px;
+}
+.thumb-card.selected .thumb-preview {
+  border: 2px solid #D17E44;
+}
+
+.default-preview span {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #D17E44;
+  margin-bottom: 5px;
+}
+
+.default-preview p {
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* 수정된 업로드 미리보기 영역 */
+.upload-preview {
+  padding: 10px;
+  /* 내부 여백 추가 */
+}
+
+.upload-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.btn-upload {
+  border: 1px solid #ccc;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #333;
+  font-weight: 500;
+}
+
+.btn-upload:hover {
+  background-color: #f1f3f5;
+  border-color: #adb5bd;
+}
+
+.thumb-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.visibility-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.vis-btn {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.vis-btn.active {
+  background-color: #D17E44;
+  color: #fff;
+  border-color: #D17E44;
+}
+
+/* 카테고리 */
+.category-select {
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+}
+
+/* 태그 칩 */
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+    margin-bottom: 10px;
+}
+
+.tag-chip {
+  background-color: #f1f3f5;
+  color: #495057;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.tag-chip:hover {
+  background-color: #e9ecef;
+}
+
+/* 푸터 */
+.editor-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background-color: #fff;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.btn-exit {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #495057;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.btn-draft {
+  background: none;
+  border: none;
+  color: #868e96;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-save {
+  background-color: #333333;
+  color: #fff;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-save:hover {
+  background-color: #212529;
+}

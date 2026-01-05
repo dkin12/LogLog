@@ -22,7 +22,6 @@ public class PostCreateRequest {
     @NotBlank(message = "본문은 필수입니다.")
     private String content;
 
-    @NotNull(message = "카테고리를 선택해주세요.")
     private Long categoryId;
 
     private String thumbnailUrl;

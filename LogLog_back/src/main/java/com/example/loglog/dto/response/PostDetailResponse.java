@@ -1,5 +1,6 @@
 package com.example.loglog.dto.response;
 
+import com.example.loglog.dto.type.PostStatus;
 import com.example.loglog.entity.Post;
 import com.example.loglog.entity.Tag;
 import lombok.*;
@@ -18,9 +19,12 @@ public class PostDetailResponse {
     private Long id;
     private String title;
     private String content;
+    private Long userId;
+    private Integer categoryId;
     private String userNickname;
     private String categoryName;
-    private String thumbnail;
+    private String thumbnailUrl;
+    private PostStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<String> tags;
@@ -31,9 +35,12 @@ public class PostDetailResponse {
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
+                .userId(post.getUser().getId())
                 .userNickname(post.getUser().getNickname())
+                .status(post.getStatus())
+                .categoryId(post.getCategory().getCategoryId())
                 .categoryName(post.getCategory().getCategoryName())
-                .thumbnail(post.getThumbnailUrl())
+                .thumbnailUrl(post.getThumbnailUrl())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .tags(
