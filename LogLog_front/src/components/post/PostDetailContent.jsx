@@ -30,7 +30,14 @@ const PostDetailContent = ({ post, currentUser }) => {
 
     const content = post.content;
     const isOwner = currentUser && (currentUser.id === post.userId);
-
+    const handleHistoryClick = async () => {
+        // 캐시를 무효화하여 다음 페이지에서 새로 데이터를 받게 함
+        await queryClient.invalidateQueries({
+            queryKey: ['log_posts_history', post.id]
+        });
+        // 이동
+        navigate(`/posts/${post.id}/history`);
+    };
     return (
         <div className="post-detail-container">
             <div className="post-header">
@@ -50,9 +57,7 @@ const PostDetailContent = ({ post, currentUser }) => {
                     {
                         isOwner && (
                             <div className="post-actions">
-                                <button className="btn-history" onClick={
-                                    () => navigate(`/posts/${post.id}/history`, { replace: true })
-                                }>내역</button>
+                                <button className="btn-history" onClick={handleHistoryClick}>내역</button>
                                 <button
                                     className="btn-update"
                                     onClick={() => navigate(`/posts/write/${post.id}/edit`)}
