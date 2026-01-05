@@ -17,7 +17,7 @@ export default function MainHeader({ isLogin, user }) {
                 {!isLogin ? (
                     <AuthButtons/>
                 ) : (
-                    <UserDropdown user={user}/>
+                    <UserDropdown user={user} />
                 )}
             </div>
         </header>

@@ -1,23 +1,29 @@
 package com.example.loglog.controller;
 
+import com.example.loglog.dto.request.NicknameUpdateRequest;
 import com.example.loglog.dto.request.UserLoginRequest;
 import com.example.loglog.dto.request.UserSignupRequest;
 import com.example.loglog.dto.response.LoginResponse;
 import com.example.loglog.dto.response.UserResponse;
 import com.example.loglog.entity.User;
 import com.example.loglog.security.jwt.JwtProvider;
+import com.example.loglog.service.LogService;
 import com.example.loglog.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.attribute.UserPrincipal;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
+    private final LogService logService;
     private final JwtProvider jwtProvider;
 
     /**
@@ -39,6 +45,9 @@ public class UserController {
                     .status(HttpStatus.UNAUTHORIZED)
                     .body("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
+
+        // 로그인 성공 → 잔디 로그 (1일 1회)
+        logService.recordLogin(user);
 
         // 로그인 성공 → JWT 발급
         String token = jwtProvider.createToken(
@@ -96,11 +105,13 @@ public class UserController {
         return ResponseEntity.ok(userService.findMe(userId));
     }
 
+    // 마이페이지 - 닉네임 수정
+    @PatchMapping("/me/nickname")
+    public UserResponse updateNickname(
+            @AuthenticationPrincipal Long userId,
+            @RequestBody @Valid NicknameUpdateRequest dto
+    ) {
+        return userService.updateNickname(userId, dto.getNickname());
+    }
 
-    // 로그아웃
-/*    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpSession session) {
-        session.invalidate();
-        return ResponseEntity.ok().build();
-    }*/
 }

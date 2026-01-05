@@ -46,4 +46,8 @@ public class User {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

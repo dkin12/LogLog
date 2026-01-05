@@ -58,3 +58,11 @@ export const getMe = async () => {
 export const getToken = () => {
     return localStorage.getItem('accessToken');
 };
+
+/**
+ * 사용자 닉네임 변경 (마이페이지)
+ */
+export async function updateNickname(nickname) {
+    const res = await api.patch("/api/users/me/nickname", { nickname });
+    return res.data;
+}
