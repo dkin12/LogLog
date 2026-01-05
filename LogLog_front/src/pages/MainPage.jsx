@@ -62,7 +62,7 @@ export default function MainPage() {
                 />
 
                 {/* 총 게시글 수 & 검색 결과 요약 */}
-                <div className="content-wrapper">
+                <div className="layout-content">
                     {data && (
                         <div className="post-summary">
                             {keyword ? (
@@ -87,7 +87,7 @@ export default function MainPage() {
                 </div>
 
                 {/* 목록 상태 판단은 PostList */}
-                <div className="content-wrapper">
+                <div className="layout-content">
                     <PostList
                         posts={data?.content}
                         isLoading={isLoading}

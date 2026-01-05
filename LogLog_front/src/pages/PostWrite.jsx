@@ -1,21 +1,21 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Editor } from '@toast-ui/react-editor';
+import React, {useState, useRef, useEffect} from 'react';
+import {Editor} from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '../css/PostWrite.css';
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { fetchCategories } from '../api/categoryApi';
-import { createPosts, detailPost, fetchPosts, updatePosts } from '../api/postsApi';
-import { uploadImage } from '../api/fileApi';
-import { useToast } from '../hooks/useToast';
+import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
+import {fetchCategories} from '../api/categoryApi';
+import {createPosts, detailPost, fetchPosts, updatePosts} from '../api/postsApi';
+import {uploadImage} from '../api/fileApi';
+import {useToast} from '../hooks/useToast';
 import defaultThumbnail from "../assets/images/default.png";
-import { useNavigate, useParams } from "react-router";
+import {useNavigate, useParams} from "react-router";
 
-const PostWrite = ({ mode }) => {
+const PostWrite = ({mode}) => {
     const editorRef = useRef();
     const fileInputRef = useRef();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const { id } = useParams();
+    const {id} = useParams();
     const postId = Number(id);
     const isEdit = mode === 'edit';
 
@@ -55,7 +55,7 @@ const PostWrite = ({ mode }) => {
         mutationFn: createPosts,
         onSuccess: () => {
             toast.success('게시글이 등록되었습니다!');
-            queryClient.invalidateQueries({ queryKey: ['log_posts'] });
+            queryClient.invalidateQueries({queryKey: ['log_posts']});
             navigate('/posts');
         },
         onError: (error) => {
@@ -67,8 +67,8 @@ const PostWrite = ({ mode }) => {
         mutationFn: (payload) => updatePosts(postId, payload),
         onSuccess: (updatedPost) => {
             toast.success('게시글이 수정되었습니다!');
-            queryClient.invalidateQueries({ queryKey: ['log_posts'] });
-            queryClient.invalidateQueries({ queryKey: ['log_posts', postId] });
+            queryClient.invalidateQueries({queryKey: ['log_posts']});
+            queryClient.invalidateQueries({queryKey: ['log_posts', postId]});
             navigate(`/posts/${postId}`);
         },
         onError: (error) => {
@@ -92,13 +92,13 @@ const PostWrite = ({ mode }) => {
     };
 
     // --- 데이터 조회 ---
-    const { data: post } = useQuery({
+    const {data: post} = useQuery({
         queryKey: ['log_posts', postId],
         queryFn: () => detailPost(postId),
         enabled: isEdit && !!postId,
     });
 
-    const { data: categories = [] } = useQuery({
+    const {data: categories = []} = useQuery({
         queryKey: ['log_category'],
         queryFn: fetchCategories,
     });
@@ -188,180 +188,185 @@ const PostWrite = ({ mode }) => {
     };
 
     return (
-        <div className="editor-container">
-            {/* 제목 */}
-            <div className="title-section">
-                <input
-                    type="text"
-                    className="title-input"
-                    placeholder="제목을 입력하세요"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-                <div className="title-underline"></div>
-            </div>
-
-            {/* 에디터 */}
-            <div className="editor-wrapper">
-                <Editor
-                    ref={editorRef}
-                    placeholder="내용을 입력해주세요."
-                    previewStyle="vertical"
-                    height="500px"
-                    initialEditType="markdown"
-                    useCommandShortcut={true}
-                />
-            </div>
-
-            {/* 설정 영역 */}
-            <div className="settings-container">
-                {/* 썸네일 설정 */}
-                <div className="setting-item">
-                    <h3>썸네일 설정</h3>
-                    <div className="thumbnail-options">
-
-                        {/* 1. 기본 썸네일 */}
-                        <label className={`thumb-card ${thumbnailType === 'default' ? 'selected' : ''}`}>
-                            <div className="radio-header">
-                                <input
-                                    type="radio"
-                                    name="thumbnail"
-                                    checked={thumbnailType === 'default'}
-                                    onChange={() => setThumbnailType('default')}
-                                /> 기본 썸네일 설정
-                            </div>
-                            <div className="thumb-preview default-preview">
-                                <img src={defaultThumbnail} alt="Default" />
-                            </div>
-                        </label>
-
-                        {/* 2. 직접 등록 */}
-                        <label className={`thumb-card ${thumbnailType === 'custom' ? 'selected' : ''}`}>
-                            <div className="radio-header">
-                                <input
-                                    type="radio"
-                                    name="thumbnail"
-                                    checked={thumbnailType === 'custom'}
-                                    onChange={() => setThumbnailType('custom')}
-                                /> 직접 썸네일 등록하기
-                            </div>
-                            <div
-                                className="thumb-preview upload-preview"
-                                onClick={thumbnailUrl ? handleThumbnailBtnClick : undefined}
-                                style={{
-                                    position: 'relative',
-                                    overflow: 'hidden',
-                                    padding: thumbnailUrl ? 0 : undefined,
-                                    cursor: thumbnailUrl ? 'pointer' : 'default',
-                                }}
-                            >
-                                {uploadMutation.isPending ? (
-                                    <p style={{ color: 'blue', margin: 0 }}>업로드 중... ⏳</p>
-                                ) : thumbnailUrl ? (
-                                    <img
-                                        src={
-                                            thumbnailUrl.startsWith('http')
-                                                ? thumbnailUrl
-                                                : `http://localhost:8088${thumbnailUrl.startsWith('/') ? '' : '/'}${thumbnailUrl}`
-                                        }
-                                        alt="Thumbnail Preview"
-                                        className="thumb-preview-img"
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            objectFit: 'cover',
-                                            display: 'block'
-                                        }}
-                                    />
-                                ) : (
-                                    <>
-                                        <div className="upload-icon">📷</div>
-                                        <button
-                                            type="button"
-                                            className="btn-upload"
-                                            onClick={(e) => { e.stopPropagation(); handleThumbnailBtnClick(); }}
-                                        >
-                                            썸네일 등록하기
-                                        </button>
-                                    </>
-                                )}
-                            </div>
-                        </label>
-
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            style={{ display: 'none' }}
-                            accept="image/*"
-                            onChange={handleFileChange}
-                        />
-                    </div>
-                </div>
-
-                {/* 공개 설정 */}
-                <div className="setting-item">
-                    <h3>공개 설정</h3>
-                    <div className="visibility-buttons">
-                        <button
-                            className={`vis-btn ${status === 'PUBLISHED' ? 'active' : ''}`}
-                            onClick={() => setStatus('PUBLISHED')}
-                        >
-                            🌏 전체 공개
-                        </button>
-                        <button
-                            className={`vis-btn ${status === 'PRIVATE' ? 'active' : ''}`}
-                            onClick={() => setStatus('PRIVATE')}
-                        >
-                            🔒 비공개
-                        </button>
-                    </div>
-                </div>
-
-                {/* 카테고리 */}
-                <div className="setting-item">
-                    <h3>카테고리</h3>
-                    <select
-                        className="category-select"
-                        value={categoryId}
-                        onChange={(e) => setCategoryId(e.target.value)}
-                    >
-                        <option value="">== 카테고리 선택 ==</option>
-                        {categories.map((item) => (
-                            <option key={item.categoryId} value={item.categoryId}>
-                                {item.categoryName}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                {/* 태그 */}
-                <div className="setting-item">
-                    <h3>태그</h3>
+        <div className="layout-content">
+            <div className="editor-container">
+                {/* 제목 */}
+                <div className="title-section">
                     <input
                         type="text"
-                        className="tag-input"
-                        placeholder="태그를 입력하세요"
-                        value={tagInput}
-                        onChange={(e) => setTagInput(e.target.value)}
-                        onKeyDown={handleTagKeyDown}
+                        className="title-input"
+                        placeholder="제목을 입력하세요"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                     />
-                    <div className="tags-list">
-                        {tags.map((tag, index) => (
-                            <span key={index} className="tag-chip" onClick={() => removeTag(tag)}>
+                    <div className="title-underline"></div>
+                </div>
+
+                {/* 에디터 */}
+                <div className="editor-wrapper">
+                    <Editor
+                        ref={editorRef}
+                        placeholder="내용을 입력해주세요."
+                        previewStyle="vertical"
+                        height="500px"
+                        initialEditType="markdown"
+                        useCommandShortcut={true}
+                    />
+                </div>
+
+                {/* 설정 영역 */}
+                <div className="settings-container">
+                    {/* 썸네일 설정 */}
+                    <div className="setting-item">
+                        <h3>썸네일 설정</h3>
+                        <div className="thumbnail-options">
+
+                            {/* 1. 기본 썸네일 */}
+                            <label className={`thumb-card ${thumbnailType === 'default' ? 'selected' : ''}`}>
+                                <div className="radio-header">
+                                    <input
+                                        type="radio"
+                                        name="thumbnail"
+                                        checked={thumbnailType === 'default'}
+                                        onChange={() => setThumbnailType('default')}
+                                    /> 기본 썸네일 설정
+                                </div>
+                                <div className="thumb-preview default-preview">
+                                    <img src={defaultThumbnail} alt="Default"/>
+                                </div>
+                            </label>
+
+                            {/* 2. 직접 등록 */}
+                            <label className={`thumb-card ${thumbnailType === 'custom' ? 'selected' : ''}`}>
+                                <div className="radio-header">
+                                    <input
+                                        type="radio"
+                                        name="thumbnail"
+                                        checked={thumbnailType === 'custom'}
+                                        onChange={() => setThumbnailType('custom')}
+                                    /> 직접 썸네일 등록하기
+                                </div>
+                                <div
+                                    className="thumb-preview upload-preview"
+                                    onClick={thumbnailUrl ? handleThumbnailBtnClick : undefined}
+                                    style={{
+                                        position: 'relative',
+                                        overflow: 'hidden',
+                                        padding: thumbnailUrl ? 0 : undefined,
+                                        cursor: thumbnailUrl ? 'pointer' : 'default',
+                                    }}
+                                >
+                                    {uploadMutation.isPending ? (
+                                        <p style={{color: 'blue', margin: 0}}>업로드 중... ⏳</p>
+                                    ) : thumbnailUrl ? (
+                                        <img
+                                            src={
+                                                thumbnailUrl.startsWith('http')
+                                                    ? thumbnailUrl
+                                                    : `http://localhost:8088${thumbnailUrl.startsWith('/') ? '' : '/'}${thumbnailUrl}`
+                                            }
+                                            alt="Thumbnail Preview"
+                                            className="thumb-preview-img"
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover',
+                                                display: 'block'
+                                            }}
+                                        />
+                                    ) : (
+                                        <>
+                                            <div className="upload-icon">📷</div>
+                                            <button
+                                                type="button"
+                                                className="btn-upload"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleThumbnailBtnClick();
+                                                }}
+                                            >
+                                                썸네일 등록하기
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            </label>
+
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                style={{display: 'none'}}
+                                accept="image/*"
+                                onChange={handleFileChange}
+                            />
+                        </div>
+                    </div>
+
+                    {/* 공개 설정 */}
+                    <div className="setting-item">
+                        <h3>공개 설정</h3>
+                        <div className="visibility-buttons">
+                            <button
+                                className={`vis-btn ${status === 'PUBLISHED' ? 'active' : ''}`}
+                                onClick={() => setStatus('PUBLISHED')}
+                            >
+                                🌏 전체 공개
+                            </button>
+                            <button
+                                className={`vis-btn ${status === 'PRIVATE' ? 'active' : ''}`}
+                                onClick={() => setStatus('PRIVATE')}
+                            >
+                                🔒 비공개
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* 카테고리 */}
+                    <div className="setting-item">
+                        <h3>카테고리</h3>
+                        <select
+                            className="category-select"
+                            value={categoryId}
+                            onChange={(e) => setCategoryId(e.target.value)}
+                        >
+                            <option value="">== 카테고리 선택 ==</option>
+                            {categories.map((item) => (
+                                <option key={item.categoryId} value={item.categoryId}>
+                                    {item.categoryName}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* 태그 */}
+                    <div className="setting-item">
+                        <h3>태그</h3>
+                        <input
+                            type="text"
+                            className="tag-input"
+                            placeholder="태그를 입력하세요"
+                            value={tagInput}
+                            onChange={(e) => setTagInput(e.target.value)}
+                            onKeyDown={handleTagKeyDown}
+                        />
+                        <div className="tags-list">
+                            {tags.map((tag, index) => (
+                                <span key={index} className="tag-chip" onClick={() => removeTag(tag)}>
                                 #{tag}
                             </span>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="editor-footer">
-                <button className="btn-exit" onClick={() => navigate(-1)}>← 나가기</button>
-                <div className="footer-actions">
-                    {!isEdit && (
-                        <button className="btn-draft" onClick={() => submitPost('DRAFT')}>임시저장</button>
-                    )}
-                    <button className="btn-save" onClick={() => submitPost(status)}>저장하기</button>
+                <div className="editor-footer">
+                    <button className="btn-exit" onClick={() => navigate(-1)}>← 나가기</button>
+                    <div className="footer-actions">
+                        {!isEdit && (
+                            <button className="btn-draft" onClick={() => submitPost('DRAFT')}>임시저장</button>
+                        )}
+                        <button className="btn-save" onClick={() => submitPost(status)}>저장하기</button>
+                    </div>
                 </div>
             </div>
         </div>
