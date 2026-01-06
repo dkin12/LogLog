@@ -1,0 +1,17 @@
+.post-detail-page {
+    min-height: 100vh;
+    padding: 50px 16px 120px;
+}
+
+.post-detail-card {
+    max-width: 720px;
+    margin: 0 auto;
+    background: linear-gradient(
+            180deg,
+            #ffffff 0%,
+            var(--bg-main) 100%
+    );
+    border-radius: 20px;
+    padding: 40px 44px;
+    box-shadow: 0 18px 36px rgba(88, 50, 24, 0.1);
+}

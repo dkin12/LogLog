@@ -16,10 +16,38 @@ body {
 }
 
 body {
-    background-color: #F9F9F8;
+    background-color: var(--bg-main);
+    color: var(--text-main);
     font-family: "PretendardJPVariable", "Noto Sans KR", sans-serif;
 }
 
 .font-pop {
     font-family: "KeinannPOP", "PretendardJPVariable", sans-serif;
+}
+
+:root {
+    --bg-main: #FAF8F5;
+    --bg-sub: #F2ECE7;
+
+    --card-bg: #FFFFFF;
+    --card-hover: #F7F2EE;
+
+    --primary: #583218;
+    --primary-hover: #6B3E21;
+    --primary-soft: #EADFD6;
+    --primary-border: #D7C4B6;
+
+    --accent: #B08968;
+    --accent-soft: #F3E9E1;
+
+    --border-soft: #E3DBD5;
+    --border-strong: #C8B6A8;
+
+    --text-main: #2B2522;
+    --text-sub: #7C736E;
+    --text-muted: #A79C95;
+
+    --success: #5F8F6A;
+    --warning: #D8A14D;
+    --error: #B84A3A;
 }
