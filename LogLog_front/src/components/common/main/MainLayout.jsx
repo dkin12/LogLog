@@ -23,12 +23,14 @@ export default function MainLayout() {
     const isLogin = !!user;
 
     return (
-        <>
-            <MainHeader isLogin={isLogin} user={user} />
+        <div className="main-layout">
+            <MainHeader isLogin={!!user} user={user} />
+
             <main className="main-container">
-                <Outlet context={{user}}/>
+                <Outlet context={{ user, setUser }} />
             </main>
+
             <WriteFloatingButton isLogin={isLogin} />
-        </>
+        </div>
     );
 }

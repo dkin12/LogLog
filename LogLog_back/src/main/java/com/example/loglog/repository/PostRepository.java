@@ -110,5 +110,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         order by p.createdAt desc
     """)
     List<Post> findAllByIdIn(@Param("ids") List<Long> ids);
+
+    // 8. 내가 쓴 글 조회
+    @Query("""
+        select p
+        from Post p
+        join fetch p.category
+        where p.user.id = :userId
+          and p.status != 'DRAFT'
+        order by p.createdAt desc
+    """)
+    List<Post> findMyPosts(@Param("userId") Long userId);
+
 }
 

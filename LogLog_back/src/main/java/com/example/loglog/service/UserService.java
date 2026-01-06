@@ -128,4 +128,15 @@ public class UserService {
                 user.getNickname()
         );
     }
+
+    // 닉네임 수정
+    @Transactional
+    public UserResponse updateNickname(Long userId, String nickname) {
+        User user = userRepository.findById(userId)
+                .orElseThrow();
+
+        user.updateNickname(nickname);
+        return UserResponse.from(user);
+    }
+
 }
