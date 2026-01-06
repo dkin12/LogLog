@@ -11,6 +11,7 @@ import DraftsPage from "../pages/DraftsPage.jsx";
 import PostWrite from "../pages/PostWrite.jsx";
 import PostDetail from "../pages/PostDetail.jsx";
 import PostHistory from "../pages/PostHistory.jsx";
+import PostDiffPage from "../components/post/PostDiffPage.jsx";
 
 export const router = createBrowserRouter([
     // 메인 영역 (공통 헤더)
@@ -57,6 +58,13 @@ export const router = createBrowserRouter([
                 path : "posts/:id/history", element: (
                     <RequireAuth>
                         <PostHistory />
+                    </RequireAuth>
+                )
+            },{
+                path: "posts/:id/history/:historyId",
+                element: (
+                    <RequireAuth>
+                        <PostDiffPage />
                     </RequireAuth>
                 )
             }

@@ -9,7 +9,10 @@
 
 .header-left {
     display: flex;
-    align-items: center;
+    flex-direction: column; /* 자식 요소들을 세로(열) 방향으로 배치 */
+    align-items: center;    /* 세로 배치 시 수평(가로) 중앙 정렬 */
+    justify-content: center; /* 필요하다면 수직 중앙 정렬도 추가 */
+    gap: 10px;               /* 자식 요소들 사이의 간격을 조절하고 싶을 때 사용 */
 }
 
 .logo {

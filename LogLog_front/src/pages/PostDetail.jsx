@@ -27,8 +27,8 @@ function PostDetail() {
         <div className="layout-content">
             <PostDetailContent post = {post} currentUser={user} />
         </div>
-
     )
+
 
 }
 

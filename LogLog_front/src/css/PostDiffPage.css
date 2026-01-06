@@ -1,0 +1,114 @@
+/* 전체 레이아웃 */
+.diff-layout-container {
+    max-width: 1400px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* 상단 헤더 - 고정형 */
+.diff-sticky-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 24px 32px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.diff-main-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+.diff-timestamp {
+    color: #909090;
+    font-size: 14px;
+}
+
+/* 버튼 스타일 */
+.btn-restore {
+    background-color: #5c4b43;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-restore:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(92, 75, 67, 0.3);
+}
+
+/* 좌우 비교 컨테이너 */
+.diff-content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 1:1 비율 고정 */
+    gap: 24px;
+    align-items: start;
+}
+
+/* 각 패널 (박스) */
+.diff-panel {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #eef0f2;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+}
+
+.panel-label {
+    padding: 12px 20px;
+    background: #f1f3f5;
+    font-size: 13px;
+    font-weight: 700;
+    color: #495057;
+    border-bottom: 1px solid #eef0f2;
+}
+
+.panel-label.current {
+    background: #fff4e6;
+    color: #fd7e14;
+}
+
+/* 토스트 뷰어 박스 */
+.viewer-box {
+    padding: 30px;
+    min-height: 500px;
+}
+
+/* 토스트 뷰어 내부 스타일 미세 조정 */
+.toastui-editor-contents {
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+/* TOAST UI Viewer 내부의 추가/삭제 스타일 */
+
+/* 추가된 부분: 연한 초록색 배경 */
+.toastui-editor-contents ins.diff-added {
+    background-color: #e6ffec;
+    text-decoration: none;
+    border-bottom: 2px solid #2da44e;
+    color: #24292f;
+}
+
+/* 삭제된 부분: 연한 빨간색 배경 + 취소선 */
+.toastui-editor-contents del.diff-removed {
+    background-color: #ffebe9;
+    color: #cf222e;
+    text-decoration: line-through;
+}
+
+/* 줄 단위 변경 강조 (필요 시) */
+.diff-line-definition {
+    display: block;
+    padding: 2px 0;
+}

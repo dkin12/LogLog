@@ -44,3 +44,9 @@ export async function getPostsHistories(postId) {
     const res = await api.get(`/api/posts/${postId}/history`);
     return res.data;
 }
+
+// 게시글 수정 내역 1개
+export async function getPostDetailHistories(historyId) {
+    const res = await api.get(`/api/history/${historyId}`);
+    return res.data;
+}
