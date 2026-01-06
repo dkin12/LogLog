@@ -12,13 +12,11 @@ function PostDetail() {
     const postId = Number(id);
 
 
-    // 이미지 경로 설정
-    const apiBase = import.meta.env.VITE_API_BASE_URL;
     const { user } = useOutletContext();
 
     // 데이터 가져오기
     const { data: post, isLoading, isError } = useQuery({
-        queryKey: ['post', postId],
+        queryKey: ['log_posts', postId],
         queryFn: () => detailPost(postId)
     });
 
@@ -27,10 +25,10 @@ function PostDetail() {
 
     return (
         <div className="layout-content">
-            <PostDetailContent post = {post} apiBase = {apiBase} currentUser={user} />
+            <PostDetailContent post = {post} currentUser={user} />
         </div>
-
     )
+
 
 }
 

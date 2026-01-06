@@ -4,7 +4,10 @@ import com.example.loglog.dto.request.PostCreateRequest;
 import com.example.loglog.dto.request.PostUpdateRequest;
 import com.example.loglog.dto.response.PageResponse;
 import com.example.loglog.dto.response.PostDetailResponse;
+import com.example.loglog.dto.response.PostHistoryResponse;
 import com.example.loglog.dto.response.PostListResponse;
+import com.example.loglog.entity.PostHistory;
+import com.example.loglog.repository.PostHistoryRepository;
 import com.example.loglog.service.PostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -87,4 +91,17 @@ public class PostController {
         postService.deletePost(postId, userId);
         return ResponseEntity.ok("게시글이 삭제되었습니다.");
     }
+
+    // 히스토리 목록 조회 API
+    @GetMapping("/{postId}/history")
+    public List<PostHistoryResponse> getPostHistoryList(@PathVariable Long postId) {
+        return postService.getPostHistories(postId);
+    }
+
+    // 히스토리 개별(단건) 조회 API
+    @GetMapping("/history/{historyId}")
+    public PostHistoryResponse getPostHistoryDetail(@PathVariable Long historyId) {
+        return postService.getPostHistoryDetail(historyId);
+    }
+
 }

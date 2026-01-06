@@ -41,7 +41,7 @@ const PostWrite = ({mode}) => {
             const uploadedUrl = result.imageUrl || result;
             setThumbnailUrl(uploadedUrl);
 
-            // ★ 업로드 성공 시에도 '직접 등록'으로 자동 선택
+            // 업로드 성공 시에도 '직접 등록'으로 자동 선택
             setThumbnailType('custom');
         },
         onError: (error) => {
@@ -56,7 +56,7 @@ const PostWrite = ({mode}) => {
         onSuccess: () => {
             toast.success('게시글이 등록되었습니다!');
             queryClient.invalidateQueries({queryKey: ['log_posts']});
-            navigate('/posts');
+            navigate('/posts',{ replace: true });
         },
         onError: (error) => {
             toast.error('등록 실패: ' + error.message);
@@ -69,7 +69,8 @@ const PostWrite = ({mode}) => {
             toast.success('게시글이 수정되었습니다!');
             queryClient.invalidateQueries({queryKey: ['log_posts']});
             queryClient.invalidateQueries({queryKey: ['log_posts', postId]});
-            navigate(`/posts/${postId}`);
+            queryClient.setQueryData(['log_posts', postId], updatedPost);
+            navigate(`/posts/${postId}`,{ replace: true });
         },
         onError: (error) => {
             toast.error('수정 실패: ' + error.message);

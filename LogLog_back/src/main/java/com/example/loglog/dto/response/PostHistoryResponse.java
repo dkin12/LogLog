@@ -1,42 +1,39 @@
 package com.example.loglog.dto.response;
 
-
-// 게시글 리스트 응답
-
-import com.example.loglog.entity.Category;
-import com.example.loglog.entity.Post;
-import com.example.loglog.entity.User;
+import com.example.loglog.entity.PostHistory;
+import com.example.loglog.repository.PostHistoryRepository;
 import lombok.*;
 
 import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostListResponse {
+public class PostHistoryResponse {
 
-    private Long id;
+    private Long historyId;
+    private Long postId;
+    private Long userId;
     private String title;
-    private String summary;
-    private String userNickname;
-    private String categoryName;
-    private Long views;
+    private String summery;
+    private String content;
     private String thumbnailUrl;
-    private LocalDateTime createdAt;
+    private LocalDateTime archivedAt;
 
-
-    public static PostListResponse fromEntity(Post post) {
-        return PostListResponse.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .summary(makeSummary(post.getContent(),150))
-                .thumbnailUrl(post.getThumbnailUrl())
-                .userNickname(post.getUser().getNickname())
-                .categoryName(post.getCategory().getCategoryName())
-                .views(post.getViews())
-                .createdAt(post.getCreatedAt())
+    public static PostHistoryResponse from(PostHistory postHistory) {
+        Long postId = (postHistory.getPost() != null) ? postHistory.getPost().getId() : null;
+        return PostHistoryResponse.builder()
+                .historyId(postHistory.getId())
+                .postId(postId)
+                .summery(makeSummary(postHistory.getContent(),150))
+                .userId(postHistory.getUserId())
+                .title(postHistory.getTitle())
+                .content(postHistory.getContent())
+                .thumbnailUrl(postHistory.getThumbnailUrl())
+                .archivedAt(postHistory.getArchivedAt())
                 .build();
     }
 
@@ -91,4 +88,5 @@ public class PostListResponse {
 
         return plainText;
     }
+
 }
