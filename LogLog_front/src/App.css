@@ -1,14 +1,25 @@
 @font-face {
+    font-family: "PretendardJPVariable";
+    src: url("./assets/fonts/PretendardJPVariable.ttf") format("truetype");
+
+}
+
+@font-face {
     font-family: "KeinannPOP";
     src: url("./assets/fonts/KeinannPOP.ttf") format("truetype");
 }
 
-html, body {
+html,
+body {
     margin: 0;
     height: 100%;
 }
 
 body {
     background-color: #F9F9F8;
-    font-family: "KeinannPOP", "Noto Sans KR", sans-serif;
+    font-family: "PretendardJPVariable", "Noto Sans KR", sans-serif;
+}
+
+.font-pop {
+    font-family: "KeinannPOP", "PretendardJPVariable", sans-serif;
 }

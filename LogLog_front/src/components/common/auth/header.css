@@ -1,12 +1,15 @@
 .header {
-    height: 50px;
+    height: 64px;
     padding: 0 32px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    background-color: #F9F9F8;
 }
 
 .logo {
     font-size: 20px;
     font-weight: 700;
     color: #583218;
+    font-family: "KeinannPOP", cursive;
 }

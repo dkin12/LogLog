@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,21 +44,22 @@ public class PostService {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("카테고리가 없습니다."));
 
-        // 게시글 먼저 저장
-        Post post = postRepository.save(request.toEntity(user, category));
+        Post post = request.toEntity(user, category);
 
-        // 태그 매핑
+        // 생성 + 발행인 경우
+        if (request.getStatus() == PostStatus.PUBLISHED) {
+            post.publishNow(); // status + publishedAt
+        }
+
+        postRepository.save(post);
+
         addTags(post, request.getTags());
 
-        // 발행인 경우만 로그 (임시저장은 집계 X)
-        if (post.getStatus() != PostStatus.DRAFT) {
-            logService.recordPostPublish(
-                    user,
-                    PostStatus.DRAFT,      // 생성은 항상 DRAFT에서 시작
-                    post.getStatus(),
-                    post.getId()
-            );
+        // 발행 버튼을 눌렀을 때만 로그
+        if (post.getStatus() == PostStatus.PUBLISHED) {
+            logService.recordPostPublish(user, post.getId());
         }
+
         return post.getId();
     }
 
@@ -158,7 +160,7 @@ public class PostService {
      ============================ */
     public PostDetailResponse getPost(Long postId) {
 
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByIdWithTags(postId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "post with id " + postId + " not found"));
 
@@ -171,6 +173,7 @@ public class PostService {
      ============================ */
     @Transactional
     public Long updatePost(Long postId, PostUpdateRequest request, Long userId) {
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
@@ -178,23 +181,20 @@ public class PostService {
             throw new IllegalStateException("수정 권한이 없습니다.");
         }
 
-        // update 전에 상태 백업
-        PostStatus oldStatus = post.getStatus();
-
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("카테고리가 없습니다."));
 
-        // 게시글 수정 (status 포함)
+        // 수정 + 재발행
         post.update(
                 request.getTitle(),
                 request.getContent(),
                 request.getThumbnailUrl(),
                 category,
-                request.getStatus()
+                PostStatus.PUBLISHED
         );
-    /* ============================
-       게시글 히스토리
-     ============================ */
+
+        post.publishNow(); // 재발행 시각 갱신
+
         PostHistory history = PostHistory.builder()
                 .post(post)
                 .userId(userId)
@@ -202,22 +202,20 @@ public class PostService {
                 .content(post.getContent())
                 .thumbnailUrl(post.getThumbnailUrl())
                 .status(post.getStatus())
-                .categoryId(post.getCategory() != null ? post.getCategory().getCategoryId() : null)
+                .categoryId(
+                        post.getCategory() != null
+                                ? post.getCategory().getCategoryId()
+                                : null
+                )
                 .build();
 
         postHistoryRepository.save(history);
 
-
         post.clearTags();
-        addTags(post, request.getTags()); // 아까 만든 addTags 메서드 재활용
+        addTags(post, request.getTags());
 
-        // 수정 후 발행 로그
-        logService.recordPostPublish(
-                post.getUser(),
-                oldStatus,
-                post.getStatus(),
-                post.getId()
-        );
+        // 재발행 로그
+        logService.recordPostPublish(post.getUser(), post.getId());
 
         return post.getId();
     }

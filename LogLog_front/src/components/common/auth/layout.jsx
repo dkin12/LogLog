@@ -6,9 +6,11 @@ export default function Layout() {
     return (
         <>
             <Header />
+
             <main className="layout-main">
                 <Outlet />
             </main>
+
         </>
     );
 }
