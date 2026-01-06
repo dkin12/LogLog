@@ -37,6 +37,12 @@ const PostDetailContent = ({ post, currentUser }) => {
         // 이동
         navigate(`/posts/${post.id}/history`);
     };
+
+    const handleTagClick = (tagName) => {
+        const cleanTagName = tagName.startsWith('#') ? tagName.substring(1) : tagName;
+        navigate(`/?tag=${encodeURIComponent(cleanTagName.trim())}`);
+    };
+
     return (
         <div className="post-detail-container">
             <div className="post-header">
@@ -81,9 +87,13 @@ const PostDetailContent = ({ post, currentUser }) => {
                 />
             </div>
 
-            <div className="tag-list">
-                {['#Postmortem', '#devops', '#개발자커리어'].map((tag, index) => (
-                    <span key={index} className="tag-item">{tag}</span>
+            <div className="tag-list" >
+                {post.tags.map((tag, index) => (
+                    <span key={index} className="tag-item"
+                        onClick={() => {
+                            handleTagClick(`${tag}`);
+                        }}
+                    > # {tag} </span>
                 ))}
             </div>
         </div>

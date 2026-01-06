@@ -160,7 +160,7 @@ public class PostService {
      ============================ */
     public PostDetailResponse getPost(Long postId) {
 
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByIdWithTags(postId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "post with id " + postId + " not found"));
 

@@ -40,7 +40,6 @@ const PostWrite = ({ mode }) => {
             console.log("이미지 업로드 성공:", result);
             const uploadedUrl = result.imageUrl || result;
             setThumbnailUrl(uploadedUrl);
-
             // 업로드 성공 시에도 '직접 등록'으로 자동 선택
             setThumbnailType('custom');
         },
