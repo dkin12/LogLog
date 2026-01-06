@@ -1,6 +1,6 @@
 package com.example.loglog.dto.response;
 
-import com.example.loglog.entity.Comment;
+import com.example.loglog.dto.type.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,20 +10,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MyCommentResponse {
 
+    // 댓글 정보
     private Long commentId;
     private String content;
     private LocalDateTime createdAt;
 
+    // 게시글 정보
     private Long postId;
     private String postTitle;
-
-    public static MyCommentResponse from(Comment comment) {
-        return new MyCommentResponse(
-                comment.getId(),
-                comment.getContent(),
-                comment.getCreatedAt(),
-                comment.getPost().getId(),
-                comment.getPost().getTitle()
-        );
-    }
+    private String categoryName;
+    private PostStatus postStatus; // PUBLISHED / PRIVATE
 }

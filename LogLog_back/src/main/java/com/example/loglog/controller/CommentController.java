@@ -29,10 +29,7 @@ public class CommentController {
     // 내가 쓴 댓글 조회
     @GetMapping("/mypage/comments")
     public List<MyCommentResponse> getMyComments(@AuthenticationPrincipal Long userId) {
-        return commentService.getMyComments(userId)
-                .stream()
-                .map(MyCommentResponse::from)
-                .toList();
+        return commentService.getMyComments(userId);
     }
 
     // 댓글 등록

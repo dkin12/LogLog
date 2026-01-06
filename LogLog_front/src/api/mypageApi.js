@@ -13,8 +13,8 @@ export const getMyComments = async () => {
 };
 
 // 특정 유저의 게시글 조회
-export const getUserPosts = async (userId) => {
-    const res = await api.get(`/api/posts/users/${userId}`);
-    return res.data;
-};
+export const fetchMyComments = async () => {
+    const res = await api.get('/mypage/comments');
+    return res.data; // 지금 네가 찍은 JSON 그대로 옴
+}
 
