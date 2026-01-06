@@ -1,18 +1,25 @@
 .mypage-layout {
     display: flex;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 32px 35px;
-    gap: 32px;
+    max-width: 100%;
+    padding: 32px 0px;
     align-items: flex-start;
+}
+
+.mypage-post-card {
+    height: 520px;
+}
+
+.mypage-own .mypage-sidebar {
+    width: 180px;
 }
 
 .mypage-sidebar {
     width: 220px;
+    margin-left: 45px;
     flex-shrink: 0;
+
     position: sticky;
-    top: 88px;   /* 헤더 높이만큼 */
-    align-self: flex-start;
+    top: 88px;
 }
 
 .mypage-content {
@@ -22,10 +29,11 @@
     gap: 32px;
     max-width: 720px;
     min-width: 0;
+    margin: 0 auto;
 }
 
 .mypost-comment-preview {
     margin-top: 6px;
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.85rem;
+    color: #9b9b9b;
 }

@@ -71,7 +71,7 @@ function Mypage() {
     };
 
     return (
-        <div className="mypage-layout">
+        <div className="mypage-layout mypage-own">
             <aside className="mypage-sidebar">
                 <LeftSidebar
                     mode={mode}
@@ -85,12 +85,14 @@ function Mypage() {
                 </section>
 
                 {mode !== "grass" && (
-                    <MyPostList
-                        posts={items}
-                        mode={mode}
-                        isOwner={true}
-                        loading={loading}
-                    />
+                    <section className="mypage-post-card">
+                        <MyPostList
+                            posts={items}
+                            mode={mode}
+                            isOwner={true}
+                            loading={loading}
+                        />
+                    </section>
                 )}
             </div>
 
