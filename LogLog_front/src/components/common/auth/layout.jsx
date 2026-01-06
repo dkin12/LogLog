@@ -5,13 +5,11 @@ import "./layout.css";
 export default function Layout() {
     return (
         <>
-            <div className="main-layout">
-                <Header />
+            <Header />
 
-                <main className="layout-main">
-                    <Outlet />
-                </main>
-            </div>
+            <main className="layout-main">
+                <Outlet />
+            </main>
 
         </>
     );
