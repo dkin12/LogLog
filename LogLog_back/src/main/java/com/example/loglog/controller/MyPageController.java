@@ -1,10 +1,8 @@
 package com.example.loglog.controller;
 
 import com.example.loglog.dto.response.GrassResponse;
-import com.example.loglog.dto.response.MyCommentResponse;
 import com.example.loglog.dto.response.MyPostResponse;
 import com.example.loglog.service.GrassService;
-import com.example.loglog.service.LogService;
 import com.example.loglog.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,7 +15,6 @@ import java.util.List;
 @RequestMapping("/api/mypage")
 public class MyPageController {
 
-    private final LogService logService;
     private final GrassService grassService;
     private final MyPageService myPageService;
 
@@ -35,7 +32,7 @@ public class MyPageController {
             @RequestParam int year,
             @AuthenticationPrincipal Long userId
     ) {
-        return logService.getGrass(userId, year);
+        return grassService.getGrassByYear(userId, year);
     }
 
     // 잔디 연도 리스트
