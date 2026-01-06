@@ -2,11 +2,10 @@
 .diff-layout-container {
     max-width: 1400px;
     padding: 20px;
-    background-color: #f8f9fa;
-    min-height: 100vh;
+    margin: 0 auto;
 }
 
-/* 상단 헤더 - 고정형 */
+/* 상단 헤더 */
 .diff-sticky-header {
     display: flex;
     justify-content: space-between;
@@ -22,7 +21,8 @@
     font-size: 24px;
     font-weight: 800;
     color: #1a1a1a;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+    word-break: break-all;
 }
 
 .diff-timestamp {
@@ -35,7 +35,7 @@
     background-color: #5c4b43;
     color: white;
     border: none;
-    padding: 14px 28px;
+    padding: 12px 24px;
     border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
@@ -43,19 +43,16 @@
 }
 
 .btn-restore:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(92, 75, 67, 0.3);
+    background-color: #4a3c36;
 }
 
 /* 좌우 비교 컨테이너 */
 .diff-content-wrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* 1:1 비율 고정 */
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
-    align-items: start;
 }
 
-/* 각 패널 (박스) */
 .diff-panel {
     background: white;
     border-radius: 16px;
@@ -74,41 +71,17 @@
 }
 
 .panel-label.current {
-    background: #fff4e6;
-    color: #fd7e14;
+    background: #f5f7ff;
+    color: #4263eb;
 }
 
-/* 토스트 뷰어 박스 */
 .viewer-box {
     padding: 30px;
     min-height: 500px;
 }
-
-/* 토스트 뷰어 내부 스타일 미세 조정 */
-.toastui-editor-contents {
-    font-size: 16px;
-    line-height: 1.8;
-}
-
-/* TOAST UI Viewer 내부의 추가/삭제 스타일 */
-
-/* 추가된 부분: 연한 초록색 배경 */
-.toastui-editor-contents ins.diff-added {
-    background-color: #e6ffec;
-    text-decoration: none;
-    border-bottom: 2px solid #2da44e;
-    color: #24292f;
-}
-
-/* 삭제된 부분: 연한 빨간색 배경 + 취소선 */
-.toastui-editor-contents del.diff-removed {
-    background-color: #ffebe9;
-    color: #cf222e;
-    text-decoration: line-through;
-}
-
-/* 줄 단위 변경 강조 (필요 시) */
-.diff-line-definition {
-    display: block;
-    padding: 2px 0;
+.diff-divider{
+    width: 100%;
+    height: 1px;
+    background-color: #dbdbdb; /* 연한 회색 */
+    margin: 20px 0;
 }
