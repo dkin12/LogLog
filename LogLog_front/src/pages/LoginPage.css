@@ -1,5 +1,6 @@
 .login-wrapper {
-    height: calc(100vh - 100px); /* 헤더 제외 */
+    height: calc(100vh - 100px);
+    /* 헤더 제외 */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,6 +10,7 @@
 .login-title {
     font-size: 36px;
     margin-bottom: 32px;
+    font-family: "KeinannPOP"
 }
 
 .title-light {

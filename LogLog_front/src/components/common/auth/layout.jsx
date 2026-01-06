@@ -5,10 +5,14 @@ import "./layout.css";
 export default function Layout() {
     return (
         <>
-            <Header />
-            <main className="layout-main">
-                <Outlet />
-            </main>
+            <div className="main-layout">
+                <Header />
+
+                <main className="layout-main">
+                    <Outlet />
+                </main>
+            </div>
+
         </>
     );
 }

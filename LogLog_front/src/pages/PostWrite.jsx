@@ -1,21 +1,21 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {Editor} from '@toast-ui/react-editor';
+import React, { useState, useRef, useEffect } from 'react';
+import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '../css/PostWrite.css';
-import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
-import {fetchCategories} from '../api/categoryApi';
-import {createPosts, detailPost, fetchPosts, updatePosts} from '../api/postsApi';
-import {uploadImage} from '../api/fileApi';
-import {useToast} from '../hooks/useToast';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { fetchCategories } from '../api/categoryApi';
+import { createPosts, detailPost, fetchPosts, updatePosts } from '../api/postsApi';
+import { uploadImage } from '../api/fileApi';
+import { useToast } from '../hooks/useToast';
 import defaultThumbnail from "../assets/images/default.png";
-import {useNavigate, useParams} from "react-router";
+import { useNavigate, useParams } from "react-router";
 
-const PostWrite = ({mode}) => {
+const PostWrite = ({ mode }) => {
     const editorRef = useRef();
     const fileInputRef = useRef();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const {id} = useParams();
+    const { id } = useParams();
     const postId = Number(id);
     const isEdit = mode === 'edit';
 
@@ -55,8 +55,12 @@ const PostWrite = ({mode}) => {
         mutationFn: createPosts,
         onSuccess: () => {
             toast.success('게시글이 등록되었습니다!');
-            queryClient.invalidateQueries({queryKey: ['log_posts']});
-            navigate('/posts',{ replace: true });
+
+            // 1. 먼저 쿼리 캐시를 비웁니다.
+            queryClient.invalidateQueries({ queryKey: ['log_posts'] });
+
+            // 2. 페이지 이동 후 강제로 새로고침하는 방법
+            window.location.href = '/posts';
         },
         onError: (error) => {
             toast.error('등록 실패: ' + error.message);
@@ -67,10 +71,10 @@ const PostWrite = ({mode}) => {
         mutationFn: (payload) => updatePosts(postId, payload),
         onSuccess: (updatedPost) => {
             toast.success('게시글이 수정되었습니다!');
-            queryClient.invalidateQueries({queryKey: ['log_posts']});
-            queryClient.invalidateQueries({queryKey: ['log_posts', postId]});
+            queryClient.invalidateQueries({ queryKey: ['log_posts'] });
+            queryClient.invalidateQueries({ queryKey: ['log_posts', postId] });
             queryClient.setQueryData(['log_posts', postId], updatedPost);
-            navigate(`/posts/${postId}`,{ replace: true });
+            navigate(`/posts/${postId}`, { replace: true });
         },
         onError: (error) => {
             toast.error('수정 실패: ' + error.message);
@@ -93,13 +97,13 @@ const PostWrite = ({mode}) => {
     };
 
     // --- 데이터 조회 ---
-    const {data: post} = useQuery({
+    const { data: post } = useQuery({
         queryKey: ['log_posts', postId],
         queryFn: () => detailPost(postId),
         enabled: isEdit && !!postId,
     });
 
-    const {data: categories = []} = useQuery({
+    const { data: categories = [] } = useQuery({
         queryKey: ['log_category'],
         queryFn: fetchCategories,
     });
@@ -233,7 +237,7 @@ const PostWrite = ({mode}) => {
                                     /> 기본 썸네일 설정
                                 </div>
                                 <div className="thumb-preview default-preview">
-                                    <img src={defaultThumbnail} alt="Default"/>
+                                    <img src={defaultThumbnail} alt="Default" />
                                 </div>
                             </label>
 
@@ -258,7 +262,7 @@ const PostWrite = ({mode}) => {
                                     }}
                                 >
                                     {uploadMutation.isPending ? (
-                                        <p style={{color: 'blue', margin: 0}}>업로드 중... ⏳</p>
+                                        <p style={{ color: 'blue', margin: 0 }}>업로드 중... ⏳</p>
                                     ) : thumbnailUrl ? (
                                         <img
                                             src={
@@ -296,7 +300,7 @@ const PostWrite = ({mode}) => {
                             <input
                                 type="file"
                                 ref={fileInputRef}
-                                style={{display: 'none'}}
+                                style={{ display: 'none' }}
                                 accept="image/*"
                                 onChange={handleFileChange}
                             />
@@ -353,8 +357,8 @@ const PostWrite = ({mode}) => {
                         <div className="tags-list">
                             {tags.map((tag, index) => (
                                 <span key={index} className="tag-chip" onClick={() => removeTag(tag)}>
-                                #{tag}
-                            </span>
+                                    #{tag}
+                                </span>
                             ))}
                         </div>
                     </div>
