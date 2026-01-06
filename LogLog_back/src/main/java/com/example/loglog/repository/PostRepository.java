@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
@@ -122,5 +123,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     """)
     List<Post> findMyPosts(@Param("userId") Long userId);
 
+
+    // 포스트 ID 로 태그 조회
+    @Query("SELECT DISTINCT p FROM Post p " +
+            "LEFT JOIN FETCH p.postTags pt " +
+            "LEFT JOIN FETCH pt.tag " +
+            "WHERE p.id = :postId")
+    Optional<Post> findByIdWithTags(@Param("postId") Long postId);
 }
 
