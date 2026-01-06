@@ -139,4 +139,12 @@ public class UserService {
         return UserResponse.from(user);
     }
 
+    // 타인 닉네임 조회
+    @Transactional(readOnly = true)
+    public UserResponse findUserProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        return UserResponse.from(user);
+    }
 }

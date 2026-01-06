@@ -68,8 +68,9 @@ function Mypage() {
                 {mode !== "grass" && (
                     <MyPostList
                         posts={items}
-                        mode={mode}
-                        loading={loading}
+                        mode="posts"
+                        isOwner={false}
+                        ownerNickname={user.nickname}
                     />
                 )}
             </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { checkEmail, checkNickname, signup } from "../api/authApi";
+import { signup } from "../api/authApi";
+import { checkEmail, checkNickname } from "../api/userApi.js"
 
 export default function useSignupForm() {
     const navigate = useNavigate();

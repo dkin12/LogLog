@@ -112,17 +112,22 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     """)
     List<Post> findAllByIdIn(@Param("ids") List<Long> ids);
 
-    // 8. 내가 쓴 글 조회
+    // 8. 내가 쓴 글 조회 (공개글 + 비밀글)
     @Query("""
         select p
         from Post p
-        join fetch p.category
         where p.user.id = :userId
-          and p.status != 'DRAFT'
-        order by p.createdAt desc
     """)
-    List<Post> findMyPosts(@Param("userId") Long userId);
+    List<Post> findByUserId(Long userId);
 
+    // 타인 마이페이지 (공개글만)
+    @Query("""
+        select p
+        from Post p
+        where p.user.id = :userId
+          and p.status = com.example.loglog.dto.type.PostStatus.PUBLISHED
+    """)
+    List<Post> findPublicPostsByUserId(@Param("userId") Long userId);
 
     // 포스트 ID 로 태그 조회
     @Query("SELECT DISTINCT p FROM Post p " +

@@ -11,3 +11,10 @@ export const getMyComments = async () => {
     const res = await api.get("/api/mypage/comments");
     return res.data;
 };
+
+// 특정 유저의 게시글 조회
+export const getUserPosts = async (userId) => {
+    const res = await api.get(`/api/posts/users/${userId}`);
+    return res.data;
+};
+

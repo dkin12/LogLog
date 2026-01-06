@@ -39,6 +39,28 @@ public interface LogRepository extends JpaRepository<Log, Long> {
             @Param("endDate") LocalDateTime endDate
     );
 
+    // 타인의 잔디
+    @Query(value = """
+        SELECT
+            TRUNC(l.created_at) AS activity_date,
+            COUNT(*) AS cnt
+        FROM log_log l
+        JOIN log_posts p
+          ON l.post_id = p.posts_id
+        WHERE p.user_id = :userId
+          AND p.status = 'PUBLISHED'
+          AND l.created_at BETWEEN :start AND :end
+        GROUP BY TRUNC(l.created_at)
+        ORDER BY TRUNC(l.created_at)
+    """,
+            nativeQuery = true
+    )
+    List<Object[]> countDailyPublicActivitiesBetween(
+            @Param("userId") Long userId,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end
+    );
+
     // 잔디 연도 목록
     @Query(
             value = """

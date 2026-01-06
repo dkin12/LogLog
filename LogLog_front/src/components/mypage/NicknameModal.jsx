@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { updateNickname } from "../../api/authApi";
+import { updateNickname } from "../../api/userApi.js";
 import "./NicknameModal.css";
 
 function NicknameModal({ open, onClose, user, onSuccess }) {

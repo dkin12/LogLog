@@ -10,28 +10,6 @@ export const login = async (data) => {
 };
 
 /**
- * 이메일 중복 확인
- * @param {string} email
- */
-export const checkEmail = async (email) => {
-    const response = await api.get("/api/users/exists/email", {
-        params: { email },
-    });
-    return response.data; // true/false 또는 메시지
-};
-
-/**
- * 닉네임 중복 확인
- * @param {string} nickname
- */
-export const checkNickname = async (nickname) => {
-    const response = await api.get("/api/users/exists/nickname", {
-        params: { nickname },
-    });
-    return response.data;
-};
-
-/**
  * 회원가입 요청
  * @param {{ email: string, password: string, nickname: string }}
  */
@@ -58,11 +36,3 @@ export const getMe = async () => {
 export const getToken = () => {
     return localStorage.getItem('accessToken');
 };
-
-/**
- * 사용자 닉네임 변경 (마이페이지)
- */
-export async function updateNickname(nickname) {
-    const res = await api.patch("/api/users/me/nickname", { nickname });
-    return res.data;
-}

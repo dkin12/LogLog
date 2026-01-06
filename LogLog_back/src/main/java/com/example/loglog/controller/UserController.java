@@ -4,6 +4,7 @@ import com.example.loglog.dto.request.NicknameUpdateRequest;
 import com.example.loglog.dto.request.UserLoginRequest;
 import com.example.loglog.dto.request.UserSignupRequest;
 import com.example.loglog.dto.response.LoginResponse;
+import com.example.loglog.dto.response.MyPostResponse;
 import com.example.loglog.dto.response.UserResponse;
 import com.example.loglog.entity.User;
 import com.example.loglog.security.jwt.JwtProvider;
@@ -17,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.attribute.UserPrincipal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -114,4 +116,11 @@ public class UserController {
         return userService.updateNickname(userId, dto.getNickname());
     }
 
+    // 타인 프로필 조회 (닉네임 등)
+    @GetMapping("/{userId}")
+    public UserResponse getUserProfile(
+            @PathVariable Long userId
+    ) {
+        return userService.findUserProfile(userId);
+    }
 }
