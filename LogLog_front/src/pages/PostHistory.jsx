@@ -1,74 +1,54 @@
 import React from 'react';
 import '../css/PostHistory.css';
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getPostsHistories } from "../api/postsApi.js";
+import { useQuery } from "@tanstack/react-query";
+// getPostDetail은 단일 게시글 정보를 가져오는 API 함수입니다 (이름은 프로젝트에 맞게 수정하세요)
+import { getPostsHistories , detailPost} from "../api/postsApi.js";
 import { useParams, useNavigate } from 'react-router-dom';
 import PostHistoryItem from '../components/post/PostHistoryItem.jsx';
-import EmptyState from "../components/post/EmptyState.jsx";
 
 function PostHistory() {
     const { id } = useParams();
     const postId = Number(id);
     const apiBase = import.meta.env.VITE_API_BASE_URL || '';
     const navigate = useNavigate();
-    const queryClient = useQueryClient();
 
-    const { data: posts = [], isLoading, isError } = useQuery({
+    // 1. 히스토리 목록 가져오기
+    const { data: posts = [], isLoading: isHistoryLoading } = useQuery({
         queryKey: ['log_posts_history', postId],
         queryFn: () => getPostsHistories(postId),
         enabled: !!postId
     });
 
-    if (isLoading) return <div className="loading">데이터 로딩 중...</div>;
-    if (isError) return <div className="error">데이터를 불러오는데 실패했습니다.</div>;
+    // 2. ⭐ 현재 발행 중인 최신 게시글 데이터 가져오기 (비교 대상)
+    const { data: currentPost, isLoading: isPostLoading } = useQuery({
+        queryKey: ['post', postId],
+        queryFn: () => detailPost(postId), // 현재 최신 제목과 본문을 가져옴
+        enabled: !!postId
+    });
+    console.log(currentPost);
 
-    /**
-     * 상세 내역(Diff) 페이지로 이동하는 핸들러
-     * @param {Object} post - 현재 선택한 버전 객체
-     * @param {string} oldContent - 비교를 위한 이전 버전의 본문
-     */
-    const handleItemClick = (post, oldContent) => {
-        // 이동하기 전 최신 데이터를 보장하기 위해 캐시를 무효화할 수 있습니다.
-        queryClient.invalidateQueries({ queryKey: ['post_history_detail', post.historyId] });
-
-        navigate(`/posts/${postId}/history/${post.historyId}`, {
-            state: {
-                oldContent: oldContent // 다음 인덱스에서 가져온 이전 버전 본문
-            }
-        });
-    };
+    if (isHistoryLoading || isPostLoading) return <div className="loading">데이터 로딩 중...</div>;
 
     return (
         <div className="layout-content">
             <div className="post-history-container">
                 <div className="post-history-header">
-                    <h2 className="post-history-header-title">버전 기록</h2>
+                    <h2 className="post-history-header-title">バ-ジョン</h2>
                     <p className="post-count-text">총 <b>{posts.length}</b> 건의 수정 내역이 있습니다.</p>
                 </div>
 
                 <div className="post-list-wrapper">
-                    {posts.map((post, index) => {
-                        // 이전 버전 찾기 (내림차순 정렬 기준)
-                        const previousPost = posts[index + 1];
-                        const oldContent = previousPost ? previousPost.content : "";
+                    {posts.map((post) => (
+                        <div
+                            key={post.historyId}
+                            className="post-item-card"
+                            onClick={() => navigate(`/posts/${postId}/history/${post.historyId}`)}
+                        >
+                            <PostHistoryItem post={post} apiBase={apiBase} />
+                        </div>
 
-                        return (
-                            <div
-                                key={post.historyId}
-                                className="post-item-card"
-                                onClick={() => navigate(`/posts/${postId}/history/${post.historyId}`, {
-                                    state: {
-                                        oldContent: oldContent,        // 이전 버전 내용
-                                        newContent: post.content,      // 선택한 버전의 내용 (추가)
-                                        title: post.title,             // 제목 (추가)
-                                        archivedAt: post.archivedAt    // 저장 시간 (추가)
-                                    }
-                                })}
-                            >
-                                <PostHistoryItem post={post} apiBase={apiBase} />
-                            </div>
-                        );
-                    })}
+                    ))
+                    }
                 </div>
             </div>
         </div>

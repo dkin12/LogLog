@@ -72,6 +72,12 @@ export const router = createBrowserRouter([
                         <PostDiffPage />
                     </RequireAuth>
                 )
+            },{
+            path: "posts/write/:id/restore", element: (
+                <RequireAuth>
+                    <PostWrite mode={"restore"} />
+                </RequireAuth>
+                )
             }
         ],
     },

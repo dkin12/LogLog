@@ -1,6 +1,8 @@
 package com.example.loglog.dto.response;
 
+import com.example.loglog.entity.Category;
 import com.example.loglog.entity.PostHistory;
+import com.example.loglog.repository.CategoryRepository;
 import com.example.loglog.repository.PostHistoryRepository;
 import lombok.*;
 
@@ -21,6 +23,7 @@ public class PostHistoryResponse {
     private String summery;
     private String content;
     private String thumbnailUrl;
+    private Integer categoryId;
     private LocalDateTime archivedAt;
 
     public static PostHistoryResponse from(PostHistory postHistory) {
@@ -28,10 +31,11 @@ public class PostHistoryResponse {
         return PostHistoryResponse.builder()
                 .historyId(postHistory.getId())
                 .postId(postId)
-                .summery(makeSummary(postHistory.getContent(),150))
                 .userId(postHistory.getUserId())
                 .title(postHistory.getTitle())
                 .content(postHistory.getContent())
+                .categoryId(postHistory.getCategoryId())
+                .summery(makeSummary(postHistory.getContent(), 150))
                 .thumbnailUrl(postHistory.getThumbnailUrl())
                 .archivedAt(postHistory.getArchivedAt())
                 .build();

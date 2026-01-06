@@ -3,7 +3,6 @@ import defaultThumbnail from "../../assets/images/default.png";
 
 const PostHistoryItem = ({ post, apiBase }) => {
     const thumbnail = post.thumbnailUrl ? `${apiBase}${post.thumbnailUrl}` : defaultThumbnail;
-
     return (
         <div className="post-history-item">
             <div className="post-thumbnail-box">
