@@ -121,11 +121,13 @@ const PostDetailContent = ({ post, currentUser }) => {
                 <h1 className="post-title">{post.title}</h1>
 
                 <div className="post-meta">
-                    <AuthorLink
-                        userId={post.userId}
-                        nickname={post.userNickname}
-                        currentUserId={currentUser?.id}
-                    />
+                    {post?.userId && (
+                        <AuthorLink
+                            userId={post.userId}
+                            nickname={post.userNickname}
+                            currentUserId={currentUser?.id}
+                        />
+                    )}
                     <span className="post-date">
                         {new Date(post.createdAt).toLocaleDateString('ko-KR')}
                     </span>

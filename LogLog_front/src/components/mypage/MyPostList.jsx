@@ -1,12 +1,22 @@
 import React from "react";
 import "./MyPostList.css";
 
-function MyPostList({ posts = [], mode = "posts" }) {
+function MyPostList({
+                        posts = [],
+                        mode = "posts",
+                        isOwner = true,
+                        ownerNickname = "",
+                    }) {
+    const titleText =
+        mode === "comments"
+            ? "내가 쓴 댓글"
+            : isOwner
+                ? "내가 쓴 글"
+                : `${ownerNickname} 님이 쓴 글`;
+
     return (
         <section className="mypost-section">
-            <h3 className="mypost-title">
-                {mode === "comments" ? "내가 쓴 댓글" : "내가 쓴 글"}
-            </h3>
+            <h3 className="mypost-title">{titleText}</h3>
 
             <ul className="mypost-list">
                 {posts.length === 0 ? (

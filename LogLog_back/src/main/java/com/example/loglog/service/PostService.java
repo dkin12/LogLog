@@ -2,10 +2,7 @@ package com.example.loglog.service;
 
 import com.example.loglog.dto.request.PostCreateRequest;
 import com.example.loglog.dto.request.PostUpdateRequest;
-import com.example.loglog.dto.response.PageResponse;
-import com.example.loglog.dto.response.PostDetailResponse;
-import com.example.loglog.dto.response.PostHistoryResponse;
-import com.example.loglog.dto.response.PostListResponse;
+import com.example.loglog.dto.response.*;
 import com.example.loglog.dto.type.PostStatus;
 import com.example.loglog.entity.*;
 import com.example.loglog.repository.*;
@@ -166,6 +163,20 @@ public class PostService {
 
         post.increaseViews();
         return PostDetailResponse.fromEntity(post);
+    }
+
+    // 특정 유저 게시글 조회 (본인: 공개+비밀 / 타인: 공개)
+    public List<MyPostResponse> getUserPosts(Long ownerId, Long viewerId) {
+
+        boolean isOwner = viewerId != null && ownerId.equals(viewerId);
+
+        List<Post> posts = isOwner
+                ? postRepository.findByUserId(ownerId)
+                : postRepository.findPublicPostsByUserId(ownerId);
+
+        return posts.stream()
+                .map(MyPostResponse::from)
+                .toList();
     }
 
     /* ============================

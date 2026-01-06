@@ -2,10 +2,7 @@ package com.example.loglog.controller;
 
 import com.example.loglog.dto.request.PostCreateRequest;
 import com.example.loglog.dto.request.PostUpdateRequest;
-import com.example.loglog.dto.response.PageResponse;
-import com.example.loglog.dto.response.PostDetailResponse;
-import com.example.loglog.dto.response.PostHistoryResponse;
-import com.example.loglog.dto.response.PostListResponse;
+import com.example.loglog.dto.response.*;
 import com.example.loglog.entity.PostHistory;
 import com.example.loglog.repository.PostHistoryRepository;
 import com.example.loglog.service.PostService;
@@ -55,6 +52,16 @@ public class PostController {
             @RequestParam(required = false) Long categoryId
     ) {
         return postService.getPostList(page, size, categoryId, keyword, tag);
+    }
+
+    // 2-1. 특정 유저가 쓴 게시글 목록 조회 (본인/타인)
+    @GetMapping("/users/{targetUserId}")
+    public List<MyPostResponse> getUserPosts(
+            @PathVariable Long targetUserId,
+            @AuthenticationPrincipal Long userId
+    ) {
+        // 로그인 안 한 경우 userId == null
+        return postService.getUserPosts(targetUserId, userId);
     }
 
     // 3. 게시글 상세 조회

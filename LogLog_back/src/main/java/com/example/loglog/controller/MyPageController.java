@@ -18,15 +18,15 @@ public class MyPageController {
     private final GrassService grassService;
     private final MyPageService myPageService;
 
-    // 최근 1년 잔디
+    // 내 마이페이지 - 최근 잔디 (본인 = owner = viewer)
     @GetMapping("/grass/recent")
-    public List<GrassResponse> getGrassRecent(
+    public List<GrassResponse> getMyGrassRecent(
             @AuthenticationPrincipal Long userId
     ) {
-        return grassService.getGrassRecent(userId);
+        return grassService.getGrassRecent(userId, userId);
     }
 
-    // 연도별 잔디
+    // 연도별 잔디 (내 것)
     @GetMapping("/grass")
     public List<GrassResponse> getGrass(
             @RequestParam int year,
@@ -43,19 +43,11 @@ public class MyPageController {
         return grassService.getGrassYears(userId);
     }
 
-    // 내 글 조회
+    // 내 게시글
     @GetMapping("/posts")
     public List<MyPostResponse> getMyPosts(
             @AuthenticationPrincipal Long userId
     ) {
         return myPageService.getMyPosts(userId);
     }
-
-    // 내 댓글 조회 (필요하면)
-/*    @GetMapping("/comments")
-    public List<MyCommentResponse> getMyComments(
-            @AuthenticationPrincipal Long userId
-    ) {
-        return myPageService.getMyComments(userId);
-    }*/
 }

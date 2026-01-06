@@ -7,9 +7,11 @@ function AuthorLink({
                         currentUserId,
                         className = '',
                     }) {
-    const isMe = currentUserId === userId;
+    const isMe = Number(currentUserId) === Number(userId);
 
-    const to = isMe ? '/mypage' : `/users/${userId}`;
+    const to = isMe
+        ? '/mypage'               // 본인 → 기존 마이페이지
+        : `/mypage/${userId}`;    // 타인 → UserPage
 
     return (
         <Link

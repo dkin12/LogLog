@@ -28,17 +28,25 @@ public class GrassService {
     }
 
     // 기본 화면: 오늘 포함 최근 365일
-    public List<GrassResponse> getGrassRecent(Long userId) {
+    public List<GrassResponse> getGrassRecent(Long ownerId, Long viewerId) {
+
+        boolean isOwner = viewerId != null && ownerId.equals(viewerId);
+
         LocalDate today = LocalDate.now();
         LocalDate startDate = today.minusDays(364);
 
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end = today.plusDays(1).atStartOfDay();
 
-        return toGrassResponses(
-                logRepository.countDailyActivitiesBetween(userId, start, end)
-        );
+        List<Object[]> rows = isOwner
+                // 본인이면 전체 활동
+                ? logRepository.countDailyActivitiesBetween(ownerId, start, end)
+                // 타인이면 공개 게시글 기준 활동
+                : logRepository.countDailyPublicActivitiesBetween(ownerId, start, end);
+
+        return toGrassResponses(rows);
     }
+
 
     // 잔디가 존재하는 연도 목록
     public List<Integer> getGrassYears(Long userId) {
