@@ -1,0 +1,113 @@
+/* 전체 페이지 컨테이너 */
+.draft-page-container {
+    padding: 60px 20px;
+    font-family: 'Pretendard', sans-serif;
+}
+
+/* 상단 타이틀 (一時保存) */
+.draft-header-section {
+    text-align: center;
+    margin-bottom: 50px;
+    font-family: 'KeinannPOP', sans-serif;
+}
+
+.draft-main-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #d27c4d; /* 이미지의 갈색/주황 톤 */
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+/* 콘텐츠 래퍼 */
+.draft-content-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* 총 0 건 텍스트 */
+.draft-count-label {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+/* 리스트 스타일 */
+.draft-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #eee; /* 맨 위 구분선 */
+}
+
+/* 개별 아이템 행 */
+.draft-item-row {
+    padding: 35px 0; /* 위아래 여백 넉넉하게 */
+    border-bottom: 1px solid #eee; /* 구분선 */
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+
+/* 제목 스타일 */
+.draft-item-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0 0 12px 0;
+}
+.draft-item-row:hover .draft-item-title {
+    text-decoration: underline;
+    text-underline-offset: 4px; /* 밑줄과 글자 사이 간격 조절 */
+    text-decoration-thickness: 1px; /* 밑줄 두께 */
+}
+/* 요약문 스타일 */
+.draft-item-summary {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+    margin: 0 0 20px 0;
+
+    /* 3줄 이상 넘어가면 ... 처리 */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 하단 정보 (날짜 + 삭제버튼) */
+.draft-item-footer {
+    display: flex;
+    justify-content: space-between; /* 양 끝 정렬 */
+    align-items: center;
+}
+
+.draft-date {
+    font-size: 0.9rem;
+    color: #999;
+}
+
+/* 삭제 텍스트 버튼 (이미지처럼 붉은 글씨만) */
+.btn-draft-delete {
+    background: none;
+    border: none;
+    color: #ff6b6b; /* 연한 빨강/핑크 */
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: color 0.2s;
+}
+
+.btn-draft-delete:hover {
+    color: #ff0000;
+    text-decoration: underline;
+}
+
+/* 데이터 없음 / 로딩 */
+.no-data, .draft-loading {
+    text-align: center;
+    padding: 100px 0;
+    color: #999;
+    font-size: 1.1rem;
+}
