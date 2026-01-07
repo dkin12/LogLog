@@ -126,6 +126,12 @@
   display: flex;
   gap: 12px;
 }
+.visibility-buttons .vis-btn.active {
+    background: var(--primary) !important;
+    color: #fff !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
 .vis-btn {
   padding: 9px 18px;
