@@ -10,9 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -65,6 +63,9 @@ public class Post {
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
 
+    @Column(name = "draft_yn", length = 1, nullable = false)
+    private String draftYn = "N"; // Y: 임시저장본, N: 최종본
+
     // ManyToMany → 중간엔티티 방식
     @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -94,13 +95,16 @@ public class Post {
                        String content,
                        String thumbnailUrl,
                        Category category,
-                       PostStatus status) {
+                       PostStatus status,
+                       String draftYn
+    ) {
 
         this.title = title;
         this.content = content;
         this.thumbnailUrl = thumbnailUrl;
         this.category = category;
         this.status = status;
+        this.draftYn = draftYn;
     }
 
     public void publishNow() {
