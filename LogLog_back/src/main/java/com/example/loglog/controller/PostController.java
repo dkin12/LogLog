@@ -110,5 +110,10 @@ public class PostController {
     public PostHistoryResponse getPostHistoryDetail(@PathVariable Long historyId) {
         return postService.getPostHistoryDetail(historyId);
     }
+    // 임시글 조회 api
+    @GetMapping("/draft/{userId}")
+    public List<PostDraftResponse> getPostDraftList(@PathVariable Long userId) {
+        return postService.getPostDraftResponse(userId);
+    }
 
 }

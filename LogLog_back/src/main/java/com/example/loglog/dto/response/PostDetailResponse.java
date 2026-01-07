@@ -24,6 +24,7 @@ public class PostDetailResponse {
     private String userNickname;
     private String categoryName;
     private String thumbnailUrl;
+    private String draftYn;
     private PostStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -38,8 +39,8 @@ public class PostDetailResponse {
                 .userId(post.getUser().getId())
                 .userNickname(post.getUser().getNickname())
                 .status(post.getStatus())
-                .categoryId(post.getCategory().getCategoryId())
-                .categoryName(post.getCategory().getCategoryName())
+                .categoryId(post.getCategory() != null ? post.getCategory().getCategoryId() : null)
+                .categoryName(post.getCategory() != null ? post.getCategory().getCategoryName() : "")
                 .thumbnailUrl(post.getThumbnailUrl())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())

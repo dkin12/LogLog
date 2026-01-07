@@ -1,4 +1,3 @@
-//import api from "./axios";
 import { api } from './api';
 
 export const fetchPosts = async ({ page, categoryId, keyword, tag }) => {
@@ -33,7 +32,7 @@ export async function updatePosts(postId, postData) {
     const res = await api.put(`/api/posts/${postId}`, postData);
     return res.data;
 }
-// 게시글 삭제 
+// 게시글 삭제
 export async function deletePosts(postId) {
     const res = await api.delete(`/api/posts/${postId}`);
     return res.data;
@@ -48,5 +47,10 @@ export async function getPostsHistories(postId) {
 // 게시글 수정 내역 1개
 export async function getPostDetailHistories(historyId) {
     const res = await api.get(`/api/posts/history/${historyId}`);
+    return res.data;
+}
+
+export async function getPostDraftList(userId){
+    const res = await api.get(`/api/posts/draft/${userId}`);
     return res.data;
 }

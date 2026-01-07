@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
                 ),
             },
             {
-                path: "drafts",
+                path: "draft",
                 element: (
                     <RequireAuth>
                         <DraftsPage />
@@ -50,11 +50,17 @@ export const router = createBrowserRouter([
                         <PostWrite mode="edit" />
                     </RequireAuth>
                 )
+            },{
+                path: "posts/write/:id/draft", element: (
+                    <RequireAuth>
+                        <PostWrite mode="draft" />
+                    </RequireAuth>
+                )
             },
             {
                 path: "posts/write", element: (
                     <RequireAuth>
-                        <PostWrite mode={"create"} />
+                        <PostWrite mode="create" />
                     </RequireAuth>
                 )
             },{
@@ -77,7 +83,7 @@ export const router = createBrowserRouter([
             },{
             path: "posts/write/:id/restore", element: (
                 <RequireAuth>
-                    <PostWrite mode={"restore"} />
+                    <PostWrite mode="restore" />
                 </RequireAuth>
                 )
             }

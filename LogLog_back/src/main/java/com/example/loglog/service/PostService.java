@@ -11,10 +11,8 @@ import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +27,9 @@ public class PostService {
     private final PostTagRepository postTagRepository;
     private final CategoryRepository categoryRepository;
     private final PostHistoryRepository postHistoryRepository;
+
     private final LogService logService;
+    private final PostDraftRepository postDraftRepository;
 
     // 게시글 작성
     @Transactional
@@ -37,25 +37,41 @@ public class PostService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("회원정보가 없습니다."));
-
-        Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("카테고리가 없습니다."));
-
+        Category category = null;
+        if (request.getCategoryId() != null) {
+            category = categoryRepository.findById(request.getCategoryId())
+                    .orElse(null); // 또는 예외 처리
+        }
         Post post = request.toEntity(user, category);
 
-        // 생성 + 발행인 경우
-        if (request.getStatus() == PostStatus.PUBLISHED) {
-            post.publishNow(); // status + publishedAt
-        }
 
         postRepository.save(post);
 
         addTags(post, request.getTags());
 
-        // 발행 버튼을 눌렀을 때만 로그
-        if (post.getStatus() == PostStatus.PUBLISHED) {
-            logService.recordPostPublish(user, post.getId());
+        // 하나 history 쌓음
+        PostHistory history = PostHistory.builder()
+                .post(post)
+                .userId(userId)
+                .title(post.getTitle())
+                .content(post.getContent())
+                .thumbnailUrl(post.getThumbnailUrl())
+                .status(post.getStatus())
+                .categoryId(
+                        post.getCategory() != null
+                                ? post.getCategory().getCategoryId()
+                                : null
+                )
+                .build();
+
+        if (request.getDraftYn().equals("N")) {
+            if (post.getStatus() == PostStatus.PUBLISHED) {
+                post.publishNow();
+                logService.recordPostPublish(post.getUser(), post.getId());
+            }
+            postHistoryRepository.save(history);
         }
+
 
         return post.getId();
     }
@@ -103,9 +119,9 @@ public class PostService {
 
             Page<Long> postIdPage = (categoryId != null)
                     ? postRepository.findPostIdsByCategoryAndTag(
-                    categoryId, tag, PostStatus.PUBLISHED, idPageable)
+                    categoryId, tag, PostStatus.PUBLISHED, "N",idPageable)
                     : postRepository.findPostIdsByTag(
-                    tag, PostStatus.PUBLISHED, idPageable);
+                    tag, PostStatus.PUBLISHED,"N", idPageable);
 
             if (postIdPage.isEmpty()) {
                 return PageResponse.from(
@@ -115,7 +131,7 @@ public class PostService {
             }
 
             List<Post> posts =
-                    postRepository.findAllByIdIn(postIdPage.getContent());
+                    postRepository.findAllByIdIn(postIdPage.getContent(),"N");
 
             postPage = new PageImpl<>(
                     posts,
@@ -130,9 +146,9 @@ public class PostService {
         if (keyword != null && !keyword.isBlank()) {
             postPage = (categoryId != null)
                     ? postRepository.findByCategoryAndKeyword(
-                    categoryId, keyword, PostStatus.PUBLISHED, postPageable)
+                    categoryId, keyword, PostStatus.PUBLISHED,"N", postPageable)
                     : postRepository.findByKeyword(
-                    keyword, PostStatus.PUBLISHED, postPageable);
+                    keyword, PostStatus.PUBLISHED,"N", postPageable);
 
             return PageResponse.from(postPage, PostListResponse::fromEntity);
         }
@@ -147,7 +163,10 @@ public class PostService {
 
         // 전체 조회
         postPage = postRepository.findAllByStatus(
-                PostStatus.PUBLISHED, postPageable);
+                PostStatus.PUBLISHED, "N" ,postPageable);
+
+
+
 
         return PageResponse.from(postPage, PostListResponse::fromEntity);
     }
@@ -171,8 +190,8 @@ public class PostService {
         boolean isOwner = viewerId != null && ownerId.equals(viewerId);
 
         List<Post> posts = isOwner
-                ? postRepository.findByUserId(ownerId)
-                : postRepository.findPublicPostsByUserId(ownerId);
+                ? postRepository.findByUserId(ownerId,"N")
+                : postRepository.findPublicPostsByUserId(ownerId,"N");
 
         return posts.stream()
                 .map(MyPostResponse::from)
@@ -184,7 +203,6 @@ public class PostService {
      ============================ */
     @Transactional
     public Long updatePost(Long postId, PostUpdateRequest request, Long userId) {
-
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
@@ -192,42 +210,47 @@ public class PostService {
             throw new IllegalStateException("수정 권한이 없습니다.");
         }
 
-        Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("카테고리가 없습니다."));
+        Category category = (request.getCategoryId() != null)
+                ? categoryRepository.findById(request.getCategoryId()).orElse(null)
+                : null;
 
-        // 수정 + 재발행
+        // 1. 엔티티 정보 업데이트 (여기서 PRIVATE/PUBLISHED가 결정됨)
         post.update(
                 request.getTitle(),
                 request.getContent(),
                 request.getThumbnailUrl(),
                 category,
-                PostStatus.PUBLISHED
+                request.getStatus(),
+                request.getDraftYN()
         );
 
-        post.publishNow(); // 재발행 시각 갱신
+        // 2. 발행(N)일 때만 실행되는 로직
+        if ("N".equals(request.getDraftYN())) {
 
-        PostHistory history = PostHistory.builder()
-                .post(post)
-                .userId(userId)
-                .title(post.getTitle())
-                .content(post.getContent())
-                .thumbnailUrl(post.getThumbnailUrl())
-                .status(post.getStatus())
-                .categoryId(
-                        post.getCategory() != null
-                                ? post.getCategory().getCategoryId()
-                                : null
-                )
-                .build();
+            // [중요] 상태가 PUBLISHED일 때만 발행 시각을 갱신하고 로그를 남김
+            if (post.getStatus() == PostStatus.PUBLISHED) {
+                post.publishNow();
+                logService.recordPostPublish(post.getUser(), post.getId());
+            }
 
-        postHistoryRepository.save(history);
+            // 히스토리는 발행(N) 시점에 무조건 남김 (상태가 PRIVATE여도 내역은 남아야 하므로)
+            PostHistory history = PostHistory.builder()
+                    .post(post)
+                    .userId(userId)
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .thumbnailUrl(post.getThumbnailUrl())
+                    .status(post.getStatus())
+                    .categoryId(category != null ? category.getCategoryId() : null)
+                    .build();
+            postHistoryRepository.save(history);
+        }
 
+        // 3. 태그 처리
         post.clearTags();
         addTags(post, request.getTags());
 
-        // 재발행 로그
-        logService.recordPostPublish(post.getUser(), post.getId());
-
+        // 4. [수정] 맨 밑에 있던 무조건 로그 남기는 코드는 삭제함!
         return post.getId();
     }
 
@@ -274,6 +297,17 @@ public class PostService {
         // Entity -> DTO 변환
         return PostHistoryResponse.from(postHistory);
     }
+    /* ============================
+       게시글 임시 조회
+     ============================ */
+    @Transactional(readOnly = true)
+    public List<PostDraftResponse> getPostDraftResponse(Long userId){
+         List<Post> postsDraftList = postDraftRepository.findByUserIdAndDraftYnOrderByCreatedAtDesc(userId,"Y");
+        return postsDraftList.stream()
+                .map(PostDraftResponse::from)
+                .collect(Collectors.toList());
+    }
+
 
 
 }

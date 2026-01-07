@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +19,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         select p
         from Post p
         where p.status = :status
+            and p.draftYn = :draftYn
     """)
     Page<Post> findAllByStatus(
             @Param("status") PostStatus status,
+            @Param("draftYn") String draftYn,
             Pageable pageable
     );
 
@@ -45,11 +48,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             lower(p.title) like lower(concat('%', :keyword, '%'))
             or lower(p.content) like lower(concat('%', :keyword, '%'))
         )
-          and p.status = :status
+          and p.status = :status and p.draftYn = :draftYn
     """)
     Page<Post> findByKeyword(
             @Param("keyword") String keyword,
             @Param("status") PostStatus status,
+            @Param("draftYn") String draftYn,
             Pageable pageable
     );
 
@@ -57,7 +61,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("""
         select p
         from Post p
-        where p.category.categoryId = :categoryId
+        where p.category.categoryId = :categoryId and p.draftYn = :draftYn
           and (
                   lower(p.title) like lower(concat('%', :keyword, '%'))
                   or lower(p.content) like lower(concat('%', :keyword, '%'))
@@ -68,6 +72,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             @Param("categoryId") Long categoryId,
             @Param("keyword") String keyword,
             @Param("status") PostStatus status,
+            @Param("draftYn") String draftYn,
             Pageable pageable
     );
 
@@ -78,11 +83,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         join p.postTags pt
         join pt.tag t
         where p.status = :status
-          and lower(t.name) like lower(concat('%', :tagName, '%'))
+          and lower(t.name) like lower(concat('%', :tagName, '%')) and p.draftYn = :draftYn
     """)
     Page<Long> findPostIdsByTag(
             @Param("tagName") String tagName,
             @Param("status") PostStatus status,
+            @Param("draftYn") String draftYn,
             Pageable pageable
     );
 
@@ -94,12 +100,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         join pt.tag t
         where p.status = :status
           and p.category.categoryId = :categoryId
-          and lower(t.name) like lower(concat('%', :tagName, '%'))
+          and lower(t.name) like lower(concat('%', :tagName, '%')) and p.draftYn = :draftYn
     """)
     Page<Long> findPostIdsByCategoryAndTag(
             @Param("categoryId") Long categoryId,
             @Param("tagName") String tagName,
             @Param("status") PostStatus status,
+            @Param("draftYn")  String draftYn,
             Pageable pageable
     );
 
@@ -107,27 +114,28 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("""
         select p
         from Post p
-        where p.id in :ids
+        where p.id in :ids and p.draftYn = :draftYn
         order by p.createdAt desc
     """)
-    List<Post> findAllByIdIn(@Param("ids") List<Long> ids);
+    List<Post> findAllByIdIn(@Param("ids") List<Long> ids,@Param("draftYn") String draftYn);
 
     // 8. 내가 쓴 글 조회 (공개글 + 비밀글)
     @Query("""
         select p
         from Post p
-        where p.user.id = :userId
+        where p.user.id = :userId and p.draftYn = :draftYn
     """)
-    List<Post> findByUserId(Long userId);
+    List<Post> findByUserId(Long userId, @Param("draftYn") String draftYn);
 
     // 타인 마이페이지 (공개글만)
     @Query("""
         select p
         from Post p
         where p.user.id = :userId
-          and p.status = com.example.loglog.dto.type.PostStatus.PUBLISHED
+          and p.status = com.example.loglog.dto.type.PostStatus.PUBLISHED and p.draftYn = :draftYn
+              
     """)
-    List<Post> findPublicPostsByUserId(@Param("userId") Long userId);
+    List<Post> findPublicPostsByUserId(@Param("userId") Long userId, @Param("draftYn") String draftYn);
 
     // 포스트 ID 로 태그 조회
     @Query("SELECT DISTINCT p FROM Post p " +

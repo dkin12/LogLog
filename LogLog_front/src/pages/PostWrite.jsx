@@ -11,27 +11,35 @@ import defaultThumbnail from "../assets/images/default.png";
 import { useLocation, useNavigate, useParams } from "react-router";
 
 const PostWrite = ({ mode }) => {
+
     const editorRef = useRef();
     const fileInputRef = useRef();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const location = useLocation();
     const { id } = useParams();
-    const postId = Number(id);
-    const isEdit = mode === 'edit';
-
-    const restoreHistoryId = location.state?.restoreHistoryId;
+    const apiBase = import.meta.env.VITE_API_BASE_URL || '';
 
     // --- 상태 관리 ---
+    const [currentPostId, setCurrentPostId] = useState(id ? Number(id) : null);
+    // mode가 'draft'여도 status는 PUBLISHED(기본값)로 시작 (공개/비공개 설정과 임시저장 분리)
     const [title, setTitle] = useState('');
     const [tagInput, setTagInput] = useState('');
     const [tags, setTags] = useState([]);
     const [thumbnailType, setThumbnailType] = useState('default');
+
+    // status: 공개(PUBLISHED) / 비공개(PRIVATE) 선택용
     const [status, setStatus] = useState('PUBLISHED');
+
     const [categoryId, setCategoryId] = useState('');
     const [thumbnailUrl, setThumbnailUrl] = useState("");
 
+    // draftYn: 실제 DB에 저장될 임시저장 여부 (초기값 설정)
+    const [draftYn, setDraftYn] = useState(mode === 'draft' ? "Y" : "N");
+
+    // 기타 훅
     const toast = useToast();
+    const restoreHistoryId = location.state?.restoreHistoryId;
 
     // --- 1. 데이터 조회 ---
     const { data: categories = [] } = useQuery({
@@ -40,29 +48,35 @@ const PostWrite = ({ mode }) => {
     });
 
     const { data: post } = useQuery({
-        queryKey: ['log_posts', postId],
-        queryFn: () => detailPost(postId),
+        queryKey: ['log_posts', currentPostId],
+        queryFn: () => detailPost(id),
+        enabled: !!currentPostId && !isNaN(currentPostId),
+    });
+
+    const { data: draftPost, isSuccess } = useQuery({
+        queryKey: ['log_posts', currentPostId],
+        queryFn: () => detailPost(currentPostId),
+        enabled: !!currentPostId && !isNaN(currentPostId),
     });
 
     const { data: historyPost } = useQuery({
         queryKey: ['post_history_detail', restoreHistoryId],
         queryFn: () => getPostDetailHistories(restoreHistoryId),
+        enabled: !!restoreHistoryId,
     });
 
-    // --- 2. 데이터 세팅 로직 (useEffect) ---
+    // --- 2. 데이터 세팅 (수정/임시저장 불러오기 시) ---
     useEffect(() => {
-        if (mode === 'write' && !restoreHistoryId) return;
-
         const targetData = historyPost || post;
         if (!targetData) return;
 
-        console.log(restoreHistoryId ? "=== 복구 데이터 적용 ===" : "=== 수정 데이터 적용 ===");
-
-        // [A] 공통 텍스트 필드 세팅
         setTitle(targetData.title || "");
-        setTags(post.tags);
-        console.log(post)
-        setStatus(targetData.status || "PUBLISHED");
+        setTags(targetData.tags || []);
+
+        // 서버에서 가져온 공개 상태(PUBLISHED/PRIVATE) 반영
+        setStatus(targetData.status);
+        // 임시저장 여부 반영
+        setDraftYn(targetData.draftYn || "N");
 
         if (editorRef.current) {
             const instance = editorRef.current.getInstance();
@@ -73,7 +87,6 @@ const PostWrite = ({ mode }) => {
 
         const catId = targetData.categoryId ? String(targetData.categoryId) : "";
         setCategoryId(catId);
-        console.log(targetData.categoryId);
 
         if (targetData.thumbnailUrl) {
             setThumbnailUrl(targetData.thumbnailUrl);
@@ -83,8 +96,47 @@ const PostWrite = ({ mode }) => {
             setThumbnailUrl("");
         }
 
-        // categories를 의존성에 넣어 카테고리가 늦게 로드되어도 다시 매칭하게 함
-    }, [mode, post, historyPost, restoreHistoryId, categories]);
+    }, [currentPostId,post,draftPost, historyPost, restoreHistoryId]);
+
+    // --- MUTATION (생성/수정) ---
+    const createMutation = useMutation({
+        mutationFn: createPosts,
+        onSuccess: (response, variables) => {
+            const newId = response.id || response;
+
+            // 요청 시 보낸 draftYN 값에 따라 분기 처리
+            if (variables.draftYn === "Y") {
+                toast.success("임시저장 되었습니다.");
+                setCurrentPostId(newId);
+                setStatus(response.status);
+                setTitle(response.data.title);
+                // URL만 변경하고 페이지 유지 (계속 작성 가능하도록)
+                navigate(`/posts/write/${newId}/draft`, { replace: true });
+            } else {
+                toast.success('게시글이 등록되었습니다!');
+                navigate(`/posts`);
+            }
+            queryClient.invalidateQueries({ queryKey: ['log_posts'] });
+        }
+    });
+
+    const updateMutation = useMutation({
+        mutationFn: (payload) => updatePosts(currentPostId, payload),
+        onSuccess: (_, variables) => {
+            if (variables.draftYn === "Y") {
+                toast.success("임시저장 내용이 업데이트되었습니다.");
+                setDraftYn(variables.draftYn);
+                setStatus(variables.status);
+                navigate(`/posts/write/${currentPostId}/draft`, { replace: true });
+            } else {
+                toast.success('수정 완료!');
+                navigate(`/posts/${currentPostId}`, { replace: true });
+            }
+            queryClient.invalidateQueries({ queryKey: ['log_posts'] });
+            queryClient.invalidateQueries({ queryKey: ['log_posts', currentPostId] });
+        },
+        onError: (err) => toast.error('수정 실패: ' + err.message)
+    });
 
     const uploadMutation = useMutation({
         mutationFn: (file) => uploadImage(file),
@@ -96,25 +148,8 @@ const PostWrite = ({ mode }) => {
         onError: () => toast.error('이미지 업로드 실패')
     });
 
-    const updateMutation = useMutation({
-        mutationFn: (payload) => updatePosts(postId, payload),
-        onSuccess: () => {
-            toast.success(restoreHistoryId ? '복구 완료!' : '수정 완료!');
-            queryClient.invalidateQueries({ queryKey: ['log_posts'] });
-            navigate(`/posts/${postId}`, { replace: true });
-        },
-        onError: (err) => toast.error('실패: ' + err.message)
-    });
 
-    const createMutation = useMutation({
-        mutationFn: createPosts,
-        onSuccess: () => {
-            toast.success('등록 완료!');
-            queryClient.invalidateQueries({ queryKey: ['log_posts'] });
-            window.location.href = '/posts';
-        }
-    });
-
+    // --- 이벤트 핸들러 ---
     const handleTagKeyDown = (e) => {
         if (e.nativeEvent.isComposing) return;
         if (e.key === 'Enter' && tagInput.trim() !== '') {
@@ -124,16 +159,22 @@ const PostWrite = ({ mode }) => {
         }
     };
 
-    // 파일 선택 버튼 트리거
     const handleThumbnailBtnClick = () => {
         fileInputRef.current.click();
     };
 
-    const submitPost = (targetStatus) => {
+    // [핵심 수정] 저장 로직
+    // isDraft: true면 임시저장(Y), false면 최종저장(N)
+    const submitPost = (isDraft) => {
         const content = editorRef.current.getInstance().getMarkdown();
+
+        // 제목은 필수
         if (!title.trim()) return toast.info('제목을 입력해주세요.');
-        if (targetStatus === 'PUBLISHED' && (!content.trim() || !categoryId)) {
-            return toast.info('내용과 카테고리를 확인해주세요.');
+
+        // '저장하기(발행)' 일 때만 필수값 체크 강화
+        if (!isDraft) {
+            if (!content.trim()) return toast.info('내용을 입력해주세요.');
+            if (!categoryId) return toast.info('카테고리를 선택해주세요.');
         }
 
         const payload = {
@@ -141,12 +182,20 @@ const PostWrite = ({ mode }) => {
             content,
             thumbnailUrl: (thumbnailType === 'custom') ? thumbnailUrl : null,
             categoryId: categoryId ? Number(categoryId) : null,
-            status: targetStatus,
+            // 핵심: 버튼에 따라 draftYN 결정
+            draftYn: isDraft ? 'Y' : 'N',
+            // 핵심: status는 사용자가 선택한 UI 상태(PUBLISHED / PRIVATE) 그대로 전송
+            status: status,
             tags
         };
 
-        if (isEdit) updateMutation.mutate(payload);
-        else createMutation.mutate(payload);
+        console.log("Submit Payload:", payload);
+
+        if (currentPostId && !isNaN(currentPostId)) {
+            updateMutation.mutate(payload);
+        } else {
+            createMutation.mutate(payload);
+        }
     };
 
     return (
@@ -211,7 +260,7 @@ const PostWrite = ({ mode }) => {
                                             src={
                                                 thumbnailUrl.startsWith('http')
                                                     ? thumbnailUrl
-                                                    : `http://localhost:8088${thumbnailUrl.startsWith('/') ? '' : '/'}${thumbnailUrl}`
+                                                    : `${apiBase}${thumbnailUrl.startsWith('/') ? '' : '/'}${thumbnailUrl}`
                                             }
                                             alt="Thumbnail Preview"
                                             className="thumb-preview-img"
@@ -240,6 +289,24 @@ const PostWrite = ({ mode }) => {
                                 </div>
                                 <input type="file" ref={fileInputRef} style={{ display: 'none' }} accept="image/*" onChange={(e) => e.target.files[0] && uploadMutation.mutate(e.target.files[0])} />
                             </label>
+                        </div>
+                    </div>
+
+                    <div className="setting-item">
+                        <h3>공개 설정</h3>
+                        <div className="visibility-buttons">
+                            <button
+                                className={`vis-btn ${status === 'PUBLISHED' ? 'active' : ''}`}
+                                onClick={() => setStatus('PUBLISHED')}
+                            >
+                                🌏 전체 공개
+                            </button>
+                            <button
+                                className={`vis-btn ${status === 'PRIVATE' ? 'active' : ''}`}
+                                onClick={() => setStatus('PRIVATE')}
+                            >
+                                🔒 비공개
+                            </button>
                         </div>
                     </div>
 
@@ -278,11 +345,19 @@ const PostWrite = ({ mode }) => {
                 <div className="editor-footer">
                     <button className="btn-exit" onClick={() => navigate(-1)}>← 나가기</button>
                     <div className="footer-actions">
-                        {(mode === 'write' || status === 'DRAFT') && (
-                            <button className="btn-draft" onClick={() => submitPost('DRAFT')}>임시저장</button>
+
+                        {/* 임시저장 버튼*/}
+                        {(draftYn === "Y" || mode === "create" || mode === "draft") && (
+                            <button
+                                type="button"
+                                className="btn-draft"
+                                onClick={() => submitPost(true)}
+                            >
+                                임시저장
+                            </button>
                         )}
-                        <button className="btn-save" onClick={() => submitPost('PUBLISHED')}>
-                            {restoreHistoryId ? '복구본으로 저장' : '저장하기'}
+                        <button className="btn-save" onClick={() => submitPost(false)}>
+                            저장하기
                         </button>
                     </div>
                 </div>

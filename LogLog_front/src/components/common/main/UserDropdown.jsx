@@ -69,7 +69,7 @@ export default function UserDropdown({ user }) {
 
                 <MenuItem
                     onClick={() => {
-                        navigate("/drafts");
+                        navigate("/draft");
                         handleClose();
                     }}
                     sx={{
