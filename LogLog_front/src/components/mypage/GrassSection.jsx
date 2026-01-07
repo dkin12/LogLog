@@ -1,49 +1,59 @@
 import React, { useEffect, useState, useRef } from "react";
-import { api } from "../../api/api";
+import {
+    fetchUserGrassRecent,
+    fetchUserGrassByYear,
+    fetchUserGrassYears
+} from "../../api/mypageApi";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import "./GrassSection.css";
 
 export default function GrassSection({ user }) {
-    const [mode, setMode] = useState("recent"); // recent | year
+    const ownerId = user?.userId || user?.id;   // ⭐ 핵심
+    const [mode, setMode] = useState("recent");
     const [year, setYear] = useState(null);
     const [grassData, setGrassData] = useState([]);
     const [years, setYears] = useState([]);
     const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, text: "" });
     const wrapperRef = useRef(null);
 
-    // --- fetch 함수 ---
-    const fetchGrass = () => {
-        const request =
-            mode === "recent"
-                ? api.get("/api/mypage/grass/recent")
-                : api.get(`/api/mypage/grass?year=${year}`);
+    const fetchGrass = async () => {
+        if (!ownerId) return;
 
-        request
-            .then(res => setGrassData(mode === "recent" ? buildGrass(res.data) : buildGrass(res.data, year)))
-            .catch(console.error);
+        try {
+            const data =
+                mode === "recent"
+                    ? await fetchUserGrassRecent(ownerId)
+                    : await fetchUserGrassByYear(ownerId, year);
+
+            setGrassData(buildGrass(data, mode === "recent" ? null : year));
+        } catch (e) {
+            console.error(e);
+        }
     };
 
-    // --- mount 시 연도 리스트 fetch ---
     useEffect(() => {
-        api.get("/api/mypage/grass/years")
-            .then(res => setYears(res.data))
-            .catch(console.error);
-    }, []);
+        if (!ownerId) return;
 
-    // --- recent mode + 날짜 변화 감지 ---
+        fetchUserGrassYears(ownerId)
+            .then(setYears)
+            .catch(console.error);
+    }, [ownerId]);
+
     useEffect(() => {
         fetchGrass();
-    }, [mode, year, new Date().getFullYear(), new Date().getMonth(), new Date().getDate()]);
+    }, [mode, year, ownerId]);
 
-    // --- scroll to end ---
     useEffect(() => {
-        if (wrapperRef.current) wrapperRef.current.scrollLeft = wrapperRef.current.scrollWidth;
+        if (wrapperRef.current)
+            wrapperRef.current.scrollLeft = wrapperRef.current.scrollWidth;
     }, [grassData]);
+
+    if (!user) return null;
 
     return (
         <section className="grass-section">
-            <h2>{user?.nickname} 님의 잔디</h2>
+            <h2>{user.nickname} 님의 잔디</h2>
 
             <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px" }}>
                 <span style={{ fontSize: "14px", color: "#555" }}>이만큼 자랐어요!</span>
@@ -61,9 +71,15 @@ export default function GrassSection({ user }) {
                                     key={day.date}
                                     className="grass-cell"
                                     style={{ backgroundColor: getColor(day.count) }}
-                                    onMouseEnter={e => setTooltip({ visible: true, x: e.clientX, y: e.clientY, text: `${day.date} · ${day.count}회` })}
-                                    onMouseMove={e => setTooltip(t => ({ ...t, x: e.clientX, y: e.clientY }))}
-                                    onMouseLeave={() => setTooltip(t => ({ ...t, visible: false }))}
+                                    onMouseEnter={e =>
+                                        setTooltip({ visible: true, x: e.clientX, y: e.clientY, text: `${day.date} · ${day.count}회` })
+                                    }
+                                    onMouseMove={e =>
+                                        setTooltip(t => ({ ...t, x: e.clientX, y: e.clientY }))
+                                    }
+                                    onMouseLeave={() =>
+                                        setTooltip(t => ({ ...t, visible: false }))
+                                    }
                                 />
                             ))}
                             <div className="grass-spacer" />
@@ -72,7 +88,9 @@ export default function GrassSection({ user }) {
 
                     <div className="grass-legend">
                         <span>Less</span>
-                        {COLORS.map((color, idx) => <div key={idx} className="legend-box" style={{ backgroundColor: color }} />)}
+                        {COLORS.map((color, idx) => (
+                            <div key={idx} className="legend-box" style={{ backgroundColor: color }} />
+                        ))}
                         <span>More</span>
                     </div>
                 </div>
@@ -105,7 +123,6 @@ export default function GrassSection({ user }) {
     );
 }
 
-// --- utils ---
 function buildGrass(apiData, year) {
     const map = {};
     apiData.forEach(d => map[d.date] = d.count);
@@ -115,14 +132,13 @@ function buildGrass(apiData, year) {
         start = new Date(year, 0, 1);
         end = new Date(year, 11, 31);
     } else {
-        end = new Date(); // 오늘
+        end = new Date();
         start = new Date();
         start.setDate(end.getDate() - 364);
     }
 
     const result = [];
-    for (let d = new Date(start.getTime()); d <= end; d.setDate(d.getDate() + 1)) {
-        // Local 기준 YYYY-MM-DD
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
         const key = d.toLocaleDateString("sv-SE");
         result.push({ date: key, count: map[key] || 0 });
     }

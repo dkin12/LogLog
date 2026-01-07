@@ -20,10 +20,11 @@ export default function FolderGrid({ categories, onSelect }) {
             initial="hidden"
             animate="show"
         >
-            {categories.map((cat) => (
+            {categories.map((cat, idx) => (
                 <FolderCard
                     key={cat.categoryId}
                     category={cat}
+                    index={idx}
                     onClick={() => onSelect(cat.categoryId)}
                 />
             ))}

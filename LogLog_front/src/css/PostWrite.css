@@ -1,267 +1,256 @@
-/* 전체 컨테이너 설정 */
 .editor-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    color: #333;
+  max-width: 1100px;
+  margin: 0 auto 160px;
+  padding: 48px 52px 0;
 }
 
-/* 제목 영역 */
-.title-section {
-  margin-bottom: 30px;
-}
+/* 제목 */
+.title-section { margin-bottom: 32px; }
 
 .title-input {
   width: 100%;
-  font-size: 2.5rem;
-  font-weight: bold;
   border: none;
+  background: transparent;
   outline: none;
-  padding: 10px 0;
-  color: #333;
-  background-color: #f9f9f8;
+  color: var(--text-main);
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
 }
 
-.title-input::placeholder {
-  color: #ccc;
-}
+.title-input::placeholder { color: #cbbfb6; }
 
 .title-underline {
-  height: 4px;
-  width: 100px;
-  background-color: #495057;
-  margin: 10px 0 20px 0;
+  width: 80px;
+  height: 5px;
+  margin-top: 12px;
+  background: var(--primary);
+  border-radius: 999px;
 }
 
-.tag-input {
-    width: 100%;
-    font-size: 1.1rem;
-    border: none;
-    border-bottom: 2px solid #ddd;
-
-    outline: none;
-    background-color: #f9f9f8;
-    padding: 5px 0;
-    margin-bottom: 10px;
-    transition: border-color 0.3s;
-}
-
-.tag-input:focus {
-    border-bottom: 2px solid #333; /* 원하는 포인트 색상(검정, 파랑 등) */
-}
-
-/* 에디터 영역 */
+/* 에디터 */
 .editor-wrapper {
-  margin-bottom: 40px;
-  border: 1px solid #eee;
+  background: #fff;
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.05);
 }
 
-/* 설정 영역 공통 */
+/* 설정 영역 */
 .settings-container {
-  margin-bottom: 80px;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
 
 .setting-item {
-  margin-bottom: 40px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 22px 24px;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.05);
 }
 
 .setting-item h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: #333;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 14px;
 }
 
-/* 썸네일 설정 */
+/* 썸네일 */
 .thumbnail-options {
   display: flex;
   gap: 20px;
 }
 
 .thumb-card {
-  display: flex;
-  flex-direction: column;
-  width: 250px;
-  cursor: pointer;
+  width: 260px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--bg-sub);
 }
 
-.radio-header {
-  margin-bottom: 10px;
-  font-size: 0.95rem;
+.upload-preview {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 5px;
+
+  height: 160px;
+  background: #f3ede7;
+  border-radius: 14px;
+  gap: 8px;
 }
 
 .thumb-preview {
-  height: 140px;
-  border: 1px solid #ddd;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #868e96;
-  transition: all 0.2s;
+  margin-top: 10px;
+  height: 160px;
+  border-radius: 12px;
   overflow: hidden;
-}
-.thumb-preview.default-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    border-radius: 4px;
-}
-.thumb-card.selected .thumb-preview {
-  border: 2px solid #D17E44;
+  background: #eee;
 }
 
-.default-preview span {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #D17E44;
-  margin-bottom: 5px;
-}
-
-.default-preview p {
-  font-size: 0.8rem;
-  margin: 0;
-}
-
-/* 수정된 업로드 미리보기 영역 */
-.upload-preview {
-  padding: 10px;
-  /* 내부 여백 추가 */
-}
-
-.upload-icon {
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-
-.btn-upload {
-  border: 1px solid #ccc;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  border-radius: 4px;
-  cursor: pointer;
-  color: #333;
-  font-weight: 500;
-}
-
-.btn-upload:hover {
-  background-color: #f1f3f5;
-  border-color: #adb5bd;
-}
-
-.thumb-preview-img {
+.thumb-preview img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.visibility-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.vis-btn {
-  padding: 10px 20px;
-  border: 1px solid #ddd;
-  background: #fff;
-  border-radius: 4px;
-  cursor: pointer;
+/* 태그 */
+.tag-input {
+  width: 100%;
   font-size: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
+  border: none;
+  border-bottom: 1px solid #ddd;
 
-.vis-btn.active {
-  background-color: #D17E44;
-  color: #fff;
-  border-color: #D17E44;
-}
-
-/* 카테고리 */
-.category-select {
-  width: 300px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
   outline: none;
-}
-
-/* 태그 칩 */
-.tags-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-    margin-bottom: 10px;
+  padding: 5px 0;
+  margin-bottom: 10px;
+  transition: border-color 0.3s;
 }
 
 .tag-chip {
-  background-color: #f1f3f5;
-  color: #495057;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.9rem;
+  display: inline-block;
+  background: var(--primary-soft);
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 6px 6px 0 0;
   cursor: pointer;
 }
 
-.tag-chip:hover {
-  background-color: #e9ecef;
+/* 공개 설정 */
+.visibility-buttons {
+  display: flex;
+  gap: 12px;
 }
 
-/* 푸터 */
+.vis-btn {
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.vis-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* 하단 저장바 */
 .editor-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 70px;
-  background-color: #fff;
-  border-top: 1px solid #eee;
+  position: sticky;
+  bottom: 24px;
+  margin-top: 56px;
+  background: #fff;
+  padding: 12px 22px;
+  border-radius: 999px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 40px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-  z-index: 100;
-  box-sizing: border-box;
-}
-
-.btn-exit {
-  background: none;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  color: #495057;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.1);
 }
 
 .footer-actions {
   display: flex;
-  gap: 15px;
+  gap: 12px;
+}
+
+.footer-actions button {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* 버튼 */
+.btn-save {
+  background: var(--primary);
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-weight: 700;
 }
 
 .btn-draft {
-  background: none;
-  border: none;
-  color: #868e96;
-  cursor: pointer;
-  font-weight: 600;
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-radius: 999px;
+  padding: 10px 20px;
 }
 
+/* ===== Form 기본 리빌드 ===== */
+
+.editor-container select,
+.editor-container textarea {
+  background: #fff;
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--text-main);
+  box-shadow: inset 0 1px 0 rgba(0,0,0,0.04);
+}
+
+.editor-container select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%238B6E55' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 10px 6px;
+  padding-right: 36px;
+}
+
+/* 버튼 공통 */
+/* Toast UI 내부 버튼 제외 */
+.editor-container > .editor-footer button,
+.editor-container .setting-item button,
+.editor-container .thumbnail-options button {
+  background: #fff;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-weight: 600;
+  color: var(--text-main);
+  transition: all .15s ease;
+}
+
+.editor-container button:hover {
+  background: var(--border-soft);
+}
+
+/* 주요 버튼 */
 .btn-save {
-  background-color: #333333;
+  background: var(--primary);
   color: #fff;
-  border: none;
-  padding: 10px 25px;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
+  border-color: var(--primary);
 }
 
 .btn-save:hover {
-  background-color: #212529;
+  filter: brightness(1.05);
 }
+
+.btn-draft {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: var(--primary-soft);
+}
+
+/* Toast UI Editor toolbar 복구 */
+.toastui-editor-toolbar button {
+  border: 1px solid var(--border-soft) !important;
+  color: #444 !important;
+}
+
+.toastui-editor-toolbar button:hover {
+  background: var(--primary-soft) !important;
+}
+
+.toastui-editor-defaultUI-toolbar {
+  background: #f9f6f3;
+  border-bottom: 1px solid var(--border-soft);
+}
+

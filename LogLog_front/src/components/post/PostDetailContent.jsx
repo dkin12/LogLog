@@ -34,7 +34,7 @@ const PostDetailContent = ({ post, currentUser }) => {
     const { data: comments = [], refetch: refetchComments } = useQuery({
         queryKey: ['comments', post?.id],
         queryFn: () => fetchComments(post.id),
-        enabled: !!post?.id, // 🔥 post 없을 때 쿼리 실행 안 함
+        enabled: !!post?.id, // post 없을 때 쿼리 실행 안 함
     });
 
     /* 자동 스크롤 */
@@ -105,7 +105,13 @@ const PostDetailContent = ({ post, currentUser }) => {
     };
 
     const handleTagClick = (tag) => {
-        navigate(`/?tag=${encodeURIComponent(tag)}`);
+        const params = new URLSearchParams();
+        params.set("tag", tag);
+
+        navigate({
+            pathname: "/posts",
+            search: params.toString(),
+        });
     };
 
     /* return은 훅 뒤 */

@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
-import '../css/PostWrite.css';
+import '../../css/PostWrite.css';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { fetchCategories } from '../api/categoryApi';
-import { createPosts, detailPost, updatePosts, getPostDetailHistories } from '../api/postsApi';
-import { uploadImage } from '../api/fileApi';
-import { useToast } from '../hooks/useToast';
-import defaultThumbnail from "../assets/images/default.png";
+import { fetchCategories } from '../../api/categoryApi.js';
+import { createPosts, detailPost, updatePosts, getPostDetailHistories } from '../../api/postsApi.js';
+import { uploadImage } from '../../api/fileApi.js';
+import { useToast } from '../../hooks/useToast.js';
+import defaultThumbnail from "../../assets/images/default.png";
 import { useLocation, useNavigate, useParams } from "react-router";
 
 const PostWrite = ({ mode }) => {
@@ -114,7 +114,7 @@ const PostWrite = ({ mode }) => {
                 navigate(`/posts/write/${newId}/draft`, { replace: true });
             } else {
                 toast.success('게시글이 등록되었습니다!');
-                navigate(`/posts`);
+                navigate(`/posts/${newId}`);
             }
             queryClient.invalidateQueries({ queryKey: ['log_posts'] });
         }
@@ -122,18 +122,20 @@ const PostWrite = ({ mode }) => {
 
     const updateMutation = useMutation({
         mutationFn: (payload) => updatePosts(currentPostId, payload),
-        onSuccess: (_, variables) => {
+        onSuccess: async (updatedPost, variables) => {
+            queryClient.setQueryData(['log_posts', currentPostId], updatedPost);
+
             if (variables.draftYn === "Y") {
                 toast.success("임시저장 내용이 업데이트되었습니다.");
                 setDraftYn(variables.draftYn);
                 setStatus(variables.status);
                 navigate(`/posts/write/${currentPostId}/draft`, { replace: true });
             } else {
-                toast.success('수정 완료!');
+                toast.success("수정 완료!");
                 navigate(`/posts/${currentPostId}`, { replace: true });
             }
+
             queryClient.invalidateQueries({ queryKey: ['log_posts'] });
-            queryClient.invalidateQueries({ queryKey: ['log_posts', currentPostId] });
         },
         onError: (err) => toast.error('수정 실패: ' + err.message)
     });
@@ -199,7 +201,7 @@ const PostWrite = ({ mode }) => {
     };
 
     return (
-        <div className="layout-content">
+        <div className="layout-content page-scroll">
             <div className="editor-container">
                 {/* 제목 */}
                 <div className="title-section">

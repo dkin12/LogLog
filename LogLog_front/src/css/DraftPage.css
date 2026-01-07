@@ -1,113 +1,119 @@
-/* 전체 페이지 컨테이너 */
+/* ===== 전체 컨테이너 ===== */
 .draft-page-container {
-    padding: 60px 20px;
-    font-family: 'Pretendard', sans-serif;
+    max-width: 1100px;
+    margin: 0 auto 120px;
+    padding: 20px 52px 0;
 }
 
-/* 상단 타이틀 (一時保存) */
+/* ===== 헤더 ===== */
 .draft-header-section {
     text-align: center;
-    margin-bottom: 50px;
-    font-family: 'KeinannPOP', sans-serif;
+    margin-bottom: 28px;
 }
 
 .draft-main-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: #d27c4d; /* 이미지의 갈색/주황 톤 */
-    margin: 0;
-    letter-spacing: 2px;
+    font-size: 42px;
+    font-weight: 900;
+    color: #d27c4d;
+    font-family: "KeinannPOP", "Noto Sans KR", sans-serif;
+    letter-spacing: -0.6px;
 }
 
-/* 콘텐츠 래퍼 */
-.draft-content-wrapper {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-/* 총 0 건 텍스트 */
+/* ===== 카운트 ===== */
 .draft-count-label {
-    font-size: 0.95rem;
-    color: #666;
+    font-size: 13px;
+    color: var(--text-sub);
     margin-bottom: 20px;
-    font-weight: 500;
 }
 
-/* 리스트 스타일 */
+/* ===== 리스트 ===== */
 .draft-list {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid #eee; /* 맨 위 구분선 */
+    gap: 16px;
 }
 
-/* 개별 아이템 행 */
+/* ===== 카드 ===== */
 .draft-item-row {
-    padding: 35px 0; /* 위아래 여백 넉넉하게 */
-    border-bottom: 1px solid #eee; /* 구분선 */
+    height: 150px;
+    padding: 26px 32px;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 10px 26px rgba(80,40,10,0.06);
+    transition: transform .15s ease, box-shadow .15s ease;
     cursor: pointer;
-    transition: background-color 0.2s;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
 }
 
+.draft-item-row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 36px rgba(80,40,10,0.12);
+}
 
-/* 제목 스타일 */
+/* ===== 제목 ===== */
 .draft-item-title {
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: #333;
-    margin: 0 0 12px 0;
-}
-.draft-item-row:hover .draft-item-title {
-    text-decoration: underline;
-    text-underline-offset: 4px; /* 밑줄과 글자 사이 간격 조절 */
-    text-decoration-thickness: 1px; /* 밑줄 두께 */
-}
-/* 요약문 스타일 */
-.draft-item-summary {
-    font-size: 1rem;
-    color: #666;
-    line-height: 1.6;
-    margin: 0 0 20px 0;
-
-    /* 3줄 이상 넘어가면 ... 처리 */
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.4px;
 }
 
-/* 하단 정보 (날짜 + 삭제버튼) */
+/* ===== 요약 ===== */
+.draft-item-row .draft-item-summary {
+    font-size: 14px !important;
+    color: #6f6158 !important;
+    line-height: 1.5 !important;
+    max-width: 720px !important;
+
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+}
+
+/* ===== 하단 ===== */
 .draft-item-footer {
     display: flex;
-    justify-content: space-between; /* 양 끝 정렬 */
+    justify-content: space-between;
     align-items: center;
+    margin-top: auto;
 }
 
 .draft-date {
-    font-size: 0.9rem;
-    color: #999;
+    font-size: 14px;
+    color: #a3968c;
 }
 
-/* 삭제 텍스트 버튼 (이미지처럼 붉은 글씨만) */
+/* ===== 삭제 버튼 ===== */
 .btn-draft-delete {
-    background: none;
+    margin-bottom: 10px;
+    padding: 6px 15px;
+    border-radius: 999px;
     border: none;
-    color: #ff6b6b; /* 연한 빨강/핑크 */
-    font-size: 0.9rem;
+    font-size: 11px;
+    font-weight: 700;
+    background: #f2e5dc;
+    color: #c1683c;
     cursor: pointer;
-    padding: 5px 10px;
-    transition: color 0.2s;
+    transition: all .15s ease;
 }
 
 .btn-draft-delete:hover {
-    color: #ff0000;
-    text-decoration: underline;
+    background: #eacfc0;
 }
 
-/* 데이터 없음 / 로딩 */
-.no-data, .draft-loading {
+.btn-draft-delete:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ===== 빈 상태 ===== */
+.no-data {
     text-align: center;
-    padding: 100px 0;
-    color: #999;
-    font-size: 1.1rem;
+    padding: 80px 0;
+    color: #b8a89c;
 }

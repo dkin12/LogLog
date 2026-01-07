@@ -27,7 +27,7 @@ function PostDiffPage() {
     if (isCurrentLoading || isHistoryLoading) return <div className="loading">데이터 로딩 중...</div>;
 
     return (
-        <div className="layout-content">
+        <div className="layout-content page-scroll">
             <div className="diff-layout-container">
                 <div className="diff-sticky-header">
                     <div className="header-left">

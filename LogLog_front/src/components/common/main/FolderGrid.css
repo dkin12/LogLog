@@ -1,28 +1,18 @@
 .folder-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(200px, 1fr));
-    grid-template-rows: repeat(2, auto);
     gap: 40px 48px;
-    justify-content: center;
 }
+
 /* 버튼 */
 .folder {
     position: relative;
     width: 100%;
     max-width: 320px;
-    min-width: 0;
-
     border: none;
     background: transparent;
     padding: 0;
-    text-align: left;
     cursor: pointer;
-}
-
-.folder:focus-visible {
-    outline: 2px solid var(--primary-border);
-    outline-offset: 6px;
-    border-radius: 22px;
 }
 
 /* 탭 */
@@ -30,37 +20,42 @@
     position: absolute;
     top: -14px;
     left: 30px;
-
     width: 72px;
     height: 24px;
-
     border-radius: 14px 14px 0 0;
-    box-shadow: 0 10px 16px rgba(0, 0, 0, 0.12);
-    opacity: 0.9;
+    filter: drop-shadow(0 6px 8px rgba(0,0,0,0.12));
 }
 
 /* 본체 */
 .folder-body {
-    border-radius: 22px;
+    border-radius: 26px;
     padding: 36px 28px 34px;
     min-height: 176px;
-
     box-shadow:
-            0 12px 26px rgba(0, 0, 0, 0.10),
-            0 2px 6px rgba(0, 0, 0, 0.06);
+            0 12px 26px rgba(0,0,0,0.10),
+            0 2px 6px rgba(0,0,0,0.06);
+    transition: all .25s ease;
 }
 
 /* 타이틀 */
 .folder-title {
-    margin: 0;
+    font-family: 'BMDOHYEON';
     font-size: 20px;
-    font-weight: 700;
-    color: var(--text-main);
+    letter-spacing: -0.4px;
 }
 
 /* 서브 */
 .folder-sub {
+    font-family: 'GmarketSansRounded';
     margin-top: 12px;
     font-size: 13px;
-    color: rgba(43, 37, 34, 0.62);
+    opacity: .7;
+}
+
+/* hover */
+.folder:hover .folder-body {
+    transform: translateY(-4px);
+    box-shadow:
+            0 16px 30px rgba(0,0,0,0.12),
+            0 0 0 3px rgba(255,255,255,0.25) inset;
 }

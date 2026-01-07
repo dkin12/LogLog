@@ -1,52 +1,44 @@
-/* ===== MainPage 전용 루트 ===== */
+/* ===== MainPage Root ===== */
 .main-page {
-    height: calc(100vh - 64px);
+    min-height: calc(100vh - 64px);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 }
 
-/* MainPage에서만 높이 고정 */
-.main-page.page-wrapper {
-    height: 100%;
-}
-
-/* ===== 고정 영역 ===== */
+/* ===== 상단 고정 영역 ===== */
 .layout-header {
-    margin-bottom: 20px;
-    margin-left: 80px;
+    margin: 24px 0 20px 80px;
 }
 
-/* ===== 스크롤 대상 ===== */
-/* MainPage 전용 */
-.main-page .main-content-area {
+/* ===== 카드 1줄 영역 ===== */
+.main-page .main-single-row {
+    margin-top: 20px;
+}
+
+/* 카드 4개 고정 */
+.main-page .main-single-row .post-grid {
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 0;
+}
+
+/* ===== 자동 여백 영역 ===== */
+.main-page .main-spacer {
     flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-}
-
-/* 공용 content-area는 건드리지 않음 */
-.main-page .content-area {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-
-    /* ⭐ 이 줄이 핵심 */
-    display: flex;
-    flex-direction: column;
-}
-
-.content-area {
-    min-height: 420px;
 }
 
 /* ===== 페이지네이션 ===== */
+.main-page .pagination-wrapper {
+    margin: 36px 0 24px;
+    display: flex;
+    justify-content: center;
+}
 
 .post-summary {
     font-size: 13px;
     color: var(--text-sub);
-}
+    margin-top: 25px;
 
+}
 .post-summary strong {
     color: var(--primary);
 }
