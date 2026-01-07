@@ -76,7 +76,7 @@ export default function Mypage() {
                 />
             }
         >
-            <div className="mypage-container">
+            <div className="mypage-container page-scroll">
                 <section id="grass">
                     <GrassSection user={user} />
                 </section>

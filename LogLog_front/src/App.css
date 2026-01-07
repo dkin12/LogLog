@@ -25,6 +25,12 @@ body {
     font-family: "KeinannPOP", "PretendardJPVariable", sans-serif;
 }
 
+.page-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
 :root {
     --bg-main: rgba(255, 248, 228, 0.21);
     --bg-sub: #F2ECE7;
