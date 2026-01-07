@@ -199,7 +199,7 @@ const PostWrite = ({ mode }) => {
     };
 
     return (
-        <div className="layout-content">
+        <div className="layout-content page-scroll">
             <div className="editor-container">
                 {/* 제목 */}
                 <div className="title-section">

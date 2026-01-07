@@ -34,7 +34,7 @@ const PostDetailContent = ({ post, currentUser }) => {
     const { data: comments = [], refetch: refetchComments } = useQuery({
         queryKey: ['comments', post?.id],
         queryFn: () => fetchComments(post.id),
-        enabled: !!post?.id, // 🔥 post 없을 때 쿼리 실행 안 함
+        enabled: !!post?.id, // post 없을 때 쿼리 실행 안 함
     });
 
     /* 자동 스크롤 */

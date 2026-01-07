@@ -22,7 +22,7 @@ function PostDetail() {
         return <ErrorMessage message="게시글을 불러오는 데 실패했습니다." />;
 
     return (
-        <div className="post-detail-page">
+        <div className="post-detail-page page-scroll">
             <div className="post-detail-card">
                 <PostDetailContent post={post} currentUser={user} />
             </div>

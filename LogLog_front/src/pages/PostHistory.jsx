@@ -30,7 +30,7 @@ function PostHistory() {
     if (isHistoryLoading || isPostLoading) return <div className="loading">데이터 로딩 중...</div>;
 
     return (
-        <div className="layout-content">
+        <div className="layout-content page-scroll">
             <div className="post-history-container">
                 <div className="post-history-header">
                     <h2 className="post-history-header-title">バ-ジョン</h2>

@@ -26,7 +26,7 @@ export const logout = async () => {
 };
 
 /**
- * 로그인 사용자 정보 조회 (세션 체크)
+ * 로그인 사용자 정보 조회
  */
 export const getMe = async () => {
     const response = await api.get("/api/users/me");

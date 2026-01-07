@@ -60,8 +60,8 @@ export default function HomePage() {
             {categoryId === null && (
                 <>
                     <div className="main-hero">
-                        <h2>기록은 이렇게 쌓여요</h2>
-                        <p>카테고리별로 정리된 LogLog의 기록들</p>
+                        <h2>모든 기록의 시작</h2>
+                        <p>카테고리별로 정리된 ログログ의 기록들</p>
                     </div>
 
                     <FolderGrid
