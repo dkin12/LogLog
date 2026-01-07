@@ -3,7 +3,7 @@ import { api } from './api';
 export const fetchPosts = async ({ page, categoryId, keyword, tag }) => {
     const params = {
         page: page + 1,
-        size: 10,
+        size: 8,
     };
 
     if (categoryId) params.categoryId = categoryId;

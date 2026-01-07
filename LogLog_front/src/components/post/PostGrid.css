@@ -1,8 +1,19 @@
+.post-list-wrapper {
+    max-width: 800px;   /* 카드 기준 폭 */
+    width: 100%;
+    margin: 0 auto;
+}
+
 .post-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 22px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
     width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
+}
+
+.post-grid > .empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -25,11 +25,17 @@ body {
     font-family: "KeinannPOP", "PretendardJPVariable", sans-serif;
 }
 
+.page-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
 :root {
-    --bg-main: #FAF8F5;
+    --bg-main: rgba(255, 248, 228, 0.21);
     --bg-sub: #F2ECE7;
 
-    --card-bg: #FFFFFF;
+    --card-bg: #ffffff;
     --card-hover: #F7F2EE;
 
     --primary: #583218;
@@ -50,4 +56,16 @@ body {
     --success: #5F8F6A;
     --warning: #D8A14D;
     --error: #B84A3A;
+
+    --folder-1: #E8D8CB; /* 일상 */
+    --folder-2: #DCE9E1; /* 기록 */
+    --folder-3: #D9D6EE; /* 정보 */
+    --folder-4: #EAD6E4; /* 취미 */
+
+    --folder-5: #EAE6C9; /* 리뷰 */
+    --folder-6: #D7E2F0; /* 생각 */
+    --folder-7: #D5ECEA; /* 여행 */
+    --folder-8: #EAD2CE; /* 공지 */
+
+    --folder-text: #2B2522;
 }

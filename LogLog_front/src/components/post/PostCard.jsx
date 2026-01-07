@@ -37,7 +37,7 @@ export default function PostCard({ post ,apiBase }) {
                 </div>
 
                 <div className="post-card-summary">
-                    {post.summary}
+                    {post.summary || "\u00A0"}
                 </div>
 
                 <div className="post-card-date">

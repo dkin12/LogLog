@@ -1,24 +1,33 @@
-.mypage-layout {
+/* ===== Frame: 사이드바 유무만 책임 ===== */
+.mypage-frame {
     display: flex;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 32px 35px;
-    gap: 32px;
-    align-items: flex-start;
+    justify-content: center;
+    height: 100%;
 }
 
+/* 왼쪽 사이드바 */
 .mypage-sidebar {
     width: 220px;
+    margin-left: 50px;
     flex-shrink: 0;
     position: sticky;
-    top: 88px;   /* 헤더 높이만큼 */
+    top: 88px; /* 헤더 높이 */
     align-self: flex-start;
 }
 
-.mypage-content {
+/* 오른쪽 영역 (가운데 정렬만) */
+.mypage-main {
     flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+/* ===== Container: 콘텐츠 폭 책임 (공통) ===== */
+.mypage-container {
+    width: 100%;
+    max-width: 800px;
+    padding: 32px 2px;
     display: flex;
     flex-direction: column;
     gap: 32px;
-    min-width: 0;
 }

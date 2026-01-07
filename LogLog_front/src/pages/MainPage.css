@@ -1,26 +1,52 @@
+/* ===== MainPage 전용 루트 ===== */
+.main-page {
+    height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* MainPage에서만 높이 고정 */
+.main-page.page-wrapper {
+    height: 100%;
+}
+
+/* ===== 고정 영역 ===== */
+.layout-header {
+    margin-bottom: 20px;
+    margin-left: 80px;
+}
+
+/* ===== 스크롤 대상 ===== */
+/* MainPage 전용 */
+.main-page .main-content-area {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+/* 공용 content-area는 건드리지 않음 */
+.main-page .content-area {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+
+    /* ⭐ 이 줄이 핵심 */
+    display: flex;
+    flex-direction: column;
+}
+
+.content-area {
+    min-height: 420px;
+}
+
+/* ===== 페이지네이션 ===== */
+
 .post-summary {
-    margin: 0px 0 16px;
-    font-size: 11px;
-    color: #666;
+    font-size: 13px;
+    color: var(--text-sub);
 }
 
 .post-summary strong {
-    color: #583218;
-}
-
-.content-wrapper {
-    padding: 0 55px;
-    box-sizing: border-box;
-}
-
-.page-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    padding-bottom: 14px;
-}
-
-.pagination-wrapper {
-    margin-top: auto;
+    color: var(--primary);
 }

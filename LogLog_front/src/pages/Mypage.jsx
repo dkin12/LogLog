@@ -4,33 +4,48 @@ import MyPostList from "../components/mypage/MyPostList.jsx";
 import GrassSection from "../components/mypage/GrassSection.jsx";
 import LeftSidebar from "../components/mypage/LeftSidebar.jsx";
 import NicknameModal from "../components/mypage/NicknameModal.jsx";
+import MyPageFrame from "../components/mypage/MyPageFrame.jsx";
 import { getMyPosts, getMyComments } from "../api/mypageApi.js";
 import "./Mypage.css";
 
-function Mypage() {
+export default function Mypage() {
     const { user, setUser } = useOutletContext();
+
     const [mode, setMode] = useState("posts");
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openSetting, setOpenSetting] = useState(false);
 
     useEffect(() => {
-        if (mode === "grass") return;
+        if (mode === "grass" || mode === "settings") return;
 
         let alive = true;
-        const request =
-            mode === "posts" ? getMyPosts() : getMyComments();
-
         setLoading(true);
 
+        const request = mode === "posts" ? getMyPosts() : getMyComments();
+
         request
-            .then((data) => alive && setItems(data))
+            .then((data) => {
+                if (!alive) return;
+
+                if (mode === "comments") {
+                    const mapped = data.map(c => ({
+                        id: c.postId,
+                        title: c.postTitle,
+                        categoryName: c.categoryName,
+                        status: c.postStatus,
+                        createdAt: new Date(c.createdAt).toLocaleDateString(),
+                        commentContent: c.content,
+                    }));
+                    setItems(mapped);
+                } else {
+                    setItems(data);
+                }
+            })
             .catch(console.error)
             .finally(() => alive && setLoading(false));
 
-        return () => {
-            alive = false;
-        };
+        return () => { alive = false; };
     }, [mode]);
 
     const handleMenuChange = (menu) => {
@@ -40,8 +55,7 @@ function Mypage() {
         }
 
         if (menu === "grass") {
-            document
-                .getElementById("grass")
+            document.getElementById("grass")
                 ?.scrollIntoView({ behavior: "smooth" });
             setMode("grass");
             return;
@@ -51,26 +65,29 @@ function Mypage() {
         setMode(menu);
     };
 
+    if (!user) return null;
+
     return (
-        <div className="mypage-layout">
-            <aside className="mypage-sidebar">
+        <MyPageFrame
+            sidebar={
                 <LeftSidebar
                     mode={mode}
                     onMenuChange={handleMenuChange}
                 />
-            </aside>
-
-            <div className="mypage-content">
+            }
+        >
+            <div className="mypage-container page-scroll">
                 <section id="grass">
                     <GrassSection user={user} />
                 </section>
 
-                {mode !== "grass" && (
+                {mode !== "grass" && mode !== "settings" && (
                     <MyPostList
                         posts={items}
-                        mode="posts"
-                        isOwner={false}
+                        mode={mode}
+                        isOwner={true}
                         ownerNickname={user.nickname}
+                        loading={loading}
                     />
                 )}
             </div>
@@ -81,8 +98,6 @@ function Mypage() {
                 user={user}
                 onSuccess={setUser}
             />
-        </div>
+        </MyPageFrame>
     );
 }
-
-export default Mypage;

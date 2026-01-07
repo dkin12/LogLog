@@ -1,5 +1,6 @@
 package com.example.loglog.service;
 
+import com.example.loglog.dto.response.MyCommentResponse;
 import com.example.loglog.entity.Comment;
 import com.example.loglog.entity.Post;
 import com.example.loglog.entity.User;
@@ -28,8 +29,8 @@ public class CommentService {
 
     // 댓글 조회 - 내가 단 댓글 목록
     @Transactional(readOnly = true)
-    public List<Comment> getMyComments(Long userId) {
-        return commentRepository.findByUserIdAndIsDeletedFalseOrderByCreatedAtDesc(userId);
+    public List<MyCommentResponse> getMyComments(Long userId) {
+        return commentRepository.findMyCommentResponses(userId);
     }
 
     // 댓글 등록

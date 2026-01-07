@@ -12,18 +12,21 @@ html,
 /* 공통 레이아웃 설정 */
 .layout-content {
     background: none;
-    padding: 0 32px;
+    padding: 0 100px;
     box-sizing: border-box;
+}
+
+.main-layout {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .main-container {
     flex: 1;
     display: flex;
     flex-direction: column;
-}
-
-.main-layout {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    overflow: hidden;
+    padding-top: 5px;
 }
