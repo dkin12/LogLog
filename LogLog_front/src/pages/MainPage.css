@@ -1,26 +1,80 @@
-.post-summary {
-    margin: 0px 0 16px;
-    font-size: 11px;
-    color: #666;
+/* 전체 래퍼 */
+.page-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px 32px;
 }
 
-.post-summary strong {
+/* ===== 메인 히어로 ===== */
+.main-hero {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.main-hero h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.main-hero p {
+    font-size: 15px;
+    color: #777;
+}
+
+/* ===== 폴더 그리드 (4행 2열) ===== */
+.folder-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 2열 */
+    grid-template-rows: repeat(2, auto);   /* 4행 */
+    gap: 28px;
+}
+
+/* 폴더 카드 */
+.folder-card {
+    background: #fdfbf7;
+    border-radius: 20px;
+    padding: 28px;
+    cursor: pointer;
+
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.folder-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
+}
+
+/* 폴더 제목 */
+.folder-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* 폴더 서브 */
+.folder-sub {
+    font-size: 14px;
     color: #583218;
 }
 
-.content-wrapper {
-    padding: 0 55px;
-    box-sizing: border-box;
+/* ===== 카테고리 상세 ===== */
+.category-header {
+    margin-bottom: 24px;
 }
 
-.page-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    padding-bottom: 14px;
+.back-button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: #583218;
 }
 
+/* 페이지네이션 */
 .pagination-wrapper {
-    margin-top: auto;
+    margin-top: 32px;
+    display: flex;
+    justify-content: center;
 }

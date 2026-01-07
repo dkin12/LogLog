@@ -12,7 +12,7 @@ html,
 /* 공통 레이아웃 설정 */
 .layout-content {
     background: none;
-    padding: 0 32px;
+    padding: 0 100px;
     box-sizing: border-box;
 }
 
