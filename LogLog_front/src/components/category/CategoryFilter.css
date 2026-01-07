@@ -3,8 +3,8 @@
     justify-content: center;
     gap: 10px;
     flex-wrap: wrap;
-    margin-top: 10px;
-    margin-bottom: 8px;
+    margin-top: -10px;
+    margin-bottom: 17px;
 }
 
 .category-filter button {

@@ -1,0 +1,55 @@
+.page-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 50px 32px;
+    width: 100%;
+}
+
+.home-page {
+    margin-top: -24px;   /* 홈만 위로 */
+}
+
+.home-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 664px;
+}
+
+.home-content {
+    flex: 1;             /* ⭐ 남은 공간 전부 차지 */
+    min-height: 0;
+}
+
+.main-hero {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.main-hero h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.main-hero p {
+    font-size: 15px;
+    color: #777;
+}
+
+.category-header {
+    margin-bottom: 24px;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: #583218;
+}
+
+.pagination-wrapper {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}

@@ -42,7 +42,7 @@ export default function SearchBar() {
         }
 
         navigate({
-            pathname: "/",
+            pathname: "/posts",
             search: new URLSearchParams(params).toString(),
         });
     };

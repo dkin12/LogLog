@@ -5,7 +5,7 @@ import RequireAuth from "../components/common/auth/RequireAuth.jsx";
 
 import LoginPage from "../pages/LoginPage";
 import SignupPage from "../pages/SignupPage";
-import MainPage from "../pages/MainPage";
+import HomePage from "../pages/HomePage.jsx";
 import MyPage from "../pages/Mypage.jsx";
 import DraftsPage from "../pages/DraftsPage.jsx";
 import PostWrite from "../pages/PostWrite.jsx";
@@ -13,6 +13,7 @@ import PostDetail from "../pages/PostDetail.jsx";
 import PostHistory from "../pages/PostHistory.jsx";
 import PostDiffPage from "../components/post/PostDiffPage.jsx";
 import UserPage from "../pages/UserPage.jsx";
+import MainPage from "../pages/MainPage.jsx";
 
 export const router = createBrowserRouter([
     // 메인 영역 (공통 헤더)
@@ -20,7 +21,8 @@ export const router = createBrowserRouter([
         path: "/",
         element: <MainLayout />,
         children: [
-            { index: true, element: <MainPage /> },
+            { index: true, element: <HomePage /> },
+            { path: "posts", element: <MainPage /> },
 
             {
                 path: "mypage",

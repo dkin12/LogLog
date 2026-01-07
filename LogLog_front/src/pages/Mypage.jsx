@@ -4,31 +4,30 @@ import MyPostList from "../components/mypage/MyPostList.jsx";
 import GrassSection from "../components/mypage/GrassSection.jsx";
 import LeftSidebar from "../components/mypage/LeftSidebar.jsx";
 import NicknameModal from "../components/mypage/NicknameModal.jsx";
+import MyPageFrame from "../components/mypage/MyPageFrame.jsx";
 import { getMyPosts, getMyComments } from "../api/mypageApi.js";
 import "./Mypage.css";
 
-function Mypage() {
+export default function Mypage() {
     const { user, setUser } = useOutletContext();
 
-    const [mode, setMode] = useState("posts"); // posts | comments | grass
+    const [mode, setMode] = useState("posts");
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openSetting, setOpenSetting] = useState(false);
 
     useEffect(() => {
-        if (mode === "grass") return;
+        if (mode === "grass" || mode === "settings") return;
 
         let alive = true;
         setLoading(true);
 
-        const request =
-            mode === "posts" ? getMyPosts() : getMyComments();
+        const request = mode === "posts" ? getMyPosts() : getMyComments();
 
         request
             .then((data) => {
                 if (!alive) return;
 
-                // 댓글일 때 프론트용 데이터로 변환
                 if (mode === "comments") {
                     const mapped = data.map(c => ({
                         id: c.postId,
@@ -40,16 +39,13 @@ function Mypage() {
                     }));
                     setItems(mapped);
                 } else {
-                    // posts는 그대로
                     setItems(data);
                 }
             })
             .catch(console.error)
             .finally(() => alive && setLoading(false));
 
-        return () => {
-            alive = false;
-        };
+        return () => { alive = false; };
     }, [mode]);
 
     const handleMenuChange = (menu) => {
@@ -59,8 +55,7 @@ function Mypage() {
         }
 
         if (menu === "grass") {
-            document
-                .getElementById("grass")
+            document.getElementById("grass")
                 ?.scrollIntoView({ behavior: "smooth" });
             setMode("grass");
             return;
@@ -70,29 +65,30 @@ function Mypage() {
         setMode(menu);
     };
 
+    if (!user) return null;
+
     return (
-        <div className="mypage-layout mypage-own">
-            <aside className="mypage-sidebar">
+        <MyPageFrame
+            sidebar={
                 <LeftSidebar
                     mode={mode}
                     onMenuChange={handleMenuChange}
                 />
-            </aside>
-
-            <div className="mypage-content">
+            }
+        >
+            <div className="mypage-container">
                 <section id="grass">
                     <GrassSection user={user} />
                 </section>
 
-                {mode !== "grass" && (
-                    <section className="mypage-post-card">
-                        <MyPostList
-                            posts={items}
-                            mode={mode}
-                            isOwner={true}
-                            loading={loading}
-                        />
-                    </section>
+                {mode !== "grass" && mode !== "settings" && (
+                    <MyPostList
+                        posts={items}
+                        mode={mode}
+                        isOwner={true}
+                        ownerNickname={user.nickname}
+                        loading={loading}
+                    />
                 )}
             </div>
 
@@ -102,8 +98,6 @@ function Mypage() {
                 user={user}
                 onSuccess={setUser}
             />
-        </div>
+        </MyPageFrame>
     );
 }
-
-export default Mypage;

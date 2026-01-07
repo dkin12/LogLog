@@ -1,103 +1,113 @@
+import "./MainPage.css"
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPosts } from "../api/postsApi";
 import { fetchCategories } from "../api/categoryApi";
 
+import CategoryFilter from "../components/category/CategoryFilter";
 import PostList from "../components/post/PostList";
-import Pagination from "../components/common/Pagination";
-import "./MainPage.css";
+import Pagination from "../components/common/Pagination";;
 
 export default function MainPage() {
     const [searchParams, setSearchParams] = useSearchParams();
 
+    // query params
     const page = Number(searchParams.get("page") ?? 0);
     const categoryIdParam = searchParams.get("categoryId");
     const categoryId = categoryIdParam ? Number(categoryIdParam) : null;
+    const keyword = searchParams.get("keyword");
+    const tag = searchParams.get("tag");
 
-    // 카테고리 조회
+    // 카테고리 목록 (항상 조회)
     const { data: categories = [] } = useQuery({
         queryKey: ["categories"],
         queryFn: fetchCategories,
         staleTime: Infinity,
     });
 
-    // 게시글 조회 (카테고리 선택 시만)
+    const selectedCategoryName = categories.find(
+        (cat) => cat.categoryId === categoryId
+    )?.categoryName;
+
+    // 게시글 조회
     const { data, isLoading, isError } = useQuery({
-        queryKey: ["posts", page, categoryId],
+        queryKey: ["posts", page, categoryId, keyword, tag],
         queryFn: () =>
             fetchPosts({
                 page,
                 categoryId,
+                keyword,
+                tag,
             }),
-        enabled: categoryId !== null,
         keepPreviousData: true,
     });
 
     return (
-        <div className="page-wrapper">
+        <div className="page-wrapper main-page">
+            {/* ===== 카테고리 필터 (고정 영역) ===== */}
+            <CategoryFilter
+                selectedCategoryId={categoryId}
+                onSelect={(id) =>
+                    setSearchParams({
+                        page: 0,
+                        ...(id ? {categoryId: id} : {}),
+                        ...(keyword ? {keyword} : {}),
+                        ...(tag ? {tag} : {}),
+                    })
+                }
+            />
 
-            {/* ====== 메인 (전체) : 폴더 화면 ====== */}
-            {categoryId === null && (
-                <>
-                    <div className="main-hero">
-                        <h2>기록은 이렇게 쌓여요</h2>
-                        <p>카테고리별로 모아본 LogLog의 기록들</p>
-                    </div>
-
-                    <div className="folder-grid">
-                        {categories.map((cat) => (
-                            <div
-                                key={cat.categoryId}
-                                className="folder-card"
-                                onClick={() =>
-                                    setSearchParams({ categoryId: cat.categoryId, page: 0 })
-                                }
-                            >
-                                <div className="folder-title">
-                                    📁 {cat.categoryName}
-                                </div>
-                                <div className="folder-sub">
-                                    기록 보러가기 →
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </>
-            )}
-
-            {/* ====== 카테고리 선택 시 : 게시글 목록 ====== */}
-            {categoryId !== null && (
-                <>
-                    <div className="category-header">
-                        <button
-                            className="back-button"
-                            onClick={() => setSearchParams({})}
-                        >
-                            ← 전체로 돌아가기
-                        </button>
-                    </div>
-
-                    <PostList
-                        posts={data?.content}
-                        isLoading={isLoading}
-                        isError={isError}
-                    />
-
-                    <div className="pagination-wrapper">
-                        {data && data.totalPages > 1 && (
-                            <Pagination
-                                page={data.currentPage}
-                                totalPages={data.totalPages}
-                                onChange={(nextPage) =>
-                                    setSearchParams({
-                                        page: nextPage,
-                                        categoryId,
-                                    })
-                                }
-                            />
+            {/* ===== 검색 요약 (고정 영역) ===== */}
+            <div className="layout-header">
+                {data && (
+                    <div className="post-summary">
+                        {keyword ? (
+                            <>
+                                <strong>"{keyword}"</strong> 검색 결과 ·{" "}
+                                {data.totalElements}건
+                            </>
+                        ) : tag ? (
+                            <>
+                                <strong>#{tag}</strong> 태그 검색 결과 ·{" "}
+                                {data.totalElements}건
+                            </>
+                        ) : categoryId && selectedCategoryName ? (
+                            <>
+                                <strong>{selectedCategoryName}</strong> 카테고리 ·{" "}
+                                {data.totalElements}건
+                            </>
+                        ) : (
+                            <>총 {data.totalElements}건</>
                         )}
                     </div>
-                </>
+                )}
+            </div>
+
+            {/* ===== 콘텐츠 영역 ===== */}
+            <div className="content-area main-content-area">
+                <PostList
+                    posts={data?.content}
+                    isLoading={isLoading}
+                    isError={isError}
+                />
+            </div>
+
+            {/* ===== 페이지네이션 (항상 하단) ===== */}
+            {data && data.totalPages > 1 && (
+                <div className="pagination-wrapper">
+                    <Pagination
+                        page={data.currentPage}
+                        totalPages={data.totalPages}
+                        onChange={(nextPage) =>
+                            setSearchParams({
+                                page: nextPage,
+                                ...(categoryId ? {categoryId} : {}),
+                                ...(keyword ? {keyword} : {}),
+                                ...(tag ? {tag} : {}),
+                            })
+                        }
+                    />
+                </div>
             )}
         </div>
     );
