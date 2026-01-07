@@ -9,7 +9,8 @@ import "./Mypage.css";
 
 function Mypage() {
     const { user, setUser } = useOutletContext();
-    const [mode, setMode] = useState("posts");
+
+    const [mode, setMode] = useState("posts"); // posts | comments | grass
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openSetting, setOpenSetting] = useState(false);
@@ -18,13 +19,31 @@ function Mypage() {
         if (mode === "grass") return;
 
         let alive = true;
+        setLoading(true);
+
         const request =
             mode === "posts" ? getMyPosts() : getMyComments();
 
-        setLoading(true);
-
         request
-            .then((data) => alive && setItems(data))
+            .then((data) => {
+                if (!alive) return;
+
+                // 댓글일 때 프론트용 데이터로 변환
+                if (mode === "comments") {
+                    const mapped = data.map(c => ({
+                        id: c.postId,
+                        title: c.postTitle,
+                        categoryName: c.categoryName,
+                        status: c.postStatus,
+                        createdAt: new Date(c.createdAt).toLocaleDateString(),
+                        commentContent: c.content,
+                    }));
+                    setItems(mapped);
+                } else {
+                    // posts는 그대로
+                    setItems(data);
+                }
+            })
             .catch(console.error)
             .finally(() => alive && setLoading(false));
 
@@ -52,7 +71,7 @@ function Mypage() {
     };
 
     return (
-        <div className="mypage-layout">
+        <div className="mypage-layout mypage-own">
             <aside className="mypage-sidebar">
                 <LeftSidebar
                     mode={mode}
@@ -66,12 +85,14 @@ function Mypage() {
                 </section>
 
                 {mode !== "grass" && (
-                    <MyPostList
-                        posts={items}
-                        mode="posts"
-                        isOwner={false}
-                        ownerNickname={user.nickname}
-                    />
+                    <section className="mypage-post-card">
+                        <MyPostList
+                            posts={items}
+                            mode={mode}
+                            isOwner={true}
+                            loading={loading}
+                        />
+                    </section>
                 )}
             </div>
 

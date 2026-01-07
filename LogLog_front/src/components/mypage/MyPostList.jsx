@@ -32,23 +32,29 @@ function MyPostList({
                                 window.location.href = `/posts/${post.id}`;
                             }}
                         >
-                            <div className="mypost-main">
-                                <span className="mypost-title-text">
+                            <div className="mypost-left">
+                                <div className="mypost-main">
+                                  <span className="mypost-title-text">
                                     {post.title}
-                                </span>
-                            </div>
+                                  </span>
+                                </div>
 
-                            <div className="mypost-meta">
-                                <span>{post.categoryName}</span>
-                                <span>·</span>
-                                <span>{post.createdAt}</span>
-                                <span>·</span>
-                                <span className={`status ${post.status}`}>
-                                    {post.status === "PUBLISHED"
-                                        ? "공개"
-                                        : "비공개"}
-                                </span>
+                                <div className="mypost-meta">
+                                    <span>{post.categoryName}</span>
+                                    <span>·</span>
+                                    <span>{post.createdAt}</span>
+                                    <span>·</span>
+                                    <span className={`status ${post.status}`}>
+                                        {post.status === "PUBLISHED" ? "공개" : "비공개"}
+                                  </span>
+                                </div>
                             </div>
+                            {/* 댓글 미리보기 */}
+                            {mode === "comments" && (
+                                <div className="mypost-comment-preview">
+                                    {post.commentContent}
+                                </div>
+                            )}
                         </li>
                     ))
                 )}
