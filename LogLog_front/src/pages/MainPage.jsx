@@ -35,6 +35,7 @@ export default function MainPage() {
         queryFn: () =>
             fetchPosts({
                 page,
+                size: 4,   // 메인페이지만 4개
                 categoryId,
                 keyword,
                 tag,
@@ -84,13 +85,16 @@ export default function MainPage() {
             </div>
 
             {/* ===== 콘텐츠 영역 ===== */}
-            <div className="content-area main-content-area">
+            <div className="content-area main-content-area main-single-row">
                 <PostList
                     posts={data?.content}
                     isLoading={isLoading}
                     isError={isError}
                 />
             </div>
+
+            {/* 여백 조절 담당 */}
+            <div className="main-spacer" />
 
             {/* ===== 페이지네이션 (항상 하단) ===== */}
             {data && data.totalPages > 1 && (

@@ -1,16 +1,16 @@
 import React from 'react';
 import defaultThumbnail from "../../assets/images/default.png";
 
-const PostHistoryItem = ({ post, apiBase }) => {
+const PostHistoryItem = ({ post, apiBase, onClick }) => {
     const thumbnail = post.thumbnailUrl ? `${apiBase}${post.thumbnailUrl}` : defaultThumbnail;
     return (
-        <div className="post-history-item">
+        <div className="post-history-item" onClick={onClick}>
             <div className="post-thumbnail-box">
                 <img src={thumbnail} alt="thumbnail" className="post-thumbnail-img" />
             </div>
 
             <div className="post-history-content-box">
-                <span className="post-history-content-title">
+                <span className="post-history-date">
                 {new Date(post.archivedAt).toLocaleString('ko-KR', {
                     year: 'numeric',
                     month: 'long',

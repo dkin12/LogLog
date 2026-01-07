@@ -1,9 +1,9 @@
 import { api } from './api';
 
-export const fetchPosts = async ({ page, categoryId, keyword, tag }) => {
+export const fetchPosts = async ({ page, categoryId, keyword, tag, size = 8 }) => {
     const params = {
         page: page + 1,
-        size: 8,
+        size,
     };
 
     if (categoryId) params.categoryId = categoryId;
@@ -13,7 +13,6 @@ export const fetchPosts = async ({ page, categoryId, keyword, tag }) => {
     const res = await api.get("/api/posts", { params });
     return res.data;
 };
-
 
 // 게시글 작성
 export async function createPosts(payload) {
