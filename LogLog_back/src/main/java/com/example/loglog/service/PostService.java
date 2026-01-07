@@ -27,6 +27,7 @@ public class PostService {
     private final PostTagRepository postTagRepository;
     private final CategoryRepository categoryRepository;
     private final PostHistoryRepository postHistoryRepository;
+    private final CommentRepository commentRepository;
 
     private final LogService logService;
     private final PostDraftRepository postDraftRepository;
@@ -262,13 +263,19 @@ public class PostService {
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "post with id " + postId + " not found"));
+                        HttpStatus.NOT_FOUND, "post not found"));
 
         if (!post.getUser().getId().equals(userId)) {
             throw new IllegalStateException("삭제 권한이 없습니다.");
         }
 
-        postRepository.deleteById(postId);
+        // 자식 먼저 정리
+        commentRepository.deleteByPostId(postId);
+        postHistoryRepository.deleteByPostId(postId);
+        postTagRepository.deleteByPostId(postId);
+
+        // 마지막에 부모 삭제
+        postRepository.delete(post);
     }
 
      /* ============================

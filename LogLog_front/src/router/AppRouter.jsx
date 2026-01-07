@@ -8,7 +8,7 @@ import SignupPage from "../pages/SignupPage";
 import HomePage from "../pages/HomePage.jsx";
 import MyPage from "../pages/Mypage.jsx";
 import DraftsPage from "../pages/DraftsPage.jsx";
-import PostWrite from "../pages/PostWrite.jsx";
+import PostWrite from "../components/post/PostWrite.jsx";
 import PostDetail from "../pages/PostDetail.jsx";
 import PostHistory from "../pages/PostHistory.jsx";
 import PostDiffPage from "../components/post/PostDiffPage.jsx";

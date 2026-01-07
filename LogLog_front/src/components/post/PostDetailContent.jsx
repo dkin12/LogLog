@@ -105,7 +105,13 @@ const PostDetailContent = ({ post, currentUser }) => {
     };
 
     const handleTagClick = (tag) => {
-        navigate(`/?tag=${encodeURIComponent(tag)}`);
+        const params = new URLSearchParams();
+        params.set("tag", tag);
+
+        navigate({
+            pathname: "/posts",
+            search: params.toString(),
+        });
     };
 
     /* return은 훅 뒤 */
