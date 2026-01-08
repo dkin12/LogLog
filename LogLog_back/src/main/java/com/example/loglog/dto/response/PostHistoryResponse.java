@@ -1,9 +1,6 @@
 package com.example.loglog.dto.response;
 
-import com.example.loglog.entity.Category;
 import com.example.loglog.entity.PostHistory;
-import com.example.loglog.repository.CategoryRepository;
-import com.example.loglog.repository.PostHistoryRepository;
 import lombok.*;
 
 import java.time.LocalDateTime;

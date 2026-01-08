@@ -28,7 +28,7 @@ public class Post {
 
     // 사용자 N:1 관계
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id",nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     // 카테고리 N:1 관계
@@ -42,7 +42,7 @@ public class Post {
     @Column(columnDefinition = "CLOB")
     private String content;
 
-    @Column(name = "thumbnail_url",length = 200)
+    @Column(name = "thumbnail_url", length = 200)
     private String thumbnailUrl;
 
     @Column(nullable = false)
@@ -53,7 +53,7 @@ public class Post {
     private PostStatus status;
 
     @CreationTimestamp
-    @Column(name = "created_at",updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
@@ -73,7 +73,7 @@ public class Post {
 
     @PrePersist
     public void prePersist() {
-        if(views == null ) this.views = 0L;
+        if (views == null) this.views = 0L;
     }
 
     // 태그 추가

@@ -1,6 +1,5 @@
 package com.example.loglog.repository;
 
-import com.example.loglog.entity.Post;
 import com.example.loglog.entity.PostHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

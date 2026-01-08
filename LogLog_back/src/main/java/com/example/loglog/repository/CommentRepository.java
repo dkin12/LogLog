@@ -28,29 +28,29 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     // 내가 댓글 단 게시글 목록 조회
     @Query("""
-        select distinct c.post
-        from Comment c
-        where c.user.id = :userId
-          and c.isDeleted = false
-    """)
+                select distinct c.post
+                from Comment c
+                where c.user.id = :userId
+                  and c.isDeleted = false
+            """)
     List<Post> findDistinctPostsCommentedByUser(@Param("userId") Long userId);
 
     @Query("""
-        select new com.example.loglog.dto.response.MyCommentResponse(
-            c.id,
-            c.content,
-            c.createdAt,
-            p.id,
-            p.title,
-            cat.categoryName,
-            p.status
-        )
-        from Comment c
-        join c.post p
-        join p.category cat
-        where c.user.id = :userId
-          and c.isDeleted = false
-        order by c.createdAt desc
-    """)
+                select new com.example.loglog.dto.response.MyCommentResponse(
+                    c.id,
+                    c.content,
+                    c.createdAt,
+                    p.id,
+                    p.title,
+                    cat.categoryName,
+                    p.status
+                )
+                from Comment c
+                join c.post p
+                join p.category cat
+                where c.user.id = :userId
+                  and c.isDeleted = false
+                order by c.createdAt desc
+            """)
     List<MyCommentResponse> findMyCommentResponses(@Param("userId") Long userId);
 }

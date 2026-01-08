@@ -2,7 +2,6 @@ package com.example.loglog.dto.response;
 
 
 // 게시글 리스트 응답
-
 import com.example.loglog.entity.Post;
 import lombok.*;
 

@@ -4,7 +4,6 @@ import com.example.loglog.dto.request.NicknameUpdateRequest;
 import com.example.loglog.dto.request.UserLoginRequest;
 import com.example.loglog.dto.request.UserSignupRequest;
 import com.example.loglog.dto.response.LoginResponse;
-import com.example.loglog.dto.response.MyPostResponse;
 import com.example.loglog.dto.response.UserResponse;
 import com.example.loglog.entity.User;
 import com.example.loglog.security.jwt.JwtProvider;

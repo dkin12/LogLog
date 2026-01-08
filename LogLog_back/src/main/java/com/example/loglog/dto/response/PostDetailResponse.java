@@ -2,7 +2,6 @@ package com.example.loglog.dto.response;
 
 import com.example.loglog.dto.type.PostStatus;
 import com.example.loglog.entity.Post;
-import com.example.loglog.entity.Tag;
 import lombok.*;
 
 import java.time.LocalDateTime;
