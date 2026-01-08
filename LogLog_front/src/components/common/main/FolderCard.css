@@ -1,0 +1,99 @@
+.folder {
+    position: relative;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    overflow: visible;
+}
+
+/* 폴더 몸통 */
+.folder-body {
+    position: relative;
+    border-radius: 24px;
+    padding: 22px 20px 18px;
+    min-height: 140px;
+}
+
+/* 폴더 탭 */
+.folder-tab {
+    position: absolute;
+    top: -8px;
+    left: 16px;
+    width: 44px;
+    height: 14px;
+    border-radius: 8px 8px 0 0;
+}
+
+/* 제목 */
+.folder-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 17px;
+    margin-bottom: 8px;
+}
+
+/* 하단 문구 */
+.folder-sub {
+    position: absolute;
+    bottom: 14px;
+    right: 18px;
+    font-size: 13px;
+    opacity: 0.6;
+}
+
+/* ⭐ preview wrapper */
+.folder-preview {
+    top: -52px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    pointer-events: none;
+}
+
+/* 기본 숨김 */
+.folder-preview {
+    position: absolute;
+    top: -70px;
+    left: 50%;
+    transform: translateX(-50%) rotate(3deg);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    pointer-events: none;
+}
+
+.preview-file:nth-child(1) { transform: rotate(-2deg); }
+.preview-file:nth-child(2) { transform: rotate(1deg); }
+.preview-file:nth-child(3) { transform: rotate(-1deg); }
+
+.preview-file {
+    min-width: 140px;
+    max-width: 200px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(6px);
+    font-size: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,.1);
+
+    opacity: 0;
+    transform: translateY(12px) scale(.96) rotate(-2deg);
+    transition: all .35s cubic-bezier(.2,.8,.2,1);
+}
+
+.folder:hover .preview-file {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+}
+
+/* 한 줄 말줄임 */
+.preview-title {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 9px;
+}

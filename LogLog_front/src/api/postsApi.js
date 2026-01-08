@@ -1,5 +1,17 @@
 import { api } from './api';
 
+// 메인화면 게시글 프리뷰
+export async function fetchCategoryPreview(categoryId) {
+    const res = await api.get("/api/posts", {
+        params: {
+            page: 1,
+            size: 2,
+            categoryId,
+        },
+    });
+    return res.data.content;
+}
+
 export const fetchPosts = async ({ page, categoryId, keyword, tag, size = 8 }) => {
     const params = {
         page: page + 1,
