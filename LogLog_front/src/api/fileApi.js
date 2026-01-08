@@ -1,5 +1,5 @@
 import React from 'react';
-import { api } from '../api/api.js';
+import {api} from '../api/api.js';
 
 /*
   이미지 업로드 API
@@ -10,15 +10,15 @@ import { api } from '../api/api.js';
 */
 
 export async function uploadImage(file) {
-  // 브라우저에서 바이너리 데이터 전송시 반드시 formData 사용
-  const formData = new FormData();
-  formData.append('file', file);
+    // 브라우저에서 바이너리 데이터 전송시 반드시 formData 사용
+    const formData = new FormData();
+    formData.append('file', file);
 
-  const res = await api.post('/api/files/image', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+    const res = await api.post('/api/files/image', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
 
-  return res.data;
+    return res.data;
 }     

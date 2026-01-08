@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { updateNickname } from "../../api/userApi.js";
+import React, {useEffect, useState} from "react";
+import {updateNickname} from "../../api/userApi.js";
 import "./NicknameModal.css";
 
-function NicknameModal({ open, onClose, user, onSuccess }) {
+function NicknameModal({open, onClose, user, onSuccess}) {
     const [nickname, setNickname] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");

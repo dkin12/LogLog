@@ -3,12 +3,8 @@ package com.example.loglog.controller;
 import com.example.loglog.dto.request.PostCreateRequest;
 import com.example.loglog.dto.request.PostUpdateRequest;
 import com.example.loglog.dto.response.*;
-import com.example.loglog.entity.PostHistory;
-import com.example.loglog.repository.PostHistoryRepository;
 import com.example.loglog.service.PostService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/posts")

@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 import MyPostList from "../components/mypage/MyPostList.jsx";
 import GrassSection from "../components/mypage/GrassSection.jsx";
 import MyPageFrame from "../components/mypage/MyPageFrame.jsx";
-import { getUserPosts, getUserProfile } from "../api/userApi.js";
+import {getUserPosts, getUserProfile} from "../api/userApi.js";
 import "./Mypage.css";
 
 function UserPage() {
-    const { userId } = useParams();
+    const {userId} = useParams();
 
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
@@ -30,7 +30,7 @@ function UserPage() {
         <MyPageFrame sidebar={null}>
             <div className="mypage-container page-scroll">
                 <section id="grass">
-                    <GrassSection user={user} />
+                    <GrassSection user={user}/>
                 </section>
 
                 <MyPostList

@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { login } from "../api/authApi";
+import {useState} from "react";
+import {useNavigate, Link} from "react-router-dom";
+import {login} from "../api/authApi";
 import "./LoginPage.css";
 
 export default function LoginPage() {
@@ -14,7 +14,7 @@ export default function LoginPage() {
         setError("");
 
         try {
-            const res = await login({ email, password });
+            const res = await login({email, password});
 
             // JWT 저장
             localStorage.setItem("accessToken", res.accessToken);

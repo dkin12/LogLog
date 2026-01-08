@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
 import FolderCard from "./FolderCard";
 import "./FolderGrid.css";
 
@@ -12,7 +12,7 @@ const container = {
     },
 };
 
-export default function FolderGrid({ categories, onSelect }) {
+export default function FolderGrid({categories, onSelect}) {
     return (
         <motion.div
             className="folder-grid"

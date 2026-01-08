@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { getMe } from "../api/authApi";
+import {useEffect, useState} from "react";
+import {getMe} from "../api/authApi";
 
 export const useAuth = () => {
     const [user, setUser] = useState(null);
@@ -12,5 +12,5 @@ export const useAuth = () => {
             .finally(() => setLoading(false));
     }, []);
 
-    return { user, loading };
+    return {user, loading};
 };

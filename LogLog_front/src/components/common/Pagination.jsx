@@ -1,6 +1,6 @@
 import "./Pagination.css";
 
-export default function Pagination({ page, totalPages, onChange }) {
+export default function Pagination({page, totalPages, onChange}) {
     return (
         <div className="pagination">
             {/* 이전 */}

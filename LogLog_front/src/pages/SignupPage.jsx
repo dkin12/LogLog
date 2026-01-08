@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import { TERMS_TEXT } from "../constants/terms";
+import {TERMS_TEXT} from "../constants/terms";
 import "./SignupPage.css";
 import useSignupForm from "../hooks/useSignupForm";
 

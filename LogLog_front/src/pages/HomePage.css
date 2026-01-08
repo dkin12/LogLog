@@ -6,7 +6,7 @@
 }
 
 .home-page {
-    margin-top: -24px;   /* 홈만 위로 */
+    margin-top: -24px; /* 홈만 위로 */
 }
 
 .home-layout {
@@ -16,7 +16,7 @@
 }
 
 .home-content {
-    flex: 1;             /* ⭐ 남은 공간 전부 차지 */
+    flex: 1; /* ⭐ 남은 공간 전부 차지 */
     min-height: 0;
 }
 

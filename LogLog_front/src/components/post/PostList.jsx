@@ -2,7 +2,7 @@ import PostGrid from "./PostGrid";
 import PostCard from "./PostCard";
 import EmptyState from "./EmptyState";
 
-export default function PostList({ posts = [], isLoading, isError }) {
+export default function PostList({posts = [], isLoading, isError}) {
     if (isLoading) {
         return <div className="loading">로딩 중...</div>;
     }

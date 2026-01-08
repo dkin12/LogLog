@@ -1,8 +1,8 @@
 import WriteFloatingButton from "../WriteFloatingButton.jsx";
-import { Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
+import {Outlet} from "react-router-dom";
+import {useEffect, useState} from "react";
 import MainHeader from "./MainHeader";
-import { getMe } from "../../../api/authApi.js";
+import {getMe} from "../../../api/authApi.js";
 import "./MainLayout.css";
 
 export default function MainLayout() {
@@ -24,13 +24,13 @@ export default function MainLayout() {
 
     return (
         <div className="main-layout">
-            <MainHeader isLogin={!!user} user={user} />
+            <MainHeader isLogin={!!user} user={user}/>
 
             <main className="main-container">
-                <Outlet context={{ user, setUser }} />
+                <Outlet context={{user, setUser}}/>
             </main>
 
-            <WriteFloatingButton isLogin={isLogin} />
+            <WriteFloatingButton isLogin={isLogin}/>
         </div>
     );
 }

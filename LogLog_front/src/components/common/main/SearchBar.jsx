@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { IoIosSearch } from "react-icons/io";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {IoIosSearch} from "react-icons/io";
 import "./SearchBar.css";
 
 export default function SearchBar() {
@@ -28,7 +28,7 @@ export default function SearchBar() {
         const trimmed = keyword.trim();
         if (!trimmed) return;
 
-        const params = { page: 0 };
+        const params = {page: 0};
 
         // 기존 카테고리 유지
         const categoryId = searchParams.get("categoryId");
@@ -56,7 +56,7 @@ export default function SearchBar() {
                 onChange={(e) => setKeyword(e.target.value)}
             />
             <button type="submit">
-                <IoIosSearch />
+                <IoIosSearch/>
             </button>
         </form>
     );

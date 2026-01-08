@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useOutletContext} from "react-router-dom";
 import MyPostList from "../components/mypage/MyPostList.jsx";
 import GrassSection from "../components/mypage/GrassSection.jsx";
 import LeftSidebar from "../components/mypage/LeftSidebar.jsx";
 import NicknameModal from "../components/mypage/NicknameModal.jsx";
 import MyPageFrame from "../components/mypage/MyPageFrame.jsx";
-import { getMyPosts, getMyComments } from "../api/mypageApi.js";
+import {getMyPosts, getMyComments} from "../api/mypageApi.js";
 import "./Mypage.css";
 
 export default function Mypage() {
-    const { user, setUser } = useOutletContext();
+    const {user, setUser} = useOutletContext();
 
     const [mode, setMode] = useState("posts");
     const [items, setItems] = useState([]);
@@ -45,7 +45,9 @@ export default function Mypage() {
             .catch(console.error)
             .finally(() => alive && setLoading(false));
 
-        return () => { alive = false; };
+        return () => {
+            alive = false;
+        };
     }, [mode]);
 
     const handleMenuChange = (menu) => {
@@ -56,12 +58,12 @@ export default function Mypage() {
 
         if (menu === "grass") {
             document.getElementById("grass")
-                ?.scrollIntoView({ behavior: "smooth" });
+                ?.scrollIntoView({behavior: "smooth"});
             setMode("grass");
             return;
         }
 
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({top: 0, behavior: "smooth"});
         setMode(menu);
     };
 
@@ -78,7 +80,7 @@ export default function Mypage() {
         >
             <div className="mypage-container page-scroll">
                 <section id="grass">
-                    <GrassSection user={user} />
+                    <GrassSection user={user}/>
                 </section>
 
                 {mode !== "grass" && mode !== "settings" && (

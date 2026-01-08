@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
-import { HiOutlineFolderOpen } from "react-icons/hi";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchCategoryPreview } from "../../../api/postsApi";
+import {motion} from "framer-motion";
+import {HiOutlineFolderOpen} from "react-icons/hi";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
+import {fetchCategoryPreview} from "../../../api/postsApi";
 import "./FolderCard.css";
 
 const defaultColors = [
@@ -9,11 +9,11 @@ const defaultColors = [
     "#F5F1D8", "#DFEBF7", "#E0F1EF", "#F2DDD7",
 ];
 
-export default function FolderCard({ category, index, onClick }) {
+export default function FolderCard({category, index, onClick}) {
     const bg = category.color || defaultColors[index % defaultColors.length];
     const queryClient = useQueryClient();
 
-    const { data: preview = [] } = useQuery({
+    const {data: preview = []} = useQuery({
         queryKey: ["categoryPreview", category.categoryId],
         queryFn: () => fetchCategoryPreview(category.categoryId),
         enabled: false,

@@ -1,9 +1,9 @@
 import defaultThumbnail from "../../assets/images/default.png";
-import { FaRegEye } from "react-icons/fa";
+import {FaRegEye} from "react-icons/fa";
 import {useNavigate} from "react-router";
 import "./PostCard.css";
 
-export default function PostCard({ post ,apiBase }) {
+export default function PostCard({post, apiBase}) {
     const navigate = useNavigate();
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -18,10 +18,10 @@ export default function PostCard({ post ,apiBase }) {
 
     return (
         <div className="post-card" onClick={() => navigate(`/posts/${post.id}`)}
-             style={{ cursor: 'pointer' }}>
+             style={{cursor: 'pointer'}}>
             {/* 썸네일 영역 */}
             <div className="post-card-thumbnail">
-                <img src={thumbnail} alt="" />
+                <img src={thumbnail} alt=""/>
             </div>
 
             {/* 콘텐츠 영역 */}

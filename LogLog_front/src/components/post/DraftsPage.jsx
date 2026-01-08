@@ -1,17 +1,17 @@
 import React from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getPostDraftList, deletePosts } from "../api/postsApi.js";
-import { toast } from "react-toastify";
-import "../css/DraftPage.css";
+import {useNavigate, useOutletContext} from "react-router-dom";
+import {useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
+import {getPostDraftList, deletePosts} from "../../api/postsApi.js";
+import {toast} from "react-toastify";
+import "./DraftPage.css";
 
 function DraftsPage() {
-    const { user } = useOutletContext();
+    const {user} = useOutletContext();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
     // 임시저장 목록 조회
-    const { data: items = [], isLoading } = useQuery({
+    const {data: items = [], isLoading} = useQuery({
         queryKey: ['post_drafts', user?.id],
         queryFn: async () => {
             const data = await getPostDraftList(user.id);
@@ -24,7 +24,7 @@ function DraftsPage() {
     const deletePostMutation = useMutation({
         mutationFn: (postId) => deletePosts(postId),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['post_drafts'] });
+            queryClient.invalidateQueries({queryKey: ['post_drafts']});
             toast.success('임시저장 글이 삭제되었습니다.');
         },
         onError: (err) => {
@@ -43,7 +43,7 @@ function DraftsPage() {
     if (isLoading) return <div className="draft-loading">목록을 불러오는 중...</div>;
 
     return (
-        <div className = "layout-content">
+        <div className="layout-content page-scroll">
             <div className="draft-page-container">
                 {/* 상단 타이틀 영역 */}
                 <div className="draft-header-section">
@@ -66,10 +66,6 @@ function DraftsPage() {
                                     <h2 className="draft-item-title">
                                         {post.title || "제목 없는 문서"}
                                     </h2>
-
-                                    <p className="draft-item-summary">
-                                        {post.summary || "내용이 없습니다."}
-                                    </p>
 
                                     <div className="draft-item-footer">
                                     <span className="draft-date">

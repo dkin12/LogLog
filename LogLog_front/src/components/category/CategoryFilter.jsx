@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchCategories } from "../../api/categoryApi";
+import {useQuery} from "@tanstack/react-query";
+import {fetchCategories} from "../../api/categoryApi";
 import "../../App.css";
 import "./CategoryFilter.css";
 
-export default function CategoryFilter({ selectedCategoryId, onSelect }) {
-    const { data: categories = [] } = useQuery({
+export default function CategoryFilter({selectedCategoryId, onSelect}) {
+    const {data: categories = []} = useQuery({
         queryKey: ["categories"],
         queryFn: fetchCategories,
         staleTime: Infinity,
@@ -23,7 +23,7 @@ export default function CategoryFilter({ selectedCategoryId, onSelect }) {
                 <button
                     key={cat.categoryId}
                     className={`cat-tab ${selectedCategoryId === cat.categoryId ? "active" : ""}`}
-                    style={{ "--tab-color": `var(--folder-${(idx % 8) + 1})` }}
+                    style={{"--tab-color": `var(--folder-${(idx % 8) + 1})`}}
                     onClick={() => onSelect(cat.categoryId)}
                 >
                     {cat.categoryName}

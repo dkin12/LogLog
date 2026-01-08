@@ -1,22 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Viewer } from '@toast-ui/react-editor';
+import React, {useState, useRef, useEffect} from 'react';
+import {Viewer} from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
-import '../../css/PostDetailContent.css';
+import './PostDetailContent.css';
 import AuthorLink from '../common/AuthorLink';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router';
+import {useQuery, useMutation, useQueryClient} from '@tanstack/react-query';
+import {useNavigate} from 'react-router';
 
-import { deletePosts } from '../../api/postsApi';
+import {deletePosts} from '../../api/postsApi';
 import {
     fetchComments,
     createComment,
     deleteComment,
     updateComment,
 } from '../../api/commentApi';
-import { useToast } from '../../hooks/useToast';
+import {useToast} from '../../hooks/useToast';
 
-const PostDetailContent = ({ post, currentUser }) => {
+const PostDetailContent = ({post, currentUser}) => {
     /* 훅은 최상단 */
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -31,7 +31,7 @@ const PostDetailContent = ({ post, currentUser }) => {
     const isOwner = currentUser?.id === post?.userId;
 
     /* 댓글 조회 */
-    const { data: comments = [], refetch: refetchComments } = useQuery({
+    const {data: comments = [], refetch: refetchComments} = useQuery({
         queryKey: ['comments', post?.id],
         queryFn: () => fetchComments(post.id),
         enabled: !!post?.id, // post 없을 때 쿼리 실행 안 함
@@ -41,16 +41,16 @@ const PostDetailContent = ({ post, currentUser }) => {
     useEffect(() => {
         if (!lastCreatedCommentId) return;
         const target = commentRefs.current[lastCreatedCommentId];
-        target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target?.scrollIntoView({behavior: 'smooth', block: 'center'});
     }, [comments, lastCreatedCommentId]);
 
     /* 게시글 삭제 */
     const deletePostMutation = useMutation({
         mutationFn: () => deletePosts(post.id),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['log_posts'] });
+            queryClient.invalidateQueries({queryKey: ['log_posts']});
             toast.success('게시글이 삭제되었습니다.');
-            navigate('/', { replace: true });
+            navigate('/', {replace: true});
         },
         onError: (e) => toast.error(e.message),
     });
@@ -68,8 +68,8 @@ const PostDetailContent = ({ post, currentUser }) => {
 
     /* 댓글 수정 */
     const updateCommentMutation = useMutation({
-        mutationFn: ({ commentId, content }) =>
-            updateComment(commentId, { content }),
+        mutationFn: ({commentId, content}) =>
+            updateComment(commentId, {content}),
         onSuccess: () => {
             setEditingCommentId(null);
             setEditContent('');
@@ -88,7 +88,7 @@ const PostDetailContent = ({ post, currentUser }) => {
     /* 핸들러 */
     const handleCreateComment = () => {
         if (!commentInput.trim()) return;
-        createCommentMutation.mutate({ content: commentInput });
+        createCommentMutation.mutate({content: commentInput});
     };
 
     const handleDeleteComment = (commentId) => {
@@ -164,7 +164,7 @@ const PostDetailContent = ({ post, currentUser }) => {
 
             {/* ===== 본문 ===== */}
             <section className="post-content">
-                <Viewer initialValue={post.content} />
+                <Viewer initialValue={post.content}/>
             </section>
 
             {/* ===== 태그 ===== */}

@@ -17,7 +17,7 @@ public class FileController {
     private final FileService fileService;
 
     @PostMapping("/image")
-    public Map<String,String> uploadImage(@RequestParam("file") MultipartFile file) {
+    public Map<String, String> uploadImage(@RequestParam("file") MultipartFile file) {
         String imageUrl = fileService.saveImage(file);
         return Map.of("imageUrl", imageUrl);
     }

@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
 
 export const useToast = () => {
 
@@ -31,5 +31,5 @@ export const useToast = () => {
         toast.warn(message);
     }
 
-    return { success, error, info, warning };
+    return {success, error, info, warning};
 };

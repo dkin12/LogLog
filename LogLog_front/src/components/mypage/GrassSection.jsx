@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {
     fetchUserGrassRecent,
     fetchUserGrassByYear,
@@ -8,13 +8,13 @@ import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import "./GrassSection.css";
 
-export default function GrassSection({ user }) {
+export default function GrassSection({user}) {
     const ownerId = user?.userId || user?.id;   // ⭐ 핵심
     const [mode, setMode] = useState("recent");
     const [year, setYear] = useState(null);
     const [grassData, setGrassData] = useState([]);
     const [years, setYears] = useState([]);
-    const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, text: "" });
+    const [tooltip, setTooltip] = useState({visible: false, x: 0, y: 0, text: ""});
     const wrapperRef = useRef(null);
 
     const fetchGrass = async () => {
@@ -55,10 +55,10 @@ export default function GrassSection({ user }) {
         <section className="grass-section">
             <h2>{user.nickname} 님의 잔디</h2>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px" }}>
-                <span style={{ fontSize: "14px", color: "#555" }}>이만큼 자랐어요!</span>
+            <div style={{display: "flex", alignItems: "center", gap: "6px", marginBottom: "12px"}}>
+                <span style={{fontSize: "14px", color: "#555"}}>이만큼 자랐어요!</span>
                 <Tooltip title="블로그를 올린 만큼 잔디를 더 채울 수 있습니다!" arrow placement="right">
-                    <HelpOutlineIcon fontSize="small" style={{ cursor: "pointer", color: "#888" }} />
+                    <HelpOutlineIcon fontSize="small" style={{cursor: "pointer", color: "#888"}}/>
                 </Tooltip>
             </div>
 
@@ -70,26 +70,31 @@ export default function GrassSection({ user }) {
                                 <div
                                     key={day.date}
                                     className="grass-cell"
-                                    style={{ backgroundColor: getColor(day.count) }}
+                                    style={{backgroundColor: getColor(day.count)}}
                                     onMouseEnter={e =>
-                                        setTooltip({ visible: true, x: e.clientX, y: e.clientY, text: `${day.date} · ${day.count}회` })
+                                        setTooltip({
+                                            visible: true,
+                                            x: e.clientX,
+                                            y: e.clientY,
+                                            text: `${day.date} · ${day.count}회`
+                                        })
                                     }
                                     onMouseMove={e =>
-                                        setTooltip(t => ({ ...t, x: e.clientX, y: e.clientY }))
+                                        setTooltip(t => ({...t, x: e.clientX, y: e.clientY}))
                                     }
                                     onMouseLeave={() =>
-                                        setTooltip(t => ({ ...t, visible: false }))
+                                        setTooltip(t => ({...t, visible: false}))
                                     }
                                 />
                             ))}
-                            <div className="grass-spacer" />
+                            <div className="grass-spacer"/>
                         </div>
                     </div>
 
                     <div className="grass-legend">
                         <span>Less</span>
                         {COLORS.map((color, idx) => (
-                            <div key={idx} className="legend-box" style={{ backgroundColor: color }} />
+                            <div key={idx} className="legend-box" style={{backgroundColor: color}}/>
                         ))}
                         <span>More</span>
                     </div>
@@ -98,7 +103,10 @@ export default function GrassSection({ user }) {
                 <div className="grass-years">
                     <button
                         className={mode === "recent" ? "active" : ""}
-                        onClick={() => { setMode("recent"); setYear(null); }}
+                        onClick={() => {
+                            setMode("recent");
+                            setYear(null);
+                        }}
                     >
                         최근 1년
                     </button>
@@ -106,7 +114,10 @@ export default function GrassSection({ user }) {
                         <button
                             key={y}
                             className={mode === "year" && year === y ? "active" : ""}
-                            onClick={() => { setMode("year"); setYear(y); }}
+                            onClick={() => {
+                                setMode("year");
+                                setYear(y);
+                            }}
                         >
                             {y}
                         </button>
@@ -115,7 +126,7 @@ export default function GrassSection({ user }) {
             </div>
 
             {tooltip.visible && (
-                <div className="grass-tooltip" style={{ left: tooltip.x, top: tooltip.y }}>
+                <div className="grass-tooltip" style={{left: tooltip.x, top: tooltip.y}}>
                     {tooltip.text}
                 </div>
             )}
@@ -140,7 +151,7 @@ function buildGrass(apiData, year) {
     const result = [];
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
         const key = d.toLocaleDateString("sv-SE");
-        result.push({ date: key, count: map[key] || 0 });
+        result.push({date: key, count: map[key] || 0});
     }
     return result;
 }
@@ -153,4 +164,4 @@ function getColor(count) {
     return "#196127";
 }
 
-const COLORS = ["#ebedf0","#c6e48b","#7bc96f","#239a3b","#196127"];
+const COLORS = ["#ebedf0", "#c6e48b", "#7bc96f", "#239a3b", "#196127"];

@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import SearchBar from "./SearchBar";
 import AuthButtons from "./AuthButtons";
 import UserDropdown from "./UserDropdown";
 import "./MainHeader.css";
 
-export default function MainHeader({ isLogin, user }) {
+export default function MainHeader({isLogin, user}) {
     return (
         <header className="header">
             <div className="header-left">
@@ -17,7 +17,7 @@ export default function MainHeader({ isLogin, user }) {
                 {!isLogin ? (
                     <AuthButtons/>
                 ) : (
-                    <UserDropdown user={user} />
+                    <UserDropdown user={user}/>
                 )}
             </div>
         </header>

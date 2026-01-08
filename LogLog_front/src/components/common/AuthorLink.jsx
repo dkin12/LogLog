@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import { FaUserCircle } from 'react-icons/fa';
+import {Link} from 'react-router-dom';
+import {FaUserCircle} from 'react-icons/fa';
 
 function AuthorLink({
                         userId,
@@ -18,7 +18,7 @@ function AuthorLink({
             to={to}
             className={`author-link ${className}`}
         >
-            <FaUserCircle className="author-icon" />
+            <FaUserCircle className="author-icon"/>
             <span className="author-name">{nickname}</span>
         </Link>
     );

@@ -1,12 +1,12 @@
 import React from 'react';
 import defaultThumbnail from "../../assets/images/default.png";
 
-const PostHistoryItem = ({ post, apiBase, onClick }) => {
+const PostHistoryItem = ({post, apiBase, onClick}) => {
     const thumbnail = post.thumbnailUrl ? `${apiBase}${post.thumbnailUrl}` : defaultThumbnail;
     return (
         <div className="post-history-item" onClick={onClick}>
             <div className="post-thumbnail-box">
-                <img src={thumbnail} alt="thumbnail" className="post-thumbnail-img" />
+                <img src={thumbnail} alt="thumbnail" className="post-thumbnail-img"/>
             </div>
 
             <div className="post-history-content-box">

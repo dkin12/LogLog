@@ -1,8 +1,8 @@
 import React from "react";
 import "./LeftSidebar.css";
-import { HiChartBar, HiDocumentText, HiChatBubbleLeft, HiCog } from "react-icons/hi2";
+import {HiChartBar, HiDocumentText, HiChatBubbleLeft, HiCog} from "react-icons/hi2";
 
-function LeftSidebar({ mode, onMenuChange }) {
+function LeftSidebar({mode, onMenuChange}) {
     return (
         <aside className="sidebar">
             <ul className="sidebar-menu">

@@ -30,13 +30,12 @@ public class UserController {
 
     /**
      * 로그인 요청 처리
-     *
+     * <p>
      * 로그인 검증을 수행 후, 성공 시 세션에 사용자 정보를 저장
      *
      * @param request 로그인 요청 DTO (email, password)
-     * @return
-     *  - 200 OK : 로그인 성공, SessionUser 반환
-     *  - 401 UNAUTHORIZED : 이메일 또는 비밀번호 불일치
+     * @return - 200 OK : 로그인 성공, SessionUser 반환
+     * - 401 UNAUTHORIZED : 이메일 또는 비밀번호 불일치
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginRequest request) {
@@ -62,13 +61,12 @@ public class UserController {
 
     /**
      * 회원가입 요청을 처리
-     *
+     * <p>
      * 이메일/닉네임 중복 여부 및 비밀번호 확인을 검증한 후, 사용자 생성
      *
      * @param request 회원가입 요청 DTO
-     * @return
-     *  - 201 CREATED : 회원가입 성공
-     *  - 400 BAD REQUEST : 검증 실패 (중복 이메일, 닉네임, 비밀번호 불일치 등)
+     * @return - 201 CREATED : 회원가입 성공
+     * - 400 BAD REQUEST : 검증 실패 (중복 이메일, 닉네임, 비밀번호 불일치 등)
      */
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody UserSignupRequest request) {

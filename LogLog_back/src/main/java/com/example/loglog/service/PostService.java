@@ -81,9 +81,9 @@ public class PostService {
        태그 연결 로직 (PostTag 생성)
      ============================ */
     private void addTags(Post post, List<String> tagNames) {
-        if(tagNames == null || tagNames.isEmpty()) return;
+        if (tagNames == null || tagNames.isEmpty()) return;
 
-        for(String raw : tagNames) {
+        for (String raw : tagNames) {
             String name = raw.startsWith("#") ? raw.substring(1) : raw;
 
             Tag tag = tagRepository.findByName(name)
@@ -120,9 +120,9 @@ public class PostService {
 
             Page<Long> postIdPage = (categoryId != null)
                     ? postRepository.findPostIdsByCategoryAndTag(
-                    categoryId, tag, PostStatus.PUBLISHED, "N",idPageable)
+                    categoryId, tag, PostStatus.PUBLISHED, "N", idPageable)
                     : postRepository.findPostIdsByTag(
-                    tag, PostStatus.PUBLISHED,"N", idPageable);
+                    tag, PostStatus.PUBLISHED, "N", idPageable);
 
             if (postIdPage.isEmpty()) {
                 return PageResponse.from(
@@ -132,7 +132,7 @@ public class PostService {
             }
 
             List<Post> posts =
-                    postRepository.findAllByIdIn(postIdPage.getContent(),"N");
+                    postRepository.findAllByIdIn(postIdPage.getContent(), "N");
 
             postPage = new PageImpl<>(
                     posts,
@@ -147,9 +147,9 @@ public class PostService {
         if (keyword != null && !keyword.isBlank()) {
             postPage = (categoryId != null)
                     ? postRepository.findByCategoryAndKeyword(
-                    categoryId, keyword, PostStatus.PUBLISHED,"N", postPageable)
+                    categoryId, keyword, PostStatus.PUBLISHED, "N", postPageable)
                     : postRepository.findByKeyword(
-                    keyword, PostStatus.PUBLISHED,"N", postPageable);
+                    keyword, PostStatus.PUBLISHED, "N", postPageable);
 
             return PageResponse.from(postPage, PostListResponse::fromEntity);
         }
@@ -164,9 +164,7 @@ public class PostService {
 
         // 전체 조회
         postPage = postRepository.findAllByStatus(
-                PostStatus.PUBLISHED, "N" ,postPageable);
-
-
+                PostStatus.PUBLISHED, "N", postPageable);
 
 
         return PageResponse.from(postPage, PostListResponse::fromEntity);
@@ -191,8 +189,8 @@ public class PostService {
         boolean isOwner = viewerId != null && ownerId.equals(viewerId);
 
         List<Post> posts = isOwner
-                ? postRepository.findByUserId(ownerId,"N")
-                : postRepository.findPublicPostsByUserId(ownerId,"N");
+                ? postRepository.findByUserId(ownerId, "N")
+                : postRepository.findPublicPostsByUserId(ownerId, "N");
 
         return posts.stream()
                 .map(MyPostResponse::from)
@@ -304,17 +302,17 @@ public class PostService {
         // Entity -> DTO 변환
         return PostHistoryResponse.from(postHistory);
     }
+
     /* ============================
        게시글 임시 조회
      ============================ */
     @Transactional(readOnly = true)
-    public List<PostDraftResponse> getPostDraftResponse(Long userId){
-         List<Post> postsDraftList = postDraftRepository.findByUserIdAndDraftYnOrderByCreatedAtDesc(userId,"Y");
+    public List<PostDraftResponse> getPostDraftResponse(Long userId) {
+        List<Post> postsDraftList = postDraftRepository.findByUserIdAndDraftYnOrderByCreatedAtDesc(userId, "Y");
         return postsDraftList.stream()
                 .map(PostDraftResponse::from)
                 .collect(Collectors.toList());
     }
-
 
 
 }

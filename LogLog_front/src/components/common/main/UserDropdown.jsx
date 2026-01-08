@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Menu, MenuItem, Divider, IconButton, Typography } from "@mui/material";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {Menu, MenuItem, Divider, IconButton, Typography} from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
-export default function UserDropdown({ user }) {
+export default function UserDropdown({user}) {
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -36,15 +36,15 @@ export default function UserDropdown({ user }) {
                 <Typography variant="body2" fontWeight={500}>
                     {user?.nickname ?? "USER"}
                 </Typography>
-                <KeyboardArrowDownIcon fontSize="small" />
+                <KeyboardArrowDownIcon fontSize="small"/>
             </IconButton>
 
             <Menu
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                anchorOrigin={{vertical: "bottom", horizontal: "right"}}
+                transformOrigin={{vertical: "top", horizontal: "right"}}
                 PaperProps={{
                     sx: {
                         mt: 1,
@@ -80,7 +80,7 @@ export default function UserDropdown({ user }) {
                     임시글 보기
                 </MenuItem>
 
-                <Divider />
+                <Divider/>
 
                 <MenuItem
                     onClick={handleLogout}

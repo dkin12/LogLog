@@ -1,23 +1,23 @@
 import React from 'react';
-import '../css/PostHistory.css';
-import { useQuery } from "@tanstack/react-query";
-import { getPostsHistories, detailPost } from "../api/postsApi.js";
-import { useParams, useNavigate } from 'react-router-dom';
-import PostHistoryItem from '../components/post/PostHistoryItem.jsx';
+import './PostHistory.css';
+import {useQuery} from "@tanstack/react-query";
+import {getPostsHistories, detailPost} from "../../api/postsApi.js";
+import {useParams, useNavigate} from 'react-router-dom';
+import PostHistoryItem from './PostHistoryItem.jsx';
 
 function PostHistory() {
-    const { id } = useParams();
+    const {id} = useParams();
     const postId = Number(id);
     const apiBase = import.meta.env.VITE_API_BASE_URL || '';
     const navigate = useNavigate();
 
-    const { data: posts = [], isLoading: isHistoryLoading } = useQuery({
+    const {data: posts = [], isLoading: isHistoryLoading} = useQuery({
         queryKey: ['log_posts_history', postId],
         queryFn: () => getPostsHistories(postId),
         enabled: !!postId
     });
 
-    const { isLoading: isPostLoading } = useQuery({
+    const {isLoading: isPostLoading} = useQuery({
         queryKey: ['post', postId],
         queryFn: () => detailPost(postId),
         enabled: !!postId

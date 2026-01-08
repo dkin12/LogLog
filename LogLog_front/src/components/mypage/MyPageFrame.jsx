@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function MyPageFrame({ sidebar, children }) {
+export default function MyPageFrame({sidebar, children}) {
     return (
         <div className="mypage-frame">
             {sidebar && (

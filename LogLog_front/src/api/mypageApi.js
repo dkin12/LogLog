@@ -1,4 +1,4 @@
-import { api } from './api';
+import {api} from './api';
 
 // 내가 쓴 글
 export const getMyPosts = async () => {

@@ -1,4 +1,4 @@
-import { api } from './api';
+import {api} from './api';
 
 // 메인화면 게시글 프리뷰
 export async function fetchCategoryPreview(categoryId) {
@@ -12,7 +12,7 @@ export async function fetchCategoryPreview(categoryId) {
     return res.data.content;
 }
 
-export const fetchPosts = async ({ page, categoryId, keyword, tag, size = 8 }) => {
+export const fetchPosts = async ({page, categoryId, keyword, tag, size = 8}) => {
     const params = {
         page: page + 1,
         size,
@@ -22,7 +22,7 @@ export const fetchPosts = async ({ page, categoryId, keyword, tag, size = 8 }) =
     if (keyword) params.keyword = keyword;
     if (tag) params.tag = tag;
 
-    const res = await api.get("/api/posts", { params });
+    const res = await api.get("/api/posts", {params});
     return res.data;
 };
 
@@ -31,6 +31,7 @@ export async function createPosts(payload) {
     const res = await api.post('/api/posts', payload);
     return res.data;
 }
+
 // 게시글 상세
 export async function detailPost(postId) {
     const res = await api.get(`/api/posts/${postId}`);
@@ -43,6 +44,7 @@ export async function updatePosts(postId, postData) {
     const res = await api.put(`/api/posts/${postId}`, postData);
     return res.data;
 }
+
 // 게시글 삭제
 export async function deletePosts(postId) {
     const res = await api.delete(`/api/posts/${postId}`);
@@ -61,7 +63,7 @@ export async function getPostDetailHistories(historyId) {
     return res.data;
 }
 
-export async function getPostDraftList(userId){
+export async function getPostDraftList(userId) {
     const res = await api.get(`/api/posts/draft/${userId}`);
     return res.data;
 }

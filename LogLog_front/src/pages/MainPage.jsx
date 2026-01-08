@@ -1,12 +1,12 @@
 import "./MainPage.css"
-import { useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { fetchPosts } from "../api/postsApi";
-import { fetchCategories } from "../api/categoryApi";
+import {useSearchParams} from "react-router-dom";
+import {useQuery} from "@tanstack/react-query";
+import {fetchPosts} from "../api/postsApi";
+import {fetchCategories} from "../api/categoryApi";
 
 import CategoryFilter from "../components/category/CategoryFilter";
 import PostList from "../components/post/PostList";
-import Pagination from "../components/common/Pagination";;
+import Pagination from "../components/common/Pagination";
 
 export default function MainPage() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -19,7 +19,7 @@ export default function MainPage() {
     const tag = searchParams.get("tag");
 
     // 카테고리 목록 (항상 조회)
-    const { data: categories = [] } = useQuery({
+    const {data: categories = []} = useQuery({
         queryKey: ["categories"],
         queryFn: fetchCategories,
         staleTime: Infinity,
@@ -30,7 +30,7 @@ export default function MainPage() {
     )?.categoryName;
 
     // 게시글 조회
-    const { data, isLoading, isError } = useQuery({
+    const {data, isLoading, isError} = useQuery({
         queryKey: ["posts", page, categoryId, keyword, tag],
         queryFn: () =>
             fetchPosts({
@@ -94,7 +94,7 @@ export default function MainPage() {
             </div>
 
             {/* 여백 조절 담당 */}
-            <div className="main-spacer" />
+            <div className="main-spacer"/>
 
             {/* ===== 페이지네이션 (항상 하단) ===== */}
             {data && data.totalPages > 1 && (
