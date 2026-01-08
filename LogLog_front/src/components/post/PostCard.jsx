@@ -1,10 +1,13 @@
 import defaultThumbnail from "../../assets/images/default.png";
-import {FaRegEye} from "react-icons/fa";
-import {useNavigate} from "react-router";
+import { FaRegEye } from "react-icons/fa";
+import { useNavigate } from "react-router";
 import "./PostCard.css";
 
-export default function PostCard({post, apiBase}) {
+export default function PostCard({ post, apiBase }) {
     const navigate = useNavigate();
+
+    const BASE_URL = apiBase || import.meta.env.VITE_API_BASE_URL;
+
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString("ko-KR", {
@@ -14,26 +17,24 @@ export default function PostCard({post, apiBase}) {
         });
     };
 
-    const thumbnail = post.thumbnailUrl ? `${apiBase}${post.thumbnailUrl}` : defaultThumbnail;
+    const thumbnail = post.thumbnailUrl
+        ? `${BASE_URL}${post.thumbnailUrl}`
+        : defaultThumbnail;
 
     return (
-        <div className="post-card" onClick={() => navigate(`/posts/${post.id}`)}
-             style={{cursor: 'pointer'}}>
-            {/* 썸네일 영역 */}
+        <div
+            className="post-card"
+            onClick={() => navigate(`/posts/${post.id}`)}
+            style={{ cursor: "pointer" }}
+        >
             <div className="post-card-thumbnail">
-                <img src={thumbnail} alt=""/>
+                <img src={thumbnail} alt="" />
             </div>
 
-            {/* 콘텐츠 영역 */}
             <div className="post-card-content">
                 <div className="post-card-header">
-                    <div className="post-card-category">
-                        {post.categoryName}
-                    </div>
-
-                    <div className="post-card-title">
-                        {post.title}
-                    </div>
+                    <div className="post-card-category">{post.categoryName}</div>
+                    <div className="post-card-title">{post.title}</div>
                 </div>
 
                 <div className="post-card-summary">
@@ -46,7 +47,9 @@ export default function PostCard({post, apiBase}) {
 
                 <div className="post-card-footer">
                     <span className="post-card-author">by {post.userNickname}</span>
-                    <span className="post-card-views"><FaRegEye/> {post.views}</span>
+                    <span className="post-card-views">
+                        <FaRegEye /> {post.views}
+                    </span>
                 </div>
             </div>
         </div>
