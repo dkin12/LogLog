@@ -32,7 +32,8 @@ public class MyPageController {
             @RequestParam int year,
             @AuthenticationPrincipal Long userId
     ) {
-        return grassService.getGrassByYear(userId, year);
+        // 내 마이페이지니까 owner = viewer = userId
+        return grassService.getGrassByYear(userId, userId, year);
     }
 
     // 잔디 연도 리스트

@@ -19,11 +19,13 @@ public class LogService {
     private final LogRepository logRepository;
 
     // 로그인 로그 (1일 1회)
+    // @return - 200 OK : 로그인 성공 전 호출해서 이력 저장
     public void recordLogin(User user) {
         LocalDate today = LocalDate.now();
         LocalDateTime start = today.atStartOfDay();
         LocalDateTime end = today.plusDays(1).atStartOfDay();
 
+        // 이미 오늘 로그인한 기록이 있으면 저장 X
         boolean alreadyLoggedToday =
                 logRepository.existsByUserAndActivityTypeAndCreatedAtBetween(
                         user,

@@ -12,26 +12,24 @@ export const getMyComments = async () => {
     return res.data;
 };
 
-// 특정 유저의 게시글 조회
+// 특정 유저의 댓글 조회
 export const fetchMyComments = async () => {
     const res = await api.get('/mypage/comments');
-    return res.data; // 지금 네가 찍은 JSON 그대로 옴
+    return res.data;
 }
 
-// 타인 잔디 - 최근 1년
-export const fetchUserGrassRecent = async (userId) => {
-    const res = await api.get(`/api/users/${userId}/grass/recent`);
+// 내 잔디
+export const fetchMyGrassRecent = async () => {
+    const res = await api.get(`/api/mypage/grass/recent`);
     return res.data;
 };
 
-// 타인 잔디 - 특정 연도
-export const fetchUserGrassByYear = async (userId, year) => {
-    const res = await api.get(`/api/users/${userId}/grass?year=${year}`);
+export const fetchMyGrassByYear = async (year) => {
+    const res = await api.get(`/api/mypage/grass?year=${year}`);
     return res.data;
 };
 
-// 타인 잔디 - 연도 목록
-export const fetchUserGrassYears = async (userId) => {
-    const res = await api.get(`/api/users/${userId}/grass/years`);
+export const fetchMyGrassYears = async () => {
+    const res = await api.get(`/api/mypage/grass/years`);
     return res.data;
 };

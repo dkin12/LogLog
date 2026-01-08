@@ -80,7 +80,7 @@ export default function Mypage() {
         >
             <div className="mypage-container page-scroll">
                 <section id="grass">
-                    <GrassSection user={user}/>
+                    <GrassSection user={user} isMe={true} />
                 </section>
 
                 {mode !== "grass" && mode !== "settings" && (

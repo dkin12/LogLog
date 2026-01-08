@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +22,15 @@ public class UserPageController {
     private final GrassService grassService;
     private final PostService postService;
 
+    // 잔디 연도 리스트
+    @GetMapping("/{userId}/grass/years")
+    public List<Integer> getUserGrassYears(
+            @PathVariable Long userId,
+            @AuthenticationPrincipal Long viewerId
+    ) {
+        return grassService.getGrassYears(userId);
+    }
+
     // 타인 잔디
     @GetMapping("/{userId}/grass/recent")
     public List<GrassResponse> getUserGrassRecent(
@@ -28,6 +38,16 @@ public class UserPageController {
             @AuthenticationPrincipal Long viewerId
     ) {
         return grassService.getGrassRecent(userId, viewerId);
+    }
+
+    // 타인 연도별 잔디
+    @GetMapping("/{userId}/grass")
+    public List<GrassResponse> getUserGrassByYear(
+            @PathVariable Long userId,
+            @RequestParam int year,
+            @AuthenticationPrincipal Long viewerId
+    ) {
+        return grassService.getGrassByYear(userId, viewerId, year);
     }
 
     // 타인 게시글 (공개글만)

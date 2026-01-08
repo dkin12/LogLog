@@ -30,7 +30,7 @@ function UserPage() {
         <MyPageFrame sidebar={null}>
             <div className="mypage-container page-scroll">
                 <section id="grass">
-                    <GrassSection user={user}/>
+                    <GrassSection user={user} isMe={false} />
                 </section>
 
                 <MyPostList

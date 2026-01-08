@@ -55,8 +55,7 @@ export default function LoginPage() {
                 <button type="submit">로그인</button>
 
                 <div className="login-links">
-                    <span>비밀번호 찾기</span>
-                    <span>|</span>
+                    <span className="signup-text">아직 계정이 없으신가요?</span>
                     <Link to="/signup" className="signup-link">
                         회원가입
                     </Link>

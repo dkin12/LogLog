@@ -66,6 +66,7 @@ public class PostService {
                 .build();
 
         if (request.getDraftYn().equals("N")) {
+            // 게시글 공개 범위가 PUBLISHED일 때만 집계
             if (post.getStatus() == PostStatus.PUBLISHED) {
                 post.publishNow();
                 logService.recordPostPublish(post.getUser(), post.getId());
@@ -226,7 +227,7 @@ public class PostService {
         // 2. 발행(N)일 때만 실행되는 로직
         if ("N".equals(request.getDraftYN())) {
 
-            // [중요] 상태가 PUBLISHED일 때만 발행 시각을 갱신하고 로그를 남김
+            // 상태가 PUBLISHED일 때만 발행 시각을 갱신하고 로그를 남김 (잔디 집계)
             if (post.getStatus() == PostStatus.PUBLISHED) {
                 post.publishNow();
                 logService.recordPostPublish(post.getUser(), post.getId());
