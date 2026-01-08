@@ -42,7 +42,7 @@ export default function HomePage() {
         isLoading,
         isError,
     } = useQuery({
-        queryKey: ["posts", page, categoryId],
+        queryKey: ["log_posts", page, categoryId],
         queryFn: () =>
             fetchPosts({
                 page,

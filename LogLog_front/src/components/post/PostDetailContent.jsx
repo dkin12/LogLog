@@ -47,10 +47,13 @@ const PostDetailContent = ({post, currentUser}) => {
     /* 게시글 삭제 */
     const deletePostMutation = useMutation({
         mutationFn: () => deletePosts(post.id),
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['log_posts']});
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ['log_posts'],
+                refetchType: 'all'
+            });
             toast.success('게시글이 삭제되었습니다.');
-            navigate('/', {replace: true});
+            navigate(-1);
         },
         onError: (e) => toast.error(e.message),
     });
