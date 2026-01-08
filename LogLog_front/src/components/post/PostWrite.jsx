@@ -4,14 +4,13 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import './PostWrite.css';
 import {useLocation, useNavigate, useParams} from "react-router";
 import {Box} from '@mui/material'; // MUI Box 추가
-
-// API & Hooks
 import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
 import {fetchCategories} from '../../api/categoryApi.js';
 import {createPosts, detailPost, updatePosts, getPostDetailHistories} from '../../api/postsApi.js';
 import {uploadImage} from '../../api/fileApi.js';
 import {useToast} from '../../hooks/useToast.js';
 import defaultThumbnail from "../../assets/images/default.png";
+import {toast} from "react-toastify";
 
 const usePostLogics = (mode, id) => {
     const navigate = useNavigate();
@@ -25,15 +24,12 @@ const usePostLogics = (mode, id) => {
     // --- 데이터 조회 ---
     // 카테고리
     const {data: categories = []} = useQuery({
-        queryKey: ['log_category'],
-        queryFn: fetchCategories,
+        queryKey: ['log_category'], queryFn: fetchCategories,
     });
 
     // 게시글 상세 (수정 모드일 때)
     const {data: postData} = useQuery({
-        queryKey: ['log_posts', Number(id)],
-        queryFn: () => detailPost(id),
-        enabled: !!id && !isNaN(Number(id)),
+        queryKey: ['log_posts', Number(id)], queryFn: () => detailPost(id), enabled: !!id && !isNaN(Number(id)),
     });
 
     // 히스토리 상세 (복원 모드일 때)
@@ -50,8 +46,7 @@ const usePostLogics = (mode, id) => {
 
     // --- Mutations ---
     const createMutation = useMutation({
-        mutationFn: createPosts,
-        onSuccess: (res, variables) => {
+        mutationFn: createPosts, onSuccess: (res, variables) => {
             const newId = res.id || res;
             if (variables.draftYn === "Y") {
                 toast.success("임시저장 되었습니다.");
@@ -65,8 +60,7 @@ const usePostLogics = (mode, id) => {
     });
 
     const updateMutation = useMutation({
-        mutationFn: (payload) => updatePosts(id, payload),
-        onSuccess: (updatedPost, variables) => {
+        mutationFn: (payload) => updatePosts(id, payload), onSuccess: (updatedPost, variables) => {
             queryClient.setQueryData(['log_posts', Number(id)], updatedPost);
 
             if (variables.draftYn === "Y") {
@@ -77,22 +71,15 @@ const usePostLogics = (mode, id) => {
                 navigate(`/posts/${id}`, {replace: true});
             }
             queryClient.invalidateQueries({queryKey: ['log_posts']});
-        },
-        onError: (err) => toast.error('수정 실패: ' + err.message)
+        }, onError: (err) => toast.error('수정 실패: ' + err.message)
     });
 
     const uploadMutation = useMutation({
-        mutationFn: uploadImage,
-        onError: () => toast.error('이미지 업로드 실패')
+        mutationFn: uploadImage, onError: () => toast.error('이미지 업로드 실패')
     });
 
     return {
-        initialData,
-        categories,
-        createMutation,
-        updateMutation,
-        uploadMutation,
-        restoreHistoryId
+        initialData, categories, createMutation, updateMutation, uploadMutation, restoreHistoryId
     };
 };
 
@@ -103,16 +90,33 @@ const ThumbnailSection = ({thumbnailType, setThumbnailType, thumbnailUrl, setThu
     const fileInputRef = useRef();
     const apiBase = import.meta.env.VITE_API_BASE_URL || '';
 
-    const handleFileChange = (e) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            uploadMutation.mutate(file, {
-                onSuccess: (res) => {
-                    setThumbnailUrl(res.imageUrl || res);
-                    setThumbnailType('custom');
-                }
-            });
+    const handleFileChange = (evt) => {
+        const file = evt.target.files?.[0];
+        if (!file) return;
+        const isHeic = file.type === 'image/heic' || file.name.toLowerCase().endsWith('.heic');
+
+        if (isHeic) {
+            toast.info('HEIC 파일은 업로드할 수 없습니다. JPG 또는 PNG 파일로 변환해주세요.');
+            evt.target.value = ""; // 입력창 초기화
+            return;
         }
+        if (file.size > 1024 * 1024 * 5) {
+            toast.info('이미지는 5MB 이하만 첨부 가능합니다.');
+            evt.target.value = "";
+            return;
+        }
+
+        uploadMutation.mutate(file, {
+            onSuccess: (res) => {
+                const imageUrl = res.imageUrl || res;
+                setThumbnailUrl(imageUrl);
+                setThumbnailType('custom');
+                toast.success('이미지가 업로드되었습니다.');
+            }, onError: (err) => {
+                console.error("업로드 에러 상세:", err);
+                toast.error('이미지 업로드에 실패했습니다.');
+            }
+        });
     };
 
     const getImageUrl = (url) => {
@@ -120,8 +124,7 @@ const ThumbnailSection = ({thumbnailType, setThumbnailType, thumbnailUrl, setThu
         return url.startsWith('http') ? url : `${apiBase}${url.startsWith('/') ? '' : '/'}${url}`;
     };
 
-    return (
-        <div className="setting-item">
+    return (<div className="setting-item">
             <h3>썸네일 설정</h3>
             <div className="thumbnail-options">
                 {/* 1. 기본 이미지 */}
@@ -157,22 +160,14 @@ const ThumbnailSection = ({thumbnailType, setThumbnailType, thumbnailUrl, setThu
                         style={{position: 'relative', padding: thumbnailUrl ? 0 : undefined}}
                     >
                         {uploadMutation.isPending ? (
-                            <p style={{color: 'blue', margin: 0}}>업로드 중...</p>
-                        ) : thumbnailUrl ? (
-                            // ★ 요청하신 MUI Code 적용
-                            <Box
+                            <p style={{color: 'blue', margin: 0}}>업로드 중...</p>) : thumbnailUrl ? (<Box
                                 component="img"
                                 src={getImageUrl(thumbnailUrl)}
                                 alt="Thumbnail Preview"
                                 sx={{
-                                    width: '100%',
-                                    height: '100%',
-                                    objectFit: 'cover',
-                                    display: 'block'
+                                    width: '100%', height: '100%', objectFit: 'cover', display: 'block'
                                 }}
-                            />
-                        ) : (
-                            <>
+                            />) : (<>
                                 <div className="upload-icon">📷</div>
                                 <button
                                     type="button"
@@ -184,8 +179,7 @@ const ThumbnailSection = ({thumbnailType, setThumbnailType, thumbnailUrl, setThu
                                 >
                                     썸네일 등록하기
                                 </button>
-                            </>
-                        )}
+                            </>)}
                     </div>
                     <input
                         type="file"
@@ -196,8 +190,7 @@ const ThumbnailSection = ({thumbnailType, setThumbnailType, thumbnailUrl, setThu
                     />
                 </label>
             </div>
-        </div>
-    );
+        </div>);
 };
 
 // =================================================================
@@ -287,8 +280,7 @@ const PostWrite = ({mode}) => {
         }
     };
 
-    return (
-        <div className="layout-content page-scroll">
+    return (<div className="layout-content page-scroll">
             <div className="editor-container">
                 {/* 1. 제목 입력 */}
                 <div className="title-section">
@@ -329,15 +321,13 @@ const PostWrite = ({mode}) => {
                     <div className="setting-item">
                         <h3>공개 설정</h3>
                         <div className="visibility-buttons">
-                            {['PUBLISHED', 'PRIVATE'].map((type) => (
-                                <button
+                            {['PUBLISHED', 'PRIVATE'].map((type) => (<button
                                     key={type}
                                     className={`vis-btn ${status === type ? 'active' : ''}`}
                                     onClick={() => setStatus(type)}
                                 >
                                     {type === 'PUBLISHED' ? '🌏 전체 공개' : '🔒 비공개'}
-                                </button>
-                            ))}
+                                </button>))}
                         </div>
                     </div>
 
@@ -350,11 +340,9 @@ const PostWrite = ({mode}) => {
                             onChange={(e) => setCategoryId(e.target.value)}
                         >
                             <option value="">== 카테고리 선택 ==</option>
-                            {categories.map((item) => (
-                                <option key={item.categoryId} value={String(item.categoryId)}>
+                            {categories.map((item) => (<option key={item.categoryId} value={String(item.categoryId)}>
                                     {item.categoryName}
-                                </option>
-                            ))}
+                                </option>))}
                         </select>
                     </div>
 
@@ -370,12 +358,10 @@ const PostWrite = ({mode}) => {
                             onKeyDown={handleTagKeyDown}
                         />
                         <div className="tags-list">
-                            {tags.map((tag, index) => (
-                                <span key={index} className="tag-chip"
-                                      onClick={() => setTags(tags.filter(t => t !== tag))}>
+                            {tags.map((tag, index) => (<span key={index} className="tag-chip"
+                                                             onClick={() => setTags(tags.filter(t => t !== tag))}>
                                     #{tag}
-                                </span>
-                            ))}
+                                </span>))}
                         </div>
                     </div>
                 </div>
@@ -387,16 +373,14 @@ const PostWrite = ({mode}) => {
                         {(draftYn === "Y" || mode === "create" || mode === "draft") && (
                             <button className="btn-draft" onClick={() => submitPost(true)}>
                                 임시저장
-                            </button>
-                        )}
+                            </button>)}
                         <button className="btn-save" onClick={() => submitPost(false)}>
                             저장하기
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        </div>);
 };
 
 export default PostWrite;
