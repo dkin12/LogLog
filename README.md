@@ -41,19 +41,6 @@ GitHub 잔디처럼 활동을 시각적으로 확인할 수 있는 블로그 플
 
 <br/>
 
-
-## 🗄 ERD 핵심 테이블
-
-- User  
-- Post  
-- PostHistory  
-- Tag  
-- PostTag  
-- Comment  
-- Log (잔디 기록)
-
-<br/>
-
 ## 🧠 설계 포인트
 
 ### ✏️ 수정 이력(diff)
